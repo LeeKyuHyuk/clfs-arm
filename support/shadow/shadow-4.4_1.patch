@@ -1,0 +1,20 @@
+--- src/useradd.c   (old)
++++ src/useradd.c   (new)
+@@ -2027,6 +2027,8 @@
+        is_shadow_grp = sgr_file_present ();
+ #endif
+
++       get_defaults ();
++
+        process_flags (argc, argv);
+
+ #ifdef ENABLE_SUBIDS
+@@ -2036,8 +2038,6 @@
+            (!user_id || (user_id <= uid_max && user_id >= uid_min));
+ #endif                         /* ENABLE_SUBIDS */
+
+-       get_defaults ();
+-
+ #ifdef ACCT_TOOLS_SETUID
+ #ifdef USE_PAM
+        {

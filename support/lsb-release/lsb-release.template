@@ -1,0 +1,8 @@
+# FSG lsb_release configuration file template
+# If the distribution is LSB compliant, uncomment the following line
+# and set the version appropriately
+# LSB_VERSION=""
+DISTRIB_ID=""
+DISTRIB_RELEASE=""
+DISTRIB_CODENAME=""
+DISTRIB_DESCRIPTION=""

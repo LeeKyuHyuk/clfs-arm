@@ -1,0 +1,18 @@
+This dir contains the lsb_release script and the required
+programs to build the associated man pages.
+
+README 
+lsb_release : version 1.4
+help2man    : the GNU script to build Man from --help output
+Makefile    : Makefile for creating the man page
+lsb_release.examples : the Man style add-on for the pages
+lsb-release.template : the sample "/etc/lsb-release" file.
+INSTALL     : this file
+
+To create the man page do a 'make'.
+To install the lsb_release program and associated man page do a 
+'make install'.
+
+Regards,
+   
+    -- Dominique

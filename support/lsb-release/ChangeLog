@@ -1,0 +1,24 @@
+2000-12-15  Christopher Yeoh  <cyeoh@linuxcare.com.au>
+
+	* lsb_release: Replace source with '.' to make
+	script more portable. Now tested to work with bash (2.04),
+	ash (0.3.7) and pdksh (5.2.14)
+
+2000-12-13  Christopher Yeoh  <cyeoh@linuxcare.com.au>
+
+	* lsb_release.examples: Fix mistakes in documentation
+
+2000-12-11  Christopher Yeoh  <cyeoh@linuxcare.com.au>
+
+	* lsb_release.examples: Update documentation. Explicitly state
+	that LSB_VERSION should not be set if the distribution is not LSB 
+	compliant.
+
+	* lsb_release: Various fixes to run with less featured shells
+	and removal of dependency on awk (Dominique Massonie et al).
+
+2000-11-06  Christopher Yeoh  <cyeoh@linuxcare.com.au>
+
+	* Makefile (lsb_release.1.gz): Compress with -9
+
+	* ChangeLog: Add changelog file

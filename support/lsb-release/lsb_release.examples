@@ -1,0 +1,75 @@
+[FILES]
+
+If the installation is LSB compliant, the \fB"/etc/lsb-release"\fR
+file should contain the \fBLSB_VERSION\fR field. The value of the
+field should be the version number of the LSB specification against
+which the installation is compliant. If the installation is not
+compliant, the above field should 
+.B not
+be present.
+
+Optional fields are \fBDISTRIB_ID\fR, \fBDISTRIB_RELEASE\fR,
+\fBDISTRIB_CODENAME\fR, \fBDISTRIB_DESCRIPTION\fR and can be used to
+overwrite information which is parsed from the next file.
+ 
+The \fB"/etc/[distrib]-release"\fR file contains a description line
+which is parsed to get information (especially on currently non-LSB
+compliant systems).
+
+The required line style is:
+.br 
+"\fIDistributor\fR \fBrelease\fR \fIx.x\fR \fB(\fR\fICodename\fR\fB)\fR"
+
+Where \fIDistributor\fR can be a couple of words, but then concatenated (i.e. Linux Foo BarLinux Linux -> FooBarLinux),
+.br
+\fIx.x\fR starts with a digit followed by any non-blank characters,
+\fICodename\fR will also be concatenated (blanks cleanup only).
+
+And \fBrelease\fR is a keyword not to be used in \fBDISTRIB_DESCRIPTION\fR if you don't want to overwrite "/etc/[distrib]-release" data.
+
+\fBNotice:\fR To support the \fBDebian\fR distributions' lack of information (see "/etc/debian_version" file) some have been directly added into the \fBlsb_release\fR script.
+
+[EXAMPLES]
+.B The "/etc/lsb-release" file contains:
+
+LSB_VERSION="1.0"
+.br
+DISTRIB_DESCRIPTION="I enjoy using my distrib"
+
+.B And the "/etc/foobar-release" file contains:
+
+My Linux Distrib release 1.0RC4 (TryIt)
+
+.B $ ./lsb_release --all
+.br
+LSB Version:    1.0
+.br
+Distributor ID: MyDistrib
+.br
+Description:    I enjoy using my distrib
+.br
+Release:        1.0RC4
+.br
+Codename:       TryIt
+
+.B $ ./lsb_release -a -s
+.br
+1.0 MyDistrib "I enjoy using my distrib" 1.0RC4 TryIt
+
+Then simply without the "/etc/lsb-release" file, that means result on a \fBnon-LSB\fR compliant distrib:
+.br
+.B $ ./lsb_release -a
+.br
+LSB Version:    n/a
+.br
+Distributor ID: MyDistrib
+.br
+Description:    My Linux Distrib release 1.0RC4 (TryIt)
+.br
+Release:        1.0RC4
+.br
+Codename:       TryIt
+
+[REPORTING BUGS]
+Report bugs to <mdomi@users.sourceforge.net>.
+Include a complete, self contained example that will allow the bug to be reproduced, and say which version of lsb_release you are using.

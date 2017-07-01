@@ -1,0 +1,52 @@
+--- configure.orig	2017-03-19 09:41:36.000000000 +0900
++++ configure	2017-04-08 00:36:56.034053000 +0900
+@@ -419,13 +419,7 @@
+ # script with STATUS, using 1 if that was 0.
+ as_fn_error ()
+ {
+-  as_status=$1; test $as_status -eq 0 && as_status=1
+-  if test "$4"; then
+-    as_lineno=${as_lineno-"$3"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
+-    $as_echo "$as_me:${as_lineno-$LINENO}: error: $2" >&$4
+-  fi
+-  $as_echo "$as_me: error: $2" >&2
+-  as_fn_exit $as_status
++  echo ""
+ } # as_fn_error
+ 
+ if expr a : '\(a\)' >/dev/null 2>&1 &&
+@@ -20078,13 +20072,7 @@
+ # script with STATUS, using 1 if that was 0.
+ as_fn_error ()
+ {
+-  as_status=$1; test $as_status -eq 0 && as_status=1
+-  if test "$4"; then
+-    as_lineno=${as_lineno-"$3"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
+-    $as_echo "$as_me:${as_lineno-$LINENO}: error: $2" >&$4
+-  fi
+-  $as_echo "$as_me: error: $2" >&2
+-  as_fn_exit $as_status
++  echo ""
+ } # as_fn_error
+ 
+ 
+@@ -29755,13 +29743,7 @@
+ # script with STATUS, using 1 if that was 0.
+ as_fn_error ()
+ {
+-  as_status=$1; test $as_status -eq 0 && as_status=1
+-  if test "$4"; then
+-    as_lineno=${as_lineno-"$3"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
+-    $as_echo "$as_me:${as_lineno-$LINENO}: error: $2" >&$4
+-  fi
+-  $as_echo "$as_me: error: $2" >&2
+-  as_fn_exit $as_status
++  echo ""
+ } # as_fn_error
+ 
+ 
+@@ -32702,4 +32684,3 @@
+   { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: unrecognized options: $ac_unrecognized_opts" >&5
+ $as_echo "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2;}
+ fi
+-

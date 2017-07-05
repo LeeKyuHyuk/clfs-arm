@@ -17,6 +17,12 @@ sudo apt install g++ texinfo gperf qemu-system
 
 ### Build CLFS-ARM
 
+Use `make list-defconfigs` to display the list of boards, and load with `make <name>_defconfig` command.
+
+```bash
+make <name>_defconfig
+```
+
 Download the source code by doing `make download`.
 
 ``` bash

@@ -11,6 +11,8 @@ echo -e '  \e[7mCleaning\e[0m'
 echo -e '    \e[1mclean\e[0m                  - Delete all files created by build'
 echo
 echo -e '  \e[7mMiscellaneous\e[0m'
+echo -e '    \e[1m<name>_defconfig\e[0m       - Load configuration file'
+echo -e '    \e[1mlist-defconfigs\e[0m        - Show configuration file list'
 echo -e '    \e[1mdownload\e[0m               - Download essential source'
 echo -e '    \e[1mrun\e[0m                    - Emulate CLFS-ARM using QEMU'
 echo -e '    \e[1mflash\e[0m                  - Flash an SD Card'

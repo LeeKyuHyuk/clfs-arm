@@ -259,19 +259,6 @@ cat > $ROOTFS_DIR/etc/shells << "EOF"
 
 # End /etc/shells
 EOF
-$STEP "Creating the fstab"
-cat > $ROOTFS_DIR/etc/fstab << "EOF"
-# Begin /etc/fstab
-# <file system>	<mount pt>	<type>	<options>	<dump>	<pass>
-/dev/mmcblk0   /            ext2     defaults,noatime,nodiratime 0     2
-#/swapfile     swap         swap     pri=1                       0     0
-proc           /proc        proc     nosuid,noexec,nodev         0     0
-sysfs          /sys         sysfs    nosuid,noexec,nodev         0     0
-devpts         /dev/pts     devpts   gid=5,mode=620              0     0
-tmpfs          /run         tmpfs    defaults                    0     0
-devtmpfs       /dev         devtmpfs mode=0755,nosuid            0     0
-# End /etc/fstab
-EOF
 $STEP "Creating the profile"
 cat > $ROOTFS_DIR/etc/profile << "EOF"
 # Begin /etc/profile

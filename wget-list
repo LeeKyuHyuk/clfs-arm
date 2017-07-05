@@ -34,6 +34,7 @@ http://ftp.gnu.org/gnu/inetutils/inetutils-1.9.4.tar.xz
 http://ftp.gnu.org/gnu/libtool/libtool-2.4.6.tar.xz
 http://ftp.gnu.org/gnu/m4/m4-1.4.18.tar.xz
 http://ftp.gnu.org/gnu/make/make-4.2.1.tar.bz2
+http://ftp.gnu.org/gnu/mtools/mtools-4.0.18.tar.bz2
 http://ftp.gnu.org/gnu/patch/patch-2.7.5.tar.xz
 http://ftp.gnu.org/gnu/readline/readline-7.0.tar.gz
 http://ftp.gnu.org/gnu/sed/sed-4.4.tar.xz
@@ -42,6 +43,7 @@ http://ftp.gnu.org/gnu/texinfo/texinfo-6.3.tar.xz
 http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-7.4p1.tar.gz
 http://sourceforge.net/projects/procps-ng/files/Production/procps-ng-3.3.12.tar.xz
 http://tukaani.org/xz/xz-5.2.3.tar.xz
+http://public.pengutronix.de/software/genimage/genimage-9.tar.xz
 http://www.bzip.org/1.0.6/bzip2-1.0.6.tar.gz
 http://www.greenwoodsoftware.com/less/less-487.tar.gz
 http://www.iana.org/time-zones/repository/releases/tzdata2017b.tar.gz
@@ -49,8 +51,8 @@ http://www.infodrom.org/projects/sysklogd/download/sysklogd-1.5.1.tar.gz
 http://www.mpfr.org/mpfr-3.1.5/mpfr-3.1.5.tar.xz
 http://www.multiprecision.org/mpc/download/mpc-1.0.3.tar.gz
 http://zlib.net/zlib-1.2.11.tar.xz
-https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.11.7.tar.xz
 https://downloads.sourceforge.net/project/genext2fs/genext2fs/1.4.1/genext2fs-1.4.1.tar.gz
+https://github.com/martinh/libconfuse/releases/download/v3.0/confuse-3.0.tar.xz
 https://github.com/pkgconf/pkgconf/releases/download/pkgconf-0.9.12/pkgconf-0.9.12.tar.bz2
 https://github.com/shadow-maint/shadow/releases/download/4.4/shadow-4.4.tar.xz
 https://github.com/westes/flex/releases/download/v2.6.4/flex-2.6.4.tar.gz

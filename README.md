@@ -78,8 +78,10 @@ CONFIG_LOCAL_TIMEZONE: Asia/Seoul
 CONFIG_PKG_VERSION: CLFS ARM 2017.07
 CONFIG_BUG_URL: https://github.com/LeeKyuHyuk/CLFS-ARM/issues
 CONFIG_PARALLEL_JOBS: 4
-CONFIG_STRIP_AND_DELETE_DOCS: 1
 WORKSPACE_DIR: /home/leekyuhyuk/clfs-arm
+CONFIG_DIR: /home/leekyuhyuk/clfs-arm/config
+DEVICE_DIR: /home/leekyuhyuk/clfs-arm/device
+PACKAGES_DIR: /home/leekyuhyuk/clfs-arm/packages
 SOURCES_DIR: /home/leekyuhyuk/clfs-arm/sources
 SCRIPTS_DIR: /home/leekyuhyuk/clfs-arm/scripts
 OUTPUT_DIR: /home/leekyuhyuk/clfs-arm/out
@@ -92,14 +94,14 @@ SYSROOT_DIR: /home/leekyuhyuk/clfs-arm/out/tools/usr/arm-linux-gnueabihf/sysroot
 PATH: "/home/leekyuhyuk/clfs-arm/out/tools/bin:/home/leekyuhyuk/clfs-arm/out/tools/sbin:/home/leekyuhyuk/clfs-arm/out/tools/usr/bin:/home/leekyuhyuk/clfs-arm/out/tools/usr/sbin:/sbin:/usr/sbin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games"
 
 >> Device Settings:
-CONFIG_NAME: vexpress
+CONFIG_NAME: raspberrypi2
 CONFIG_ABI: aapcs-linux
-CONFIG_CPU: cortex-a9
-CONFIG_FPU: vfpv3-d16
+CONFIG_CPU: cortex-a7
+CONFIG_FPU: neon-vfpv4
 CONFIG_FLOAT: hard
 CONFIG_MODE: arm
-CONFIG_LINUX_KERNEL_DEFCONFIG: vexpress
-CONFIG_LINUX_KERNEL_INTREE_DTS_NAME: vexpress-v2p-ca9
+CONFIG_LINUX_KERNEL_SOURCE: be2540e540f5442d7b372208787fb64100af0c54.tar.gz
+CONFIG_LINUX_KERNEL_SOURCE_URL: https://github.com/raspberrypi/linux/archive/be2540e540f5442d7b372208787fb64100af0c54.tar.gz
 ```
 
 ### Built With

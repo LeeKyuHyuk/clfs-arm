@@ -25,7 +25,7 @@ staging:
 	--sysconfdir=$(SYSROOT_DIR)/etc \
 	--localstatedir=$(SYSROOT_DIR)/var \
 	--disable-egl \
-	--disable-xwayland \
+	--enable-xwayland \
 	--disable-x11-compositor \
 	--disable-drm-compositor \
 	--disable-weston-launch \
@@ -56,7 +56,7 @@ system:
 	--sysconfdir=/etc \
 	--localstatedir=/var \
 	--disable-egl \
-	--disable-xwayland \
+	--enable-xwayland \
 	--disable-x11-compositor \
 	--disable-drm-compositor \
 	--disable-weston-launch \

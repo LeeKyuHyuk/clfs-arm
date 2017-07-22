@@ -44,8 +44,8 @@ staging:
 	--host=$(CONFIG_TARGET) \
 	--build=$(CONFIG_HOST) \
  	--prefix=$(SYSROOT_DIR)/usr \
+	--libdir=$(SYSROOT_DIR)/usr/lib \
 	--sysconfdir=$(SYSROOT_DIR)/etc \
-	--localstatedir=$(SYSROOT_DIR)/var \
 	--with-host-scanner \
 	--disable-tests \
 	--disable-documentation )
@@ -71,8 +71,8 @@ system:
 	--host=$(CONFIG_TARGET) \
 	--build=$(CONFIG_HOST) \
  	--prefix=/usr \
+	--libdir=/usr/lib \
 	--sysconfdir=/etc \
-	--localstatedir=/var \
 	--with-host-scanner \
 	--disable-tests \
 	--disable-documentation )

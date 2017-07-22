@@ -22,8 +22,8 @@ staging:
 	--host=$(CONFIG_TARGET) \
 	--build=$(CONFIG_HOST) \
  	--prefix=$(SYSROOT_DIR)/usr \
+	--libdir=$(SYSROOT_DIR)/usr/lib \
 	--sysconfdir=$(SYSROOT_DIR)/etc \
-	--localstatedir=$(SYSROOT_DIR)/var \
 	--disable-static \
 	--enable-shared )
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/wayland-protocols-1.9
@@ -48,8 +48,8 @@ system:
 	--host=$(CONFIG_TARGET) \
 	--build=$(CONFIG_HOST) \
  	--prefix=/usr \
+	--libdir=/usr/lib \
 	--sysconfdir=/etc \
-	--localstatedir=/var \
 	--disable-static \
 	--enable-shared )
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/wayland-protocols-1.9

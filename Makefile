@@ -106,13 +106,26 @@ toolchain:
 	@make toolchain -C $(PACKAGES_DIR)/util-linux
 	@make toolchain -C $(PACKAGES_DIR)/glib
 	@make toolchain -C $(PACKAGES_DIR)/kmod
+	@make toolchain -C $(PACKAGES_DIR)/libpng
+	@make toolchain -C $(PACKAGES_DIR)/nasm
+	@make toolchain -C $(PACKAGES_DIR)/libjpeg-turbo
+	@make toolchain -C $(PACKAGES_DIR)/util-macros
+	@make toolchain -C $(PACKAGES_DIR)/gdk-pixbuf
+	@make toolchain -C $(PACKAGES_DIR)/libgtk2
+	@make toolchain -C $(PACKAGES_DIR)/expat
+	@make toolchain -C $(PACKAGES_DIR)/libpciaccess
+	@make toolchain -C $(PACKAGES_DIR)/libdrm
+	@make toolchain -C $(PACKAGES_DIR)/xorg/xfonts
+	@make toolchain -C $(PACKAGES_DIR)/wayland
 	@make toolchain-staging
 	$(PRINT_BUILD_TIME)
 
 toolchain-staging:
 	@make check
-	@rm -rf $(BUILD_DIR)
-	@mkdir -pv $(BUILD_DIR)
+	@rm -rf $(BUILD_DIR) $(SYSROOT_DIR)
+	@mkdir -pv $(BUILD_DIR)	$(SYSROOT_DIR)
+	@make staging -C $(PACKAGES_DIR)/linux
+	@make staging -C $(PACKAGES_DIR)/glibc
 	@make staging -C $(PACKAGES_DIR)/zlib
 	@make staging -C $(PACKAGES_DIR)/binutils
 	@make staging -C $(PACKAGES_DIR)/gcc
@@ -127,6 +140,47 @@ toolchain-staging:
 	@make staging -C $(PACKAGES_DIR)/gdbm
 	@make staging -C $(PACKAGES_DIR)/libcap
 	@make staging -C $(PACKAGES_DIR)/openssl
+	@make staging -C $(PACKAGES_DIR)/linux-pam
+	@make staging -C $(PACKAGES_DIR)/libxml2
+	@make staging -C $(PACKAGES_DIR)/libpng
+	@make staging -C $(PACKAGES_DIR)/nasm
+	@make staging -C $(PACKAGES_DIR)/libjpeg-turbo
+	@make staging -C $(PACKAGES_DIR)/atk
+	@make staging -C $(PACKAGES_DIR)/gdk-pixbuf
+	@make staging -C $(PACKAGES_DIR)/freetype
+	@make staging -C $(PACKAGES_DIR)/harfbuzz
+	@make staging -C $(PACKAGES_DIR)/freetype
+	@make staging -C $(PACKAGES_DIR)/fontconfig
+	@make staging -C $(PACKAGES_DIR)/pixman
+	@make staging -C $(PACKAGES_DIR)/util-macros
+	@make staging -C $(PACKAGES_DIR)/xorg/xproto
+	@make staging -C $(PACKAGES_DIR)/libxau
+	@make staging -C $(PACKAGES_DIR)/xcb-proto
+	@make staging -C $(PACKAGES_DIR)/libxcb
+	@make staging -C $(PACKAGES_DIR)/xorg/xlib
+	@make staging -C $(PACKAGES_DIR)/cairo
+	@make staging -C $(PACKAGES_DIR)/pango
+	@make staging -C $(PACKAGES_DIR)/hicolor-icon-theme
+	@make staging -C $(PACKAGES_DIR)/libgtk2
+	@make staging -C $(PACKAGES_DIR)/mtdev
+	@make staging -C $(PACKAGES_DIR)/xkeyboard-config
+	@make staging -C $(PACKAGES_DIR)/libxkbcommon
+	@make staging -C $(PACKAGES_DIR)/libevdev
+	@make staging -C $(PACKAGES_DIR)/eudev
+	@make staging -C $(PACKAGES_DIR)/libinput
+	@make staging -C $(PACKAGES_DIR)/libpciaccess
+	@make staging -C $(PACKAGES_DIR)/libdrm
+	@make staging -C $(PACKAGES_DIR)/expat
+	@make staging -C $(PACKAGES_DIR)/wayland
+	@make staging -C $(PACKAGES_DIR)/wayland-protocols
+	@make staging -C $(PACKAGES_DIR)/mesa
+	@make staging -C $(PACKAGES_DIR)/libunwind
+	@make staging -C $(PACKAGES_DIR)/libepoxy
+	@make staging -C $(PACKAGES_DIR)/weston
+	@make staging -C $(PACKAGES_DIR)/xorg/xfonts
+	@make staging -C $(PACKAGES_DIR)/xorg/xserver
+	@make staging -C $(PACKAGES_DIR)/xorg/xdriver/xf86-input-evdev
+	@make staging -C $(PACKAGES_DIR)/xorg/xdriver/xf86-input-libinput
 	$(PRINT_BUILD_TIME)
 
 system:
@@ -193,6 +247,48 @@ system:
 	@make system -C $(PACKAGES_DIR)/openssh
 	@make system -C $(PACKAGES_DIR)/ntp
 	@make system -C $(PACKAGES_DIR)/lsb-release
+	@make system -C $(PACKAGES_DIR)/linux-pam
+	@make system -C $(PACKAGES_DIR)/libxml2
+	@make system -C $(PACKAGES_DIR)/libpng
+	@make system -C $(PACKAGES_DIR)/nasm
+	@make system -C $(PACKAGES_DIR)/libjpeg-turbo
+	@make system -C $(PACKAGES_DIR)/atk
+	@make system -C $(PACKAGES_DIR)/gdk-pixbuf
+	@make system -C $(PACKAGES_DIR)/freetype
+	@make system -C $(PACKAGES_DIR)/harfbuzz
+	@make system -C $(PACKAGES_DIR)/freetype
+	@make system -C $(PACKAGES_DIR)/fontconfig
+	@make system -C $(PACKAGES_DIR)/pixman
+	@make system -C $(PACKAGES_DIR)/util-macros
+	@make system -C $(PACKAGES_DIR)/xorg/xproto
+	@make system -C $(PACKAGES_DIR)/libxau
+	@make system -C $(PACKAGES_DIR)/xcb-proto
+	@make system -C $(PACKAGES_DIR)/libxcb
+	@make system -C $(PACKAGES_DIR)/xorg/xlib
+	@make system -C $(PACKAGES_DIR)/cairo
+	@make system -C $(PACKAGES_DIR)/pango
+	@make system -C $(PACKAGES_DIR)/hicolor-icon-theme
+	@make system -C $(PACKAGES_DIR)/libgtk2
+	@make system -C $(PACKAGES_DIR)/mtdev
+	@make system -C $(PACKAGES_DIR)/xkeyboard-config
+	@make system -C $(PACKAGES_DIR)/libxkbcommon
+	@make system -C $(PACKAGES_DIR)/libevdev
+	@make system -C $(PACKAGES_DIR)/libinput
+	@make system -C $(PACKAGES_DIR)/libpciaccess
+	@make system -C $(PACKAGES_DIR)/libdrm
+	@make system -C $(PACKAGES_DIR)/wayland
+	@make system -C $(PACKAGES_DIR)/wayland-protocols
+	@make system -C $(PACKAGES_DIR)/mesa
+	@make system -C $(PACKAGES_DIR)/libunwind
+	@make system -C $(PACKAGES_DIR)/libepoxy
+	@make system -C $(PACKAGES_DIR)/expat
+	@make system -C $(PACKAGES_DIR)/weston
+	@make system -C $(PACKAGES_DIR)/xorg/xserver
+	@make system -C $(PACKAGES_DIR)/xorg/xdriver/xf86-input-evdev
+	@make system -C $(PACKAGES_DIR)/xorg/xdriver/xf86-input-libinput
+	@make system -C $(PACKAGES_DIR)/xorg/xdriver/xf86-input-mouse
+	@make system -C $(PACKAGES_DIR)/xorg/xdriver/xf86-input-keyboard
+	@make system -C $(PACKAGES_DIR)/xorg/xdriver/xf86-video-fbdev
 	@make system -C $(PACKAGES_DIR)/glibc
 	$(PRINT_BUILD_TIME)
 
@@ -218,7 +314,7 @@ run:
 		$(ERROR) "QEMU Emulate only supports 'qemu_vexpress'." ; \
 		exit 1 ; \
 	fi;
-	@qemu-system-arm -M vexpress-a9 -smp 1 -m 256 -kernel $(KERNEL_DIR)/zImage -dtb $(KERNEL_DIR)/vexpress-v2p-ca9.dtb -drive file=$(IMAGES_DIR)/rootfs.ext2,if=sd,format=raw -append "console=ttyAMA0,115200 root=/dev/mmcblk0 ip=dhcp" -serial stdio -net nic,model=lan9118 -net user
+	@qemu-system-arm -M vexpress-a9 -smp 1 -m 256 -kernel $(KERNEL_DIR)/zImage -dtb $(KERNEL_DIR)/vexpress-v2p-ca9.dtb -drive file=$(IMAGES_DIR)/rootfs.ext2,if=sd,format=raw -append "console=ttyAMA0,115200 root=/dev/mmcblk0 ip=dhcp" -serial stdio -net nic,model=lan9118 -net user -show-cursor
 
 flash:
 	@chmod 755 $(DEVICE_DIR)/raspberrypi/image-usb-stick

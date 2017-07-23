@@ -22,7 +22,7 @@ staging:
 	@( cd $(BUILD_DIR)/xorg-server-1.19.3 && autoconf )
 	@( cd $(BUILD_DIR)/xorg-server-1.19.3 && \
 	PKG_CONFIG="$(TOOLS_DIR)/usr/bin/pkg-config" \
-	ACLOCAL="aclocal -I $(ROOTFS_DIR)/usr/share/aclocal" \
+	ACLOCAL="aclocal -I $(SYSROOT_DIR)/usr/share/aclocal" \
 	./configure \
 	--target=$(CONFIG_TARGET) \
 	--host=$(CONFIG_TARGET) \

@@ -124,6 +124,7 @@ toolchain-staging:
 	@make check
 	@rm -rf $(BUILD_DIR) $(SYSROOT_DIR)
 	@mkdir -pv $(BUILD_DIR)	$(SYSROOT_DIR)
+	@make staging -C $(PACKAGES_DIR)/skeleton
 	@make staging -C $(PACKAGES_DIR)/linux
 	@make staging -C $(PACKAGES_DIR)/glibc
 	@make staging -C $(PACKAGES_DIR)/zlib
@@ -134,8 +135,11 @@ toolchain-staging:
 	@make staging -C $(PACKAGES_DIR)/libffi
 	@make staging -C $(PACKAGES_DIR)/pcre
 	@make staging -C $(PACKAGES_DIR)/glib
+	@make staging -C $(PACKAGES_DIR)/libtool
+	@make staging -C $(PACKAGES_DIR)/which
 	@make staging -C $(PACKAGES_DIR)/xz
 	@make staging -C $(PACKAGES_DIR)/util-linux
+	@make staging -C $(PACKAGES_DIR)/libpthread
 	@make staging -C $(PACKAGES_DIR)/libpipeline
 	@make staging -C $(PACKAGES_DIR)/gdbm
 	@make staging -C $(PACKAGES_DIR)/libcap
@@ -157,6 +161,7 @@ toolchain-staging:
 	@make staging -C $(PACKAGES_DIR)/libxau
 	@make staging -C $(PACKAGES_DIR)/xcb-proto
 	@make staging -C $(PACKAGES_DIR)/libxcb
+	@make staging -C $(PACKAGES_DIR)/xcb-util
 	@make staging -C $(PACKAGES_DIR)/xorg/xlib
 	@make staging -C $(PACKAGES_DIR)/cairo
 	@make staging -C $(PACKAGES_DIR)/pango
@@ -173,14 +178,31 @@ toolchain-staging:
 	@make staging -C $(PACKAGES_DIR)/expat
 	@make staging -C $(PACKAGES_DIR)/wayland
 	@make staging -C $(PACKAGES_DIR)/wayland-protocols
-	@make staging -C $(PACKAGES_DIR)/mesa
 	@make staging -C $(PACKAGES_DIR)/libunwind
 	@make staging -C $(PACKAGES_DIR)/libepoxy
+	@make staging -C $(PACKAGES_DIR)/mesa
 	@make staging -C $(PACKAGES_DIR)/weston
 	@make staging -C $(PACKAGES_DIR)/xorg/xfonts
 	@make staging -C $(PACKAGES_DIR)/xorg/xserver
 	@make staging -C $(PACKAGES_DIR)/xorg/xdriver/xf86-input-evdev
 	@make staging -C $(PACKAGES_DIR)/xorg/xdriver/xf86-input-libinput
+	@make staging -C $(PACKAGES_DIR)/sqlite
+	@make staging -C $(PACKAGES_DIR)/nspr
+	@make staging -C $(PACKAGES_DIR)/nss
+	@make staging -C $(PACKAGES_DIR)/json-c
+	@make staging -C $(PACKAGES_DIR)/libogg
+	@make staging -C $(PACKAGES_DIR)/speex
+	@make staging -C $(PACKAGES_DIR)/speexdsp
+	@make staging -C $(PACKAGES_DIR)/libsndfile
+	@make staging -C $(PACKAGES_DIR)/dbus
+	@make staging -C $(PACKAGES_DIR)/alsa-lib
+	@make staging -C $(PACKAGES_DIR)/pulseaudio
+	@make staging -C $(PACKAGES_DIR)/libvpx
+	@make staging -C $(PACKAGES_DIR)/snappy
+	@make staging -C $(PACKAGES_DIR)/libsrtp
+	@make staging -C $(PACKAGES_DIR)/opus
+	@make staging -C $(PACKAGES_DIR)/icu
+	@make staging -C $(PACKAGES_DIR)/qt5base
 	$(PRINT_BUILD_TIME)
 
 system:
@@ -210,6 +232,7 @@ system:
 	@make system -C $(PACKAGES_DIR)/bison
 	@make system -C $(PACKAGES_DIR)/flex
 	@make system -C $(PACKAGES_DIR)/grep
+	@make system -C $(PACKAGES_DIR)/which
 	@make system -C $(PACKAGES_DIR)/bash
 	@make system -C $(PACKAGES_DIR)/libtool
 	@make system -C $(PACKAGES_DIR)/gdbm
@@ -264,6 +287,7 @@ system:
 	@make system -C $(PACKAGES_DIR)/libxau
 	@make system -C $(PACKAGES_DIR)/xcb-proto
 	@make system -C $(PACKAGES_DIR)/libxcb
+	@make system -C $(PACKAGES_DIR)/xcb-util
 	@make system -C $(PACKAGES_DIR)/xorg/xlib
 	@make system -C $(PACKAGES_DIR)/cairo
 	@make system -C $(PACKAGES_DIR)/pango
@@ -289,6 +313,24 @@ system:
 	@make system -C $(PACKAGES_DIR)/xorg/xdriver/xf86-input-mouse
 	@make system -C $(PACKAGES_DIR)/xorg/xdriver/xf86-input-keyboard
 	@make system -C $(PACKAGES_DIR)/xorg/xdriver/xf86-video-fbdev
+	@make system -C $(PACKAGES_DIR)/sqlite
+	@make system -C $(PACKAGES_DIR)/nspr
+	@make system -C $(PACKAGES_DIR)/nss
+	@make system -C $(PACKAGES_DIR)/json-c
+	@make system -C $(PACKAGES_DIR)/libogg
+	@make system -C $(PACKAGES_DIR)/speex
+	@make system -C $(PACKAGES_DIR)/speexdsp
+	@make system -C $(PACKAGES_DIR)/libsndfile
+	@make system -C $(PACKAGES_DIR)/dbus
+	@make system -C $(PACKAGES_DIR)/alsa-lib
+	@make system -C $(PACKAGES_DIR)/pulseaudio
+	@make system -C $(PACKAGES_DIR)/libvpx
+	@make system -C $(PACKAGES_DIR)/snappy
+	@make system -C $(PACKAGES_DIR)/libsrtp
+	@make system -C $(PACKAGES_DIR)/opus
+	@make system -C $(PACKAGES_DIR)/icu
+	@make system -C $(PACKAGES_DIR)/qt5base
+	@make system -C $(PACKAGES_DIR)/qupzilla
 	@make system -C $(PACKAGES_DIR)/glibc
 	$(PRINT_BUILD_TIME)
 

@@ -21,14 +21,14 @@ staging:
 	--target=$(CONFIG_TARGET) \
 	--host=$(CONFIG_TARGET) \
 	--build=$(CONFIG_HOST) \
-	--prefix=$(SYSROOT_DIR)/usr \
-	--sysconfdir=$(SYSROOT_DIR)/etc \
-	--localstatedir=$(SYSROOT_DIR)/var \
+	--prefix=/usr \
+	--sysconfdir=/etc \
+	--localstatedir=/var \
 	--disable-bluez4 \
 	--disable-bluez5 \
 	--disable-rpath )
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/pulseaudio-10.99.1
-	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/pulseaudio-10.99.1
+	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/pulseaudio-10.99.1
 	@rm -fv $(SYSROOT_DIR)/etc/dbus-1/system.d/pulseaudio-system.conf
 	@sed -i '/load-module module-console-kit/s/^/#/' $(SYSROOT_DIR)/etc/pulse/default.pa
 	@rm -rf $(BUILD_DIR)/pulseaudio-10.99.1

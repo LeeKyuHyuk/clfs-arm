@@ -53,7 +53,7 @@ if [ -d $BUILD_DIR/usr/libexec/dbus-daemon-launch-helper ] ; then
 echo "/usr/libexec/dbus-daemon-launch-helper	d	4750	0	18	-	-	-	-	-" >> $BUILD_DIR/_device_table.txt
 fi
 echo "$TOOLS_DIR/usr/bin/makedevs -d $BUILD_DIR/_device_table.txt $ROOTFS_DIR" >> $BUILD_DIR/_fakeroot.fs
-echo "$TOOLS_DIR/usr/bin/mke2img -d $ROOTFS_DIR -G 4 -R 1 -b 1356960 -I 150000 -o $IMAGES_DIR/rootfs.ext2" >> $BUILD_DIR/_fakeroot.fs
+echo "$TOOLS_DIR/usr/sbin/mkfs.ext2 -d $ROOTFS_DIR $IMAGES_DIR/rootfs.ext2 2000M" >> $BUILD_DIR/_fakeroot.fs
 chmod a+x $BUILD_DIR/_fakeroot.fs
 $TOOLS_DIR/usr/bin/fakeroot -- $BUILD_DIR/_fakeroot.fs
 ln -svf rootfs.ext2 $IMAGES_DIR/rootfs.ext4

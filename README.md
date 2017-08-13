@@ -12,7 +12,7 @@ Debian 9 or Ubuntu 16.04 is recommended.
 
 ``` bash
 sudo apt update
-sudo apt install g++ git texinfo gperf intltool qemu-system
+sudo apt install g++ git texinfo gperf intltool qemu-system build-essential g++-multilib
 ```
 
 ### Get CLFS-ARM Source code

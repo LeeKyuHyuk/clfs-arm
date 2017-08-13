@@ -9,16 +9,22 @@ toolchain:
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/kmod-24 && \
-	CFLAGS="-O2 -I$(TOOLS_DIR)/usr/include" \
-	CPPFLAGS="-I$(TOOLS_DIR)/usr/include" \
-	CXXFLAGS="-O2 -I$(TOOLS_DIR)/usr/include" \
-	LDFLAGS="-L$(TOOLS_DIR)/lib -L$(TOOLS_DIR)/usr/lib -Wl,-rpath,$(TOOLS_DIR)/usr/lib" \
 	PKG_CONFIG="$(TOOLS_DIR)/usr/bin/pkg-config" \
+	PKG_CONFIG_SYSROOT_DIR="/" \
+	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
+	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
 	PKG_CONFIG_LIBDIR="$(TOOLS_DIR)/usr/lib/pkgconfig:$(TOOLS_DIR)/usr/share/pkgconfig" \
+	CPPFLAGS="-I$(TOOLS_DIR)/usr/include" \
+	CFLAGS="-O2 -I$(TOOLS_DIR)/usr/include" \
+	CXXFLAGS="-O2 -I$(TOOLS_DIR)/usr/include" \
+	LDFLAGS="-L$(TOOLS_DIR)/usr/lib -Wl,-rpath,$(TOOLS_DIR)/usr/lib" \
+	CONFIG_SITE=/dev/null \
 	./configure \
 	--prefix=$(TOOLS_DIR)/usr \
 	--sysconfdir=$(TOOLS_DIR)/etc \
 	--localstatedir=$(TOOLS_DIR)/var \
+	--enable-shared \
+	--disable-static \
 	--disable-manpages )
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/kmod-24
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/kmod-24
@@ -38,21 +44,36 @@ system:
 	@$(STEP) "kmod 24"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
+	@patch -Np1 -i $(PACKAGES_DIR)/kmod/fix-O_CLOEXEC.patch -d $(BUILD_DIR)/kmod-24
+	@patch -Np1 -i $(PACKAGES_DIR)/kmod/shared-util.c-assert_cc-can-only-be-used-inside-func.patch -d $(BUILD_DIR)/kmod-24
 	@( cd $(BUILD_DIR)/kmod-24 && \
+	ac_cv_lbl_unaligned_fail=yes \
+	ac_cv_func_mmap_fixed_mapped=yes \
+	ac_cv_func_memcmp_working=yes \
+	ac_cv_have_decl_malloc=yes \
+	gl_cv_func_malloc_0_nonnull=yes \
+	ac_cv_func_malloc_0_nonnull=yes \
+	ac_cv_func_calloc_0_nonnull=yes \
+	ac_cv_func_realloc_0_nonnull=yes \
+	lt_cv_sys_lib_search_path_spec="" \
+	ac_cv_c_bigendian=no \
+	CONFIG_SITE=/dev/null \
 	./configure \
 	--target=$(CONFIG_TARGET) \
 	--host=$(CONFIG_TARGET) \
 	--build=$(CONFIG_HOST) \
 	--prefix=/usr \
-	--bindir=/bin \
+	--exec-prefix=/usr \
 	--sysconfdir=/etc \
-	--with-rootlibdir=/lib \
-	--with-xz \
-	--with-zlib )
+	--localstatedir=/var \
+	--program-prefix="" \
+	--disable-static \
+	--enable-shared \
+	--disable-manpages \
+	--with-zlib \
+	--disable-tools )
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/kmod-24
+	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/kmod-24
+	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/kmod-24
-	@for target in depmod insmod lsmod modinfo modprobe rmmod ; do \
-  	ln -svf ../bin/kmod $(ROOTFS_DIR)/sbin/$${target} ; \
-	done
-	@ln -svf kmod $(ROOTFS_DIR)/bin/lsmod
 	@rm -rf $(BUILD_DIR)/kmod-24

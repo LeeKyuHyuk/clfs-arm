@@ -1,6 +1,6 @@
 include $(SUPPORT_DIR)/functions.mk
 
-SOURCE := $(SOURCES_DIR)/shadow-4.4.tar.xz
+SOURCE := $(PACKAGES_DIR)/shadow/shadow-4.4.tar.xz
 SOURCE_URL := https://github.com/shadow-maint/shadow/releases/download/4.4/shadow-4.4.tar.xz
 MD5 := c06f8c2571b44899e60662f9ad259dd6
 
@@ -25,6 +25,18 @@ system:
 	@sed -i 's/1000/999/' $(BUILD_DIR)/shadow-4.4/etc/useradd
 	@sed -i -e '47 d' -e '60,65 d' $(BUILD_DIR)/shadow-4.4/libmisc/myname.c
 	@( cd $(BUILD_DIR)/shadow-4.4 && \
+	PKG_CONFIG="$(TOOLS_DIR)/usr/bin/pkg-config" \
+	ac_cv_lbl_unaligned_fail=yes \
+	ac_cv_func_mmap_fixed_mapped=yes \
+	ac_cv_func_memcmp_working=yes \
+	ac_cv_have_decl_malloc=yes \
+	gl_cv_func_malloc_0_nonnull=yes \
+	ac_cv_func_malloc_0_nonnull=yes \
+	ac_cv_func_calloc_0_nonnull=yes \
+	ac_cv_func_realloc_0_nonnull=yes \
+	lt_cv_sys_lib_search_path_spec="" \
+	ac_cv_c_bigendian=no \
+	CONFIG_SITE=/dev/null \
 	./configure \
 	--target=$(CONFIG_TARGET) \
 	--host=$(CONFIG_TARGET) \

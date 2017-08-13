@@ -18,15 +18,28 @@ system:
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@patch -Np1 -i $(PACKAGES_DIR)/bash/bash-4.4-upstream_fixes-1.patch -d $(BUILD_DIR)/bash-4.4
 	@( cd $(BUILD_DIR)/bash-4.4 && \
+	PKG_CONFIG="$(TOOLS_DIR)/usr/bin/pkg-config" \
+	ac_cv_lbl_unaligned_fail=yes \
+	ac_cv_func_mmap_fixed_mapped=yes \
+	ac_cv_func_memcmp_working=yes \
+	ac_cv_have_decl_malloc=yes \
+	gl_cv_func_malloc_0_nonnull=yes \
+	ac_cv_func_malloc_0_nonnull=yes \
+	ac_cv_func_calloc_0_nonnull=yes \
+	ac_cv_func_realloc_0_nonnull=yes \
+	lt_cv_sys_lib_search_path_spec="" \
+	ac_cv_c_bigendian=no \
+	CONFIG_SITE=/dev/null \
 	./configure \
 	--target=$(CONFIG_TARGET) \
 	--host=$(CONFIG_TARGET) \
 	--build=$(CONFIG_HOST) \
 	--prefix=/usr \
-	--docdir=/usr/share/doc/bash-4.4 \
 	--without-bash-malloc \
 	--with-installed-readline )
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/bash-4.4
+	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/bash-4.4
+	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/bash-4.4
 	@mv -vf $(ROOTFS_DIR)/usr/bin/bash $(ROOTFS_DIR)/bin
 	@ln -svf bash $(ROOTFS_DIR)/bin/sh

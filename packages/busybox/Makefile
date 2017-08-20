@@ -16,16 +16,15 @@ system:
 	@$(STEP) "Busybox 1.27.1"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
-	@make distclean -C $(BUILD_DIR)/busybox-1.27.1
-	@make ARCH=$(CONFIG_MODE) defconfig -C $(BUILD_DIR)/busybox-1.27.1
-	@sed -i 's/\(CONFIG_\)\(.*\)\(INETD\)\(.*\)=y/# \1\2\3\4 is not set/g' $(BUILD_DIR)/busybox-1.27.1/.config
-	@sed -i 's/\(CONFIG_IFPLUGD\)=y/# \1 is not set/' $(BUILD_DIR)/busybox-1.27.1/.config
-	@sed -i 's/\(CONFIG_FEATURE_WTMP\)=y/# \1 is not set/' $(BUILD_DIR)/busybox-1.27.1/.config
-	@sed -i 's/\(CONFIG_FEATURE_UTMP\)=y/# \1 is not set/' $(BUILD_DIR)/busybox-1.27.1/.config
-	@sed -i 's/\(CONFIG_UDPSVD\)=y/# \1 is not set/' $(BUILD_DIR)/busybox-1.27.1/.config
-	@sed -i 's/\(CONFIG_TCPSVD\)=y/# \1 is not set/' $(BUILD_DIR)/busybox-1.27.1/.config
-	@make ARCH=$(CONFIG_MODE) CROSS_COMPILE=$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)- -C $(BUILD_DIR)/busybox-1.27.1
-	@make ARCH=$(CONFIG_MODE) CROSS_COMPILE=$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)- CONFIG_PREFIX=$(ROOTFS_DIR) install -C $(BUILD_DIR)/busybox-1.27.1
-	@cp -v $(BUILD_DIR)/busybox-1.27.1/examples/depmod.pl $(TOOLS_DIR)/usr/bin
-	@chmod -v 755 $(TOOLS_DIR)/usr/bin/depmod.pl
+	@patch -Np1 -i $(PACKAGES_DIR)/busybox/networking-libiproute-use-linux-if_packet.h-instead-.patch -d $(BUILD_DIR)/busybox-1.27.1
+	@patch -Np1 -i $(PACKAGES_DIR)/busybox/Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch -d $(BUILD_DIR)/busybox-1.27.1
+	@patch -Np1 -i $(PACKAGES_DIR)/busybox/Makefile-include-per-arch-Makefile-before-Makefile.f.patch -d $(BUILD_DIR)/busybox-1.27.1
+	@cp -v $(PACKAGES_DIR)/busybox/busybox.config $(BUILD_DIR)/busybox-1.27.1/.config
+	@sed -i -e 's/^noclobber="0"$$/noclobber="1"/' $(BUILD_DIR)/busybox-1.27.1/applets/install.sh
+	@CFLAGS_busybox="" make -j$(CONFIG_PARALLEL_JOBS) CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc ARCH=$(CONFIG_MODE) PREFIX=$(ROOTFS_DIR) EXTRA_LDFLAGS="" CROSS_COMPILE=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)- CONFIG_PREFIX=$(ROOTFS_DIR) SKIP_STRIP=y -C $(BUILD_DIR)/busybox-1.27.1
+	@CFLAGS_busybox="" make -j$(CONFIG_PARALLEL_JOBS) CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc ARCH=$(CONFIG_MODE) PREFIX=$(ROOTFS_DIR) EXTRA_LDFLAGS="" CROSS_COMPILE=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)- CONFIG_PREFIX=$(ROOTFS_DIR) SKIP_STRIP=y -C $(BUILD_DIR)/busybox-1.27.1 install
+	@install -Dv -m 0644 $(PACKAGES_DIR)/busybox/inittab $(ROOTFS_DIR)/etc/inittab
+	@install -Dv -m 0755 $(PACKAGES_DIR)/busybox/udhcpc.script $(ROOTFS_DIR)/usr/share/udhcpc/default.script
+	@install -d -m 0755 $(ROOTFS_DIR)/usr/share/udhcpc/default.script.d
+	@install -Dv -m 0755 $(PACKAGES_DIR)/busybox/S01logging $(ROOTFS_DIR)/etc/init.d/S01logging
 	@rm -rf $(BUILD_DIR)/busybox-1.27.1

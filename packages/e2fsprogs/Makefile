@@ -20,7 +20,7 @@ toolchain:
 	LDFLAGS="-L$(TOOLS_DIR)/usr/lib -Wl,-rpath,$(TOOLS_DIR)/usr/lib" \
 	CONFIG_SITE=/dev/null \
 	./configure \
-	--prefix=$(TOOLS_DIR)/usr \
+	--prefix=$(TOOLS_DIR) \
 	--sysconfdir=$(TOOLS_DIR)/etc \
 	--localstatedir=$(TOOLS_DIR)/var \
 	--enable-shared \

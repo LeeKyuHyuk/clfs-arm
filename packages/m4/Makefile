@@ -9,20 +9,20 @@ toolchain:
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/m4-1.4.18 && \
-	PKG_CONFIG="$(TOOLS_DIR)/usr/bin/pkg-config" \
+	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
 	PKG_CONFIG_SYSROOT_DIR="/" \
 	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
 	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
-	PKG_CONFIG_LIBDIR="$(TOOLS_DIR)/usr/lib/pkgconfig:$(TOOLS_DIR)/usr/share/pkgconfig" \
-	CPPFLAGS="-I$(TOOLS_DIR)/usr/include" \
-	CFLAGS="-O2 -I$(TOOLS_DIR)/usr/include" \
-	CXXFLAGS="-O2 -I$(TOOLS_DIR)/usr/include" \
-	LDFLAGS="-L$(TOOLS_DIR)/usr/lib -Wl,-rpath,$(TOOLS_DIR)/usr/lib" \
+	PKG_CONFIG_LIBDIR="$(TOOLS_DIR)/lib/pkgconfig:$(TOOLS_DIR)/share/pkgconfig" \
+	CPPFLAGS="-I$(TOOLS_DIR)/include" \
+	CFLAGS="-O2 -I$(TOOLS_DIR)/include" \
+	CXXFLAGS="-O2 -I$(TOOLS_DIR)/include" \
+	LDFLAGS="-L$(TOOLS_DIR)/lib -Wl,-rpath,$(TOOLS_DIR)/lib" \
 	CONFIG_SITE=/dev/null \
 	./configure \
-	--prefix=$(TOOLS_DIR)/usr \
-	--sysconfdir=$(TOOLS_DIR)/usr/etc \
-	--localstatedir=$(TOOLS_DIR)/usr/var \
+	--prefix=$(TOOLS_DIR) \
+	--sysconfdir=$(TOOLS_DIR)/etc \
+	--localstatedir=$(TOOLS_DIR)/var \
 	--enable-shared \
 	--disable-static )
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/m4-1.4.18

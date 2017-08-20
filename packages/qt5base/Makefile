@@ -60,6 +60,7 @@ system:
 	-system-xkbcommon \
 	-opengl es2 \
 	-eglfs \
+	--enable-linuxfb \
 	-openssl \
 	-fontconfig \
 	-system-libjpeg \
@@ -67,7 +68,6 @@ system:
 	-dbus \
 	-no-tslib \
 	-no-glib \
-	-icu \
 	-nomake examples \
 	-libinput )
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/qt-everywhere-opensource-src-5.9.1

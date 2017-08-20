@@ -8,7 +8,6 @@ toolchain:
 	@$(STEP) "autoconf 2.69"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
-	@patch -Np1 -i $(PACKAGES_DIR)/autoconf/dont-add-dirty-to-version.patch -d $(BUILD_DIR)/autoconf-2.69
 	@( cd $(BUILD_DIR)/autoconf-2.69 && \
 	PKG_CONFIG="$(TOOLS_DIR)/usr/bin/pkg-config" \
 	PKG_CONFIG_SYSROOT_DIR="/" \
@@ -24,9 +23,9 @@ toolchain:
 	ac_cv_prog_gnu_m4_gnu=no \
 	CONFIG_SITE=/dev/null \
 	./configure \
-	--prefix=$(TOOLS_DIR)/usr \
-	--sysconfdir=$(TOOLS_DIR)/usr/etc \
-	--localstatedir=$(TOOLS_DIR)/usr/var \
+	--prefix=$(TOOLS_DIR) \
+	--sysconfdir=$(TOOLS_DIR)/etc \
+	--localstatedir=$(TOOLS_DIR)/var \
 	--enable-shared \
 	--disable-static )
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/autoconf-2.69

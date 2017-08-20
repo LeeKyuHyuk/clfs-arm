@@ -25,9 +25,9 @@ toolchain:
 	MAKEINFO=true \
 	CONFIG_SITE=/dev/null \
 	./configure \
-	--prefix=$(TOOLS_DIR)/usr \
-	--sysconfdir=$(TOOLS_DIR)/usr/etc \
-	--localstatedir=$(TOOLS_DIR)/usr/var \
+	--prefix=$(TOOLS_DIR) \
+	--sysconfdir=$(TOOLS_DIR)/etc \
+	--localstatedir=$(TOOLS_DIR)/var \
 	--enable-shared \
 	--disable-static )
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/libtool-2.4.6

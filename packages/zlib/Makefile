@@ -40,7 +40,6 @@ system:
 	@( cd $(BUILD_DIR)/zlib-1.2.11 && \
 	PKG_CONFIG="$(TOOLS_DIR)/usr/bin/pkg-config" \
 	CC=$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-gcc \
-	CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -fPIC" \
 	ac_cv_lbl_unaligned_fail=yes \
 	ac_cv_func_mmap_fixed_mapped=yes \
 	ac_cv_func_memcmp_working=yes \

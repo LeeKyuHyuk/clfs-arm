@@ -8,7 +8,6 @@ toolchain:
 	@$(STEP) "util-linux 2.30.1"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
-	@patch -Np1 -i $(PACKAGES_DIR)/util-linux/Revert-build-sys-ncurses-headers-cleanup.patch -d $(BUILD_DIR)/util-linux-2.30.1
 	@( cd $(BUILD_DIR)/util-linux-2.30.1 && \
 	PKG_CONFIG="$(TOOLS_DIR)/usr/bin/pkg-config" \
 	PKG_CONFIG_SYSROOT_DIR="/" \
@@ -21,7 +20,7 @@ toolchain:
 	LDFLAGS="-L$(TOOLS_DIR)/usr/lib -Wl,-rpath,$(TOOLS_DIR)/usr/lib" \
 	CONFIG_SITE=/dev/null \
 	./configure \
-	--prefix=$(TOOLS_DIR)/usr \
+	--prefix=$(TOOLS_DIR) \
 	--sysconfdir=$(TOOLS_DIR)/etc \
 	--localstatedir=$(TOOLS_DIR)/var \
 	--enable-shared \
@@ -51,7 +50,6 @@ system:
 	@$(STEP) "util-linux 2.29.2"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
-	@patch -Np1 -i $(PACKAGES_DIR)/util-linux/Revert-build-sys-ncurses-headers-cleanup.patch -d $(BUILD_DIR)/util-linux-2.30.1
 	@mkdir -pv $(ROOTFS_DIR)/var/lib/hwclock
 	@( cd $(BUILD_DIR)/util-linux-2.30.1 && \
 	PKG_CONFIG="$(TOOLS_DIR)/usr/bin/pkg-config" \

@@ -61,11 +61,21 @@ system:
 	@mv -v $(ROOTFS_DIR)/usr/lib/*gdb.py $(ROOTFS_DIR)/usr/share/gdb/auto-load/usr/lib
 	@rm -rf $(BUILD_DIR)/gcc-6.3.0
 
+staging-lib:
+	@cp -dpvf $(TOOLS_DIR)/$(CONFIG_TARGET)/lib*/libgcc_s* $(SYSROOT_DIR)/lib/
+	@cp -dpvf $(TOOLS_DIR)/$(CONFIG_TARGET)/lib*/libatomic* $(SYSROOT_DIR)/lib/
+	@for i in libstdc++ ; do \
+		cp -dpvf $(TOOLS_DIR)/$(CONFIG_TARGET)/lib*/$${i}.a $(SYSROOT_DIR)/usr/lib/ ; \
+	done
+	@for i in libstdc++ ; do \
+		cp -dpvf $(TOOLS_DIR)/$(CONFIG_TARGET)/lib*/$${i}.so* $(SYSROOT_DIR)/usr/lib/ ; \
+	done
+
 system-lib:
 	@$(STEP) "gcc 7.1.0"
 	@mkdir -p $(ROOTFS_DIR)/usr/lib
-	@cp -dpvf $(TOOLS_DIR)/usr/$(CONFIG_TARGET)/lib*/libgcc_s* $(ROOTFS_DIR)/lib/
-	@cp -dpvf $(TOOLS_DIR)/usr/$(CONFIG_TARGET)/lib*/libatomic* $(ROOTFS_DIR)/lib/
+	@cp -dpvf $(TOOLS_DIR)/$(CONFIG_TARGET)/lib*/libgcc_s* $(ROOTFS_DIR)/lib/
+	@cp -dpvf $(TOOLS_DIR)/$(CONFIG_TARGET)/lib*/libatomic* $(ROOTFS_DIR)/lib/
 	@for i in libstdc++ ; do \
-		cp -dpvf $(TOOLS_DIR)/usr/$(CONFIG_TARGET)/lib*/$${i}.so* $(ROOTFS_DIR)/usr/lib/ ; \
+		cp -dpvf $(TOOLS_DIR)/$(CONFIG_TARGET)/lib*/$${i}.so* $(ROOTFS_DIR)/usr/lib/ ; \
 	done

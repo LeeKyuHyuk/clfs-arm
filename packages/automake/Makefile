@@ -8,8 +8,6 @@ toolchain:
 	@$(STEP) "automake 1.15"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
-	@patch -Np1 -i $(PACKAGES_DIR)/automake/noman.patch -d $(BUILD_DIR)/automake-1.15
-	@patch -Np1 -i $(PACKAGES_DIR)/automake/port-to-perl-5.22-and-later.patch -d $(BUILD_DIR)/automake-1.15
 	@( cd $(BUILD_DIR)/automake-1.15 && \
 	PKG_CONFIG="$(TOOLS_DIR)/usr/bin/pkg-config" \
 	PKG_CONFIG_SYSROOT_DIR="/" \
@@ -22,15 +20,14 @@ toolchain:
 	LDFLAGS="-L$(TOOLS_DIR)/usr/lib -Wl,-rpath,$(TOOLS_DIR)/usr/lib" \
 	CONFIG_SITE=/dev/null \
 	./configure \
-	--prefix=$(TOOLS_DIR)/usr \
-	--sysconfdir=$(TOOLS_DIR)/usr/etc \
-	--localstatedir=$(TOOLS_DIR)/usr/var \
+	--prefix=$(TOOLS_DIR) \
+	--sysconfdir=$(TOOLS_DIR)/etc \
+	--localstatedir=$(TOOLS_DIR)/var \
 	--enable-shared \
 	--disable-static )
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/automake-1.15
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/automake-1.15
 	@install -Dv -m 0644 $(PACKAGES_DIR)/automake/gtk-doc.m4 $(TOOLS_DIR)/usr/share/aclocal/gtk-doc.m4
-	@mkdir -p $(SYSROOT_DIR)/usr/share/aclocal
 	@rm -rf $(BUILD_DIR)/automake-1.15
 
 system:

@@ -8,18 +8,15 @@ staging:
 	@$(STEP) "glibc 2.25"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
-	@patch -Np1 -i $(PACKAGES_DIR)/glibc/sh-Fix-building-with-gcc5-6.patch -d $(BUILD_DIR)/glibc-2.25
-	@patch -Np1 -i $(PACKAGES_DIR)/glibc/CVE-2017-1000366-Ignore-LD_LIBRARY_PATH-for-AT_SECUR.patch -d $(BUILD_DIR)/glibc-2.25
-	@patch -Np1 -i $(PACKAGES_DIR)/glibc/ld.so-Reject-overly-long-LD_PRELOAD-path-elements.patch -d $(BUILD_DIR)/glibc-2.25
-	@patch -Np1 -i $(PACKAGES_DIR)/glibc/ld.so-Reject-overly-long-LD_AUDIT-path-elements.patch -d $(BUILD_DIR)/glibc-2.25
 	@patch -Np1 -i $(PACKAGES_DIR)/glibc/fix-binutils-2-29-build.patch -d $(BUILD_DIR)/glibc-2.25
-	@patch -Np1 -i $(PACKAGES_DIR)/glibc/glibc-2.25-fhs-1.patch -d $(BUILD_DIR)/glibc-2.25
+	@patch -Np1 -i $(PACKAGES_DIR)/glibc/CVE-2017-1000366-Ignore-LD_LIBRARY_PATH-for-AT_SECUR.patch -d $(BUILD_DIR)/glibc-2.25
 	@mkdir -p $(BUILD_DIR)/glibc-2.25/glibc-build
 	@( cd $(BUILD_DIR)/glibc-2.25/glibc-build && \
 	PKG_CONFIG="$(TOOLS_DIR)/usr/bin/pkg-config" \
 	AR="$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-ar" \
 	CC="$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-gcc" \
 	RANLIB="$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-ranlib" \
+	BUILD_CC="gcc" \
 	$(BUILD_DIR)/glibc-2.25/configure \
 	ac_cv_path_BASH_SHELL=/bin/bash \
 	libc_cv_forced_unwind=yes \
@@ -38,6 +35,44 @@ staging:
 	@make -j$(CONFIG_PARALLEL_JOBS) install_root=$(SYSROOT_DIR) install -C $(BUILD_DIR)/glibc-2.25/glibc-build
 	@echo "#include <gnu/stubs-hard.h>" > $(SYSROOT_DIR)/usr/include/gnu/stubs.h
 	@cp -v $(BUILD_DIR)/glibc-2.25/nscd/nscd.conf $(SYSROOT_DIR)/etc/nscd.conf
+	@rm -rf $(BUILD_DIR)/glibc-2.25
+
+system:
+	@$(STEP) "glibc 2.25"
+	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
+	@patch -Np1 -i $(PACKAGES_DIR)/glibc/glibc-2.25-fhs-1.patch -d $(BUILD_DIR)/glibc-2.25
+	@patch -Np1 -i $(PACKAGES_DIR)/glibc/fix-binutils-2-29-build.patch -d $(BUILD_DIR)/glibc-2.25
+	@patch -Np1 -i $(PACKAGES_DIR)/glibc/CVE-2017-1000366-Ignore-LD_LIBRARY_PATH-for-AT_SECUR.patch -d $(BUILD_DIR)/glibc-2.25
+	@mkdir -p $(BUILD_DIR)/glibc-2.25/glibc-build
+	@( cd $(BUILD_DIR)/glibc-2.25/glibc-build && \
+	PKG_CONFIG="$(TOOLS_DIR)/usr/bin/pkg-config" \
+	AR="$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-ar" \
+	CC="$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-gcc" \
+	RANLIB="$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-ranlib" \
+	BUILD_CC="gcc" \
+	$(BUILD_DIR)/glibc-2.25/configure \
+	ac_cv_path_BASH_SHELL=/bin/bash \
+	libc_cv_forced_unwind=yes \
+	libc_cv_ssp=no \
+	--target=$(CONFIG_TARGET) \
+	--host=$(CONFIG_TARGET) \
+	--build=$(CONFIG_HOST) \
+	--with-pkgversion="$(CONFIG_PKG_VERSION)" \
+	--prefix=/usr \
+	--enable-obsolete-rpc \
+	--enable-kernel=2.6.32 \
+	--with-headers=$(SYSROOT_DIR)/usr/include )
+	@mkdir -p $(SYSROOT_DIR)/usr/include/gnu
+	@touch $(SYSROOT_DIR)/usr/include/gnu/stubs.h
+	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/glibc-2.25/glibc-build
+	@make -j$(CONFIG_PARALLEL_JOBS) install_root=$(ROOTFS_DIR) install -C $(BUILD_DIR)/glibc-2.25/glibc-build
+	@cp -v $(SYSROOT_DIR)/etc/nscd.conf $(ROOTFS_DIR)/etc/nscd.conf
+	@mkdir -pv $(ROOTFS_DIR)/var/cache/nscd
+	@cp -v $(PACKAGES_DIR)/glibc/nsswitch.conf $(ROOTFS_DIR)/etc/nsswitch.conf
+	@cp -v $(PACKAGES_DIR)/glibc/ld.so.conf $(ROOTFS_DIR)/etc/ld.so.conf
+	@mkdir -pv $(ROOTFS_DIR)/etc/ld.so.conf.d
+	@ln -svf ld-2.25.so $(ROOTFS_DIR)/lib/ld-linux.so.3
 	@rm -rf $(BUILD_DIR)/glibc-2.25
 
 system-lib:

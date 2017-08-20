@@ -19,6 +19,7 @@ system:
 	@make -j$(CONFIG_PARALLEL_JOBS) ARCH=$(CONFIG_MODE) headers_check -C $(BUILD_DIR)/linux-header
 	@make -j$(CONFIG_PARALLEL_JOBS) ARCH=$(CONFIG_MODE) INSTALL_HDR_PATH=$(BUILD_DIR)/linux-header/dest headers_install -C $(BUILD_DIR)/linux-header
 	@find $(BUILD_DIR)/linux-header/dest/include \( -name .install -o -name ..install.cmd \) -delete
+	@mkdir -pv $(ROOTFS_DIR)/usr/include
 	@cp -rv $(BUILD_DIR)/linux-header/dest/include/* $(ROOTFS_DIR)/usr/include
 	@rm -rf $(BUILD_DIR)/linux-header
 

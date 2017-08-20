@@ -41,6 +41,9 @@ system:
 	@$(STEP) "libXcb 1.12"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
+	@sed -i "s/pthread-stubs//" $(BUILD_DIR)/libxcb-1.12/configure
+	@sed -i "s|XCBPROTO_XCBINCLUDEDIR=|XCBPROTO_XCBINCLUDEDIR=$(SYSROOT_DIR)/|" $(BUILD_DIR)/libxcb-1.12/configure.ac
+	@sed -i "s|XCBPROTO_XCBPYTHONDIR=|XCBPROTO_XCBPYTHONDIR=$(SYSROOT_DIR)/|" $(BUILD_DIR)/libxcb-1.12/configure.ac
 	@( cd $(BUILD_DIR)/libxcb-1.12 && \
 	PKG_CONFIG="$(TOOLS_DIR)/usr/bin/pkg-config" \
 	ac_cv_lbl_unaligned_fail=yes \
@@ -64,7 +67,8 @@ system:
 	--localstatedir=/var \
 	--program-prefix="" \
 	--disable-static \
-	--enable-shared )
+	--enable-shared \
+	--with-doxygen=no )
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/libxcb-1.12
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/libxcb-1.12
 	@$(call dependency_libs_patch)

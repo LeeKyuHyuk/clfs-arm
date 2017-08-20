@@ -8,6 +8,7 @@ toolchain:
 	@$(STEP) "pkgconf 0.9.12"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
+	@patch -Np1 -i $(PACKAGES_DIR)/pkgconf/Fix-all-variables-sysroot-prefix-problem.patch -d $(BUILD_DIR)/pkgconf-0.9.12
 	@( cd $(BUILD_DIR)/pkgconf-0.9.12 && \
 	PKG_CONFIG="$(TOOLS_DIR)/usr/bin/pkg-config" \
 	PKG_CONFIG_SYSROOT_DIR="/" \
@@ -19,7 +20,7 @@ toolchain:
 	CXXFLAGS="-O2 -I$(TOOLS_DIR)/usr/include" \
 	LDFLAGS="-L$(TOOLS_DIR)/usr/lib -Wl,-rpath,$(TOOLS_DIR)/usr/lib" \
 	./configure \
-	--prefix=$(TOOLS_DIR)/usr \
+	--prefix=$(TOOLS_DIR) \
 	--sysconfdir=$(TOOLS_DIR)/etc \
 	--localstatedir=$(TOOLS_DIR)/var \
 	--enable-shared \

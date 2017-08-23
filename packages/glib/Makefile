@@ -51,7 +51,7 @@ system:
 	@export RANLIB=$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-ranlib
 	@export READELF=$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-readelf
 	@export STRIP=$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-strip
-	@$(STEP) "kmod 24"
+	@$(STEP) "glib 2.52.0"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@sed -i -e "s# tests##" $(BUILD_DIR)/glib-2.52.0/Makefile.am

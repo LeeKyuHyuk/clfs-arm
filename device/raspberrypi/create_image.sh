@@ -2,6 +2,10 @@
 set -o nounset
 set -o errexit
 
+$STEP "Copy GTK Setting script."
+cp -v $SUPPORT_DIR/gtk_setting.sh $ROOTFS_DIR/root/gtk_setting.sh
+chmod a+x $ROOTFS_DIR/root/gtk_setting.sh
+
 $STEP "Creating the fstab"
 rm -f $ROOTFS_DIR/etc/fstab
 cat > $ROOTFS_DIR/etc/fstab << "EOF"

@@ -4,6 +4,36 @@ SOURCE := $(SOURCES_DIR)/pcre-8.40.tar.bz2
 SOURCE_URL := ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.40.tar.bz2
 MD5 := 41a842bf7dcecd6634219336e2167d1d
 
+toolchain:
+	@$(STEP) "pcre 8.40"
+	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
+	@( cd $(BUILD_DIR)/pcre-8.40 && \
+	PKG_CONFIG="$(TOOLS_DIR)/usr/bin/pkg-config" \
+	PKG_CONFIG_SYSROOT_DIR="/" \
+	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
+	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
+	PKG_CONFIG_LIBDIR="$(TOOLS_DIR)/usr/lib/pkgconfig:$(TOOLS_DIR)/usr/share/pkgconfig" \
+	CPPFLAGS="-I$(TOOLS_DIR)/usr/include" \
+	CFLAGS="-O2 -I$(TOOLS_DIR)/usr/include" \
+	CXXFLAGS="-O2 -I$(TOOLS_DIR)/usr/include" \
+	LDFLAGS="-L$(TOOLS_DIR)/usr/lib -Wl,-rpath,$(TOOLS_DIR)/usr/lib" \
+	CONFIG_SITE=/dev/null \
+	./configure \
+	--prefix=$(TOOLS_DIR)/usr \
+	--sysconfdir=$(TOOLS_DIR)/etc \
+	--localstatedir=$(TOOLS_DIR)/var \
+	--enable-shared \
+	--disable-static \
+	--enable-pcre8 \
+	--disable-pcre16 \
+	--disable-pcre32 \
+	--enable-utf \
+	--enable-unicode-properties )
+	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/pcre-8.40
+	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/pcre-8.40
+	@rm -rf $(BUILD_DIR)/pcre-8.40
+
 system:
 	@export CC=$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-gcc
 	@export CXX=$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-g++

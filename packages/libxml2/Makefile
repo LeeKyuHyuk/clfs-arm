@@ -26,8 +26,7 @@ toolchain:
 	--enable-shared \
 	--disable-static \
 	--without-zlib \
-	--without-lzma \
-	--without-python )
+	--without-lzma )
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/libxml2-2.9.4
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/libxml2-2.9.4
 	@rm -rf $(BUILD_DIR)/libxml2-2.9.4

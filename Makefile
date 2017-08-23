@@ -80,6 +80,7 @@ toolchain:
 	@make toolchain -C $(PACKAGES_DIR)/file
 	@make toolchain -C $(PACKAGES_DIR)/binutils
 	@make toolchain -C $(PACKAGES_DIR)/m4
+	@make toolchain -C $(PACKAGES_DIR)/bc
 	@make toolchain -C $(PACKAGES_DIR)/gcc/initial
 	@make staging -C $(PACKAGES_DIR)/linux
 	@make staging -C $(PACKAGES_DIR)/glibc
@@ -91,8 +92,6 @@ toolchain:
 	@make toolchain -C $(PACKAGES_DIR)/gperf
 	@make toolchain -C $(PACKAGES_DIR)/bison
 	@make toolchain -C $(PACKAGES_DIR)/flex
-	@make toolchain -C $(PACKAGES_DIR)/libxml2
-	@make toolchain -C $(PACKAGES_DIR)/libxslt
 	@make toolchain -C $(PACKAGES_DIR)/expat
 	@make toolchain -C $(PACKAGES_DIR)/zlib
 	@make toolchain -C $(PACKAGES_DIR)/libconfuse
@@ -100,12 +99,16 @@ toolchain:
 	@make toolchain -C $(PACKAGES_DIR)/mtools
 	@make toolchain -C $(PACKAGES_DIR)/xcb-proto
 	@make toolchain -C $(PACKAGES_DIR)/libffi
+	@make toolchain -C $(PACKAGES_DIR)/python2
+	@make toolchain -C $(PACKAGES_DIR)/libxml2
+	@make toolchain -C $(PACKAGES_DIR)/libxslt
 	@make toolchain -C $(PACKAGES_DIR)/wayland
 	@make toolchain -C $(PACKAGES_DIR)/xproto
 	@make toolchain -C $(PACKAGES_DIR)/util-linux
 	@make toolchain -C $(PACKAGES_DIR)/e2fsprogs
 	@make toolchain -C $(PACKAGES_DIR)/patchelf
 	@make toolchain -C $(PACKAGES_DIR)/gettext
+	@make toolchain -C $(PACKAGES_DIR)/pcre
 	@make toolchain -C $(PACKAGES_DIR)/glib
 	@make toolchain -C $(PACKAGES_DIR)/kmod
 	@make toolchain -C $(PACKAGES_DIR)/libcap
@@ -131,6 +134,14 @@ toolchain:
 	@make toolchain -C $(PACKAGES_DIR)/encodings
 	@make toolchain -C $(PACKAGES_DIR)/fontsproto
 	@make toolchain -C $(PACKAGES_DIR)/libxfont2
+	@make toolchain -C $(PACKAGES_DIR)/libpng
+	@make toolchain -C $(PACKAGES_DIR)/gdk-pixbuf
+	@make toolchain -C $(PACKAGES_DIR)/libgtk2
+	@make toolchain -C $(PACKAGES_DIR)/itstool
+	@make toolchain -C $(PACKAGES_DIR)/libgpg-error
+	@make toolchain -C $(PACKAGES_DIR)/curl
+	@make toolchain -C $(PACKAGES_DIR)/libarchive
+	@make toolchain -C $(PACKAGES_DIR)/cmake
 	$(PRINT_BUILD_TIME)
 
 system:
@@ -202,7 +213,6 @@ system:
 	@make system -C $(PACKAGES_DIR)/sysklogd
 	@make system -C $(PACKAGES_DIR)/sysvinit
 	@make system -C $(PACKAGES_DIR)/tar
-	@make system -C $(PACKAGES_DIR)/texinfo
 	@make system -C $(PACKAGES_DIR)/vim
 	@make system -C $(PACKAGES_DIR)/tzdata
 	@make system -C $(PACKAGES_DIR)/bootscripts
@@ -248,7 +258,6 @@ system:
 	@make system -C $(PACKAGES_DIR)/openssh
 	@make system -C $(PACKAGES_DIR)/ntp
 	@make system -C $(PACKAGES_DIR)/lsb-release
-	@make system -C $(PACKAGES_DIR)/opus
 	@make system -C $(PACKAGES_DIR)/libxcursor
 	@make system -C $(PACKAGES_DIR)/libxkbfile
 	@make system -C $(PACKAGES_DIR)/xkbcomp
@@ -270,6 +279,7 @@ system:
 	@make system -C $(PACKAGES_DIR)/libxxf86vm
 	@make system -C $(PACKAGES_DIR)/bigreqsproto
 	@make system -C $(PACKAGES_DIR)/compositeproto
+	@make system -C $(PACKAGES_DIR)/libxcomposite
 	@make system -C $(PACKAGES_DIR)/presentproto
 	@make system -C $(PACKAGES_DIR)/videoproto
 	@make system -C $(PACKAGES_DIR)/xcmiscproto
@@ -281,8 +291,38 @@ system:
 	@make system -C $(PACKAGES_DIR)/xf86-input-mouse
 	@make system -C $(PACKAGES_DIR)/xf86-video-fbdev
 	@make system -C $(PACKAGES_DIR)/weston
-	@make system -C $(PACKAGES_DIR)/qt5base
-	@make system -C $(PACKAGES_DIR)/qupzilla
+	@make system -C $(PACKAGES_DIR)/atk
+	@make system -C $(PACKAGES_DIR)/icu
+	@make system -C $(PACKAGES_DIR)/harfbuzz
+	@make system -C $(PACKAGES_DIR)/pango
+	@make system -C $(PACKAGES_DIR)/hicolor-icon-theme
+	@make system -C $(PACKAGES_DIR)/gdk-pixbuf
+	@make system -C $(PACKAGES_DIR)/recordproto
+	@make system -C $(PACKAGES_DIR)/libxtst
+	@make system -C $(PACKAGES_DIR)/at-spi2-core
+	@make system -C $(PACKAGES_DIR)/at-spi2-atk
+	@make system -C $(PACKAGES_DIR)/libgtk3
+	@make system -C $(PACKAGES_DIR)/libtasn1
+	@make system -C $(PACKAGES_DIR)/p11-kit
+	@make system -C $(PACKAGES_DIR)/libgpg-error
+	@make system -C $(PACKAGES_DIR)/libgcrypt
+	@make system -C $(PACKAGES_DIR)/gcr
+	@make system -C $(PACKAGES_DIR)/iso-codes
+	@make system -C $(PACKAGES_DIR)/gsettings-desktop-schemas
+	@make system -C $(PACKAGES_DIR)/gnome-desktop
+	@make system -C $(PACKAGES_DIR)/json-glib
+	@make system -C $(PACKAGES_DIR)/libnotify
+	@make system -C $(PACKAGES_DIR)/libsecret
+	@make system -C $(PACKAGES_DIR)/libsoup
+	@make system -C $(PACKAGES_DIR)/libxslt
+	@make system -C $(PACKAGES_DIR)/ruby
+	@make system -C $(PACKAGES_DIR)/libgtk2
+	@make system -C $(PACKAGES_DIR)/enchant
+	@make system -C $(PACKAGES_DIR)/gstreamer
+	@make system -C $(PACKAGES_DIR)/gst-plugins-base
+	@make system -C $(PACKAGES_DIR)/libwebp
+	@make system -C $(PACKAGES_DIR)/webkitgtk
+	@make system -C $(PACKAGES_DIR)/epiphany
 	@make system -C $(PACKAGES_DIR)/glibc
 	$(PRINT_BUILD_TIME)
 

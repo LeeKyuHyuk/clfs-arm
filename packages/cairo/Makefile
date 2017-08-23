@@ -45,7 +45,7 @@ system:
 	--enable-interpreter=no \
 	--disable-directfb \
 	--enable-ft \
-	--disable-gobject \
+	--enable-gobject \
 	--enable-gl \
 	--disable-glesv2 \
 	--disable-vg \
@@ -53,17 +53,17 @@ system:
 	--enable-xcb \
 	--with-x \
 	--enable-xlib-xrender \
-	--disable-ps \
-	--disable-pdf \
+	--enable-ps \
+	--enable-pdf \
 	--enable-png \
 	--disable-script \
-	--disable-svg \
+	--enable-svg \
 	--disable-tee \
-	--disable-xml )
+	--enable-xml )
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/cairo-1.14.10
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/cairo-1.14.10
 	@$(call dependency_libs_patch)
-	@sed -i "s@\.latomic@\-latomic@g" $(SYSROOT_DIR)/usr/lib/libcairo.la
+	@sed -i "s@\.latomic@\-latomic@g" $(SYSROOT_DIR)/usr/lib/libcairo-gobject.la $(SYSROOT_DIR)/usr/lib/libcairo.la
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/cairo-1.14.10
-	@sed -i "s@\.latomic@\-latomic@g" $(ROOTFS_DIR)/usr/lib/libcairo.la
+	@sed -i "s@\.latomic@\-latomic@g" $(ROOTFS_DIR)/usr/lib/libcairo-gobject.la $(ROOTFS_DIR)/usr/lib/libcairo.la
 	@rm -rf $(BUILD_DIR)/cairo-1.14.10

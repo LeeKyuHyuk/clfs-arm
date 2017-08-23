@@ -8,6 +8,11 @@ toolchain:
 	@$(STEP) "icu 59.1"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
+	@patch -Np1 -i $(PACKAGES_DIR)/icu/0001-dont-build-static-dynamic-twice.patch -d $(BUILD_DIR)/icu
+	@patch -Np1 -i $(PACKAGES_DIR)/icu/0002-workaround-toolchain-bugs.patch -d $(BUILD_DIR)/icu
+	@patch -Np1 -i $(PACKAGES_DIR)/icu/0003-detect-compiler-symbol-prefix.patch -d $(BUILD_DIR)/icu
+	@patch -Np1 -i $(PACKAGES_DIR)/icu/0004-link-icudata-as-data-only.patch -d $(BUILD_DIR)/icu
+	@patch -Np1 -i $(PACKAGES_DIR)/icu/0005-fix-static-linking-with-icu-uc.patch -d $(BUILD_DIR)/icu
 	@( cd $(BUILD_DIR)/icu/source && \
 	PKG_CONFIG="$(TOOLS_DIR)/usr/bin/pkg-config" \
 	PKG_CONFIG_SYSROOT_DIR="/" \
@@ -48,6 +53,11 @@ system:
 	@$(STEP) "icu 59.1"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
+	@patch -Np1 -i $(PACKAGES_DIR)/icu/0001-dont-build-static-dynamic-twice.patch -d $(BUILD_DIR)/icu
+	@patch -Np1 -i $(PACKAGES_DIR)/icu/0002-workaround-toolchain-bugs.patch -d $(BUILD_DIR)/icu
+	@patch -Np1 -i $(PACKAGES_DIR)/icu/0003-detect-compiler-symbol-prefix.patch -d $(BUILD_DIR)/icu
+	@patch -Np1 -i $(PACKAGES_DIR)/icu/0004-link-icudata-as-data-only.patch -d $(BUILD_DIR)/icu
+	@patch -Np1 -i $(PACKAGES_DIR)/icu/0005-fix-static-linking-with-icu-uc.patch -d $(BUILD_DIR)/icu
 	@( cd $(BUILD_DIR)/icu/source && \
 	PKG_CONFIG="$(TOOLS_DIR)/usr/bin/pkg-config" \
 	ac_cv_lbl_unaligned_fail=yes \

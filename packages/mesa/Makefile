@@ -47,7 +47,7 @@ system:
 	--disable-mangling \
 	--enable-xa \
 	--enable-shared-glapi \
-	--with-gallium-drivers=vc4 \
+	--with-gallium-drivers=swrast,vc4 \
 	--enable-gallium-extra-hud \
 	--without-dri-drivers \
 	--disable-dri3 \

@@ -11,7 +11,6 @@ define PRINT_TOTAL_BUILD_TIME
 @time_end=`date +%s` ; time_exec=`awk -v "TS=${START_TOTAL_BUILD_TIME}" -v "TE=$$time_end" 'BEGIN{TD=TE-TS;printf "%02dh:%02dm:%02ds\n",TD/(60*60)%24,TD/(60)%60,TD%60}'` ; $(STEP) "Total Build Time: $${time_exec}"
 endef
 
-
 help:
 	@$(SCRIPTS_DIR)/help.sh
 
@@ -99,6 +98,11 @@ toolchain:
 	@make toolchain -C $(PACKAGES_DIR)/mtools
 	@make toolchain -C $(PACKAGES_DIR)/xcb-proto
 	@make toolchain -C $(PACKAGES_DIR)/libffi
+	@make toolchain -C $(PACKAGES_DIR)/zlib
+	@make toolchain -C $(PACKAGES_DIR)/openssl
+	@make toolchain -C $(PACKAGES_DIR)/nspr
+	@make toolchain -C $(PACKAGES_DIR)/libarchive
+	@make toolchain -C $(PACKAGES_DIR)/bzip2
 	@make toolchain -C $(PACKAGES_DIR)/python2
 	@make toolchain -C $(PACKAGES_DIR)/libxml2
 	@make toolchain -C $(PACKAGES_DIR)/libxslt
@@ -140,7 +144,8 @@ toolchain:
 	@make toolchain -C $(PACKAGES_DIR)/itstool
 	@make toolchain -C $(PACKAGES_DIR)/libgpg-error
 	@make toolchain -C $(PACKAGES_DIR)/curl
-	@make toolchain -C $(PACKAGES_DIR)/libarchive
+	@make toolchain -C $(PACKAGES_DIR)/dbus
+	@make toolchain -C $(PACKAGES_DIR)/dbus-glib
 	@make toolchain -C $(PACKAGES_DIR)/cmake
 	$(PRINT_BUILD_TIME)
 
@@ -290,39 +295,75 @@ system:
 	@make system -C $(PACKAGES_DIR)/xf86-input-libinput
 	@make system -C $(PACKAGES_DIR)/xf86-input-mouse
 	@make system -C $(PACKAGES_DIR)/xf86-video-fbdev
-	@make system -C $(PACKAGES_DIR)/weston
+	# Start
+	@make system -C $(PACKAGES_DIR)/dbus-glib
 	@make system -C $(PACKAGES_DIR)/atk
-	@make system -C $(PACKAGES_DIR)/icu
-	@make system -C $(PACKAGES_DIR)/harfbuzz
-	@make system -C $(PACKAGES_DIR)/pango
-	@make system -C $(PACKAGES_DIR)/hicolor-icon-theme
-	@make system -C $(PACKAGES_DIR)/gdk-pixbuf
 	@make system -C $(PACKAGES_DIR)/recordproto
 	@make system -C $(PACKAGES_DIR)/libxtst
 	@make system -C $(PACKAGES_DIR)/at-spi2-core
 	@make system -C $(PACKAGES_DIR)/at-spi2-atk
-	@make system -C $(PACKAGES_DIR)/libgtk3
-	@make system -C $(PACKAGES_DIR)/libtasn1
-	@make system -C $(PACKAGES_DIR)/p11-kit
-	@make system -C $(PACKAGES_DIR)/libgpg-error
-	@make system -C $(PACKAGES_DIR)/libgcrypt
-	@make system -C $(PACKAGES_DIR)/gcr
-	@make system -C $(PACKAGES_DIR)/iso-codes
-	@make system -C $(PACKAGES_DIR)/gsettings-desktop-schemas
-	@make system -C $(PACKAGES_DIR)/gnome-desktop
-	@make system -C $(PACKAGES_DIR)/json-glib
-	@make system -C $(PACKAGES_DIR)/libnotify
-	@make system -C $(PACKAGES_DIR)/libsecret
-	@make system -C $(PACKAGES_DIR)/libsoup
-	@make system -C $(PACKAGES_DIR)/libxslt
-	@make system -C $(PACKAGES_DIR)/ruby
+	@make system -C $(PACKAGES_DIR)/gdk-pixbuf
+	@make system -C $(PACKAGES_DIR)/hicolor-icon-theme
+	@make system -C $(PACKAGES_DIR)/icu
+	@make system -C $(PACKAGES_DIR)/harfbuzz
+	@make system -C $(PACKAGES_DIR)/pango
 	@make system -C $(PACKAGES_DIR)/libgtk2
-	@make system -C $(PACKAGES_DIR)/enchant
-	@make system -C $(PACKAGES_DIR)/gstreamer
-	@make system -C $(PACKAGES_DIR)/gst-plugins-base
-	@make system -C $(PACKAGES_DIR)/libwebp
-	@make system -C $(PACKAGES_DIR)/webkitgtk
-	@make system -C $(PACKAGES_DIR)/epiphany
+	@make system -C $(PACKAGES_DIR)/libgtk3
+	@make system -C $(PACKAGES_DIR)/libxfce4util # Glib need
+	@make system -C $(PACKAGES_DIR)/xfconf
+	@make system -C $(PACKAGES_DIR)/libxfce4ui
+	@make system -C $(PACKAGES_DIR)/exo
+	@make system -C $(PACKAGES_DIR)/garcon
+	@make system -C $(PACKAGES_DIR)/gtk-xfce-engine
+	@make system -C $(PACKAGES_DIR)/libwnck
+	@make system -C $(PACKAGES_DIR)/xfce4-panel
+	@make system -C $(PACKAGES_DIR)/iso-codes
+	@make system -C $(PACKAGES_DIR)/libxklavier
+	@make system -C $(PACKAGES_DIR)/libcroco
+	@make system -C $(PACKAGES_DIR)/librsvg
+	@make system -C $(PACKAGES_DIR)/xfce4-xkb-plugin
+	@make system -C $(PACKAGES_DIR)/lxde-icon-theme
+	@make system -C $(PACKAGES_DIR)/thunar
+	@make system -C $(PACKAGES_DIR)/libgudev
+	@make system -C $(PACKAGES_DIR)/thunar-volman
+	@make system -C $(PACKAGES_DIR)/tumbler
+	@make system -C $(PACKAGES_DIR)/xfce4-appfinder
+	# @make system -C $(PACKAGES_DIR)/xfce4-settings # 보류
+	@make system -C $(PACKAGES_DIR)/xfdesktop
+	@make system -C $(PACKAGES_DIR)/xfwm4
+	@make system -C $(PACKAGES_DIR)/libice
+	@make system -C $(PACKAGES_DIR)/libsm
+	@make system -C $(PACKAGES_DIR)/xfce4-session
+	@make system -C $(PACKAGES_DIR)/xinit
+	@make system -C $(PACKAGES_DIR)/libxt
+	@make system -C $(PACKAGES_DIR)/libxmu
+	@make system -C $(PACKAGES_DIR)/twm # need libxt
+	@make system -C $(PACKAGES_DIR)/libxpm
+	@make system -C $(PACKAGES_DIR)/libxaw
+	@make system -C $(PACKAGES_DIR)/xclock
+	@make system -C $(PACKAGES_DIR)/xterm
+	@make system -C $(PACKAGES_DIR)/lxdm
+	# End
+	# @make system -C $(PACKAGES_DIR)/weston
+	# @make system -C $(PACKAGES_DIR)/libtasn1
+	# @make system -C $(PACKAGES_DIR)/p11-kit
+	# @make system -C $(PACKAGES_DIR)/libgpg-error
+	# @make system -C $(PACKAGES_DIR)/libgcrypt
+	# @make system -C $(PACKAGES_DIR)/gcr
+	# @make system -C $(PACKAGES_DIR)/gsettings-desktop-schemas
+	# @make system -C $(PACKAGES_DIR)/gnome-desktop
+	# @make system -C $(PACKAGES_DIR)/json-glib
+	# @make system -C $(PACKAGES_DIR)/libnotify
+	# @make system -C $(PACKAGES_DIR)/libsecret
+	# @make system -C $(PACKAGES_DIR)/libsoup
+	# @make system -C $(PACKAGES_DIR)/libxslt
+	# @make system -C $(PACKAGES_DIR)/ruby
+	# @make system -C $(PACKAGES_DIR)/enchant
+	# @make system -C $(PACKAGES_DIR)/gstreamer
+	# @make system -C $(PACKAGES_DIR)/gst-plugins-base
+	# @make system -C $(PACKAGES_DIR)/libwebp
+	# @make system -C $(PACKAGES_DIR)/webkitgtk
+	# @make system -C $(PACKAGES_DIR)/epiphany
 	@make system -C $(PACKAGES_DIR)/glibc
 	$(PRINT_BUILD_TIME)
 

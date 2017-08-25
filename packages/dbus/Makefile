@@ -4,6 +4,33 @@ SOURCE := $(SOURCES_DIR)/dbus-1.10.22.tar.gz
 SOURCE_URL := https://dbus.freedesktop.org/releases/dbus/dbus-1.10.22.tar.gz
 MD5 := baaa10b7cb49086ad91179a8decfadc5
 
+toolchain:
+	@$(STEP) "dbus 1.10.22"
+	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
+	@( cd $(BUILD_DIR)/dbus-1.10.22 && \
+	PKG_CONFIG="$(TOOLS_DIR)/usr/bin/pkg-config" \
+	PKG_CONFIG_SYSROOT_DIR="/" \
+	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
+	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
+	PKG_CONFIG_LIBDIR="$(TOOLS_DIR)/usr/lib/pkgconfig:$(TOOLS_DIR)/usr/share/pkgconfig" \
+	CPPFLAGS="-I$(TOOLS_DIR)/usr/include" \
+	CFLAGS="-O2 -I$(TOOLS_DIR)/usr/include" \
+	CXXFLAGS="-O2 -I$(TOOLS_DIR)/usr/include" \
+	LDFLAGS="-L$(TOOLS_DIR)/usr/lib -Wl,-rpath,$(TOOLS_DIR)/usr/lib" \
+	CONFIG_SITE=/dev/null \
+	./configure \
+	--prefix=$(TOOLS_DIR) \
+	--sysconfdir=$(TOOLS_DIR)/etc \
+	--localstatedir=$(TOOLS_DIR)/var \
+	--enable-shared \
+	--disable-static \
+	--disable-doxygen-docs \
+	--disable-xml-docs )
+	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/dbus-1.10.22
+	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/dbus-1.10.22
+	@rm -rf $(BUILD_DIR)/dbus-1.10.22
+
 system:
 	@export CC=$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-gcc
 	@export CXX=$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-g++
@@ -61,11 +88,18 @@ system:
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/dbus-1.10.22
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/dbus-1.10.22
-	@echo 'messagebus:x:18:' >> $(ROOTFS_DIR)/etc/group
-	@echo 'messagebus:x:18:18:D-Bus Message Daemon User:/var/run/dbus:/bin/false' >> $(ROOTFS_DIR)/etc/passwd
+	@echo 'dbus:x:18:' >> $(ROOTFS_DIR)/etc/group
+	@echo 'dbus:x:18:18:D-Bus Message Daemon User:/var/run/dbus:/bin/false' >> $(ROOTFS_DIR)/etc/passwd
 	@cp -v $(PACKAGES_DIR)/dbus/session-local.conf $(ROOTFS_DIR)/etc/dbus-1/session-local.conf
-	@mkdir -p $(ROOTFS_DIR)/var/lib
-	@rm -rf $(ROOTFS_DIR)/var/lib/dbus
-	@ln -sf /tmp/dbus $(ROOTFS_DIR)/var/lib/dbus
+	@mkdir -p $(ROOTFS_DIR)/var/lib/dbus
 	@rm -rf $(ROOTFS_DIR)/usr/lib/dbus-1.0
+	@install -m 754 $(PACKAGES_DIR)/dbus/dbus $(ROOTFS_DIR)/etc/rc.d/init.d/
+	@ln -sf ../init.d/dbus $(ROOTFS_DIR)/etc/rc.d/rc0.d/K30dbus
+	@ln -sf ../init.d/dbus $(ROOTFS_DIR)/etc/rc.d/rc1.d/K30dbus
+	@ln -sf ../init.d/dbus $(ROOTFS_DIR)/etc/rc.d/rc2.d/S29dbus
+	@ln -sf ../init.d/dbus $(ROOTFS_DIR)/etc/rc.d/rc3.d/S29dbus
+	@ln -sf ../init.d/dbus $(ROOTFS_DIR)/etc/rc.d/rc4.d/S29dbus
+	@ln -sf ../init.d/dbus $(ROOTFS_DIR)/etc/rc.d/rc5.d/S29dbus
+	@ln -sf ../init.d/dbus $(ROOTFS_DIR)/etc/rc.d/rc6.d/K30dbus
+	@echo "0514377dc9004423a748b218c634fae6" > $(ROOTFS_DIR)/etc/machine-id
 	@rm -rf $(BUILD_DIR)/dbus-1.10.22

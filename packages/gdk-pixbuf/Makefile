@@ -72,7 +72,8 @@ system:
 	--disable-static \
 	--enable-shared \
 	--disable-glibtest \
-	--without-libtiff )
+	--without-libtiff \
+	--with-x11 )
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/gdk-pixbuf-2.36.6
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/gdk-pixbuf-2.36.6
 	@$(call dependency_libs_patch)

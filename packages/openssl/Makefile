@@ -4,6 +4,30 @@ SOURCE := $(SOURCES_DIR)/openssl-1.0.2k.tar.gz
 SOURCE_URL := https://www.openssl.org/source/openssl-1.0.2k.tar.gz
 MD5 := f965fc0bf01bf882b31314b61391ae65
 
+toolchain:
+	@$(STEP) "openssl 1.0.2k"
+	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
+	@( cd $(BUILD_DIR)/openssl-1.0.2k && \
+	PKG_CONFIG="$(TOOLS_DIR)/usr/bin/pkg-config" \
+	PKG_CONFIG_SYSROOT_DIR="/" \
+	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
+	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
+	PKG_CONFIG_LIBDIR="$(TOOLS_DIR)/usr/lib/pkgconfig:$(TOOLS_DIR)/usr/share/pkgconfig" \
+	CPPFLAGS="-I$(TOOLS_DIR)/usr/include" \
+	CFLAGS="-O2 -I$(TOOLS_DIR)/usr/include" \
+	CXXFLAGS="-O2 -I$(TOOLS_DIR)/usr/include" \
+	LDFLAGS="-L$(TOOLS_DIR)/usr/lib -Wl,-rpath,$(TOOLS_DIR)/usr/lib" \
+	CONFIG_SITE=/dev/null \
+	./config \
+	--prefix=$(TOOLS_DIR) \
+	--openssldir=$(TOOLS_DIR)/etc/ssl \
+	--libdir=/lib \
+	shared )
+	@make -j1 -C $(BUILD_DIR)/openssl-1.0.2k
+	@make -j1 install -C $(BUILD_DIR)/openssl-1.0.2k
+	@rm -rf $(BUILD_DIR)/openssl-1.0.2k
+
 system:
 	@export CC=$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-gcc
 	@export CXX=$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-g++

@@ -4,6 +4,20 @@ SOURCE := $(SOURCES_DIR)/bzip2-1.0.6.tar.gz
 SOURCE_URL := http://www.bzip.org/1.0.6/bzip2-1.0.6.tar.gz
 MD5 := 00b516f4704d4a7cb50a1d97e6e8e15b
 
+toolchain:
+	@$(STEP) "bzip2 1.0.6"
+	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
+	@patch -Np1 -i $(PACKAGES_DIR)/bzip2/bzip2-1.0.6-install_docs-1.patch -d $(BUILD_DIR)/bzip2-1.0.6
+	@sed -i 's#\(ln -s -f \)$(PREFIX)/bin/#\1#' $(BUILD_DIR)/bzip2-1.0.6/Makefile
+	@sed -i "s#(PREFIX)/share/man#(PREFIX)/share/man#g" $(BUILD_DIR)/bzip2-1.0.6/Makefile
+	@sed -i "s#bzip2recover test#bzip2recover#g" $(BUILD_DIR)/bzip2-1.0.6/Makefile
+	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/bzip2-1.0.6 -f Makefile-libbz2_so
+	@make clean -C $(BUILD_DIR)/bzip2-1.0.6
+	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/bzip2-1.0.6
+	@make -j$(CONFIG_PARALLEL_JOBS) PREFIX=$(TOOLS_DIR) install -C $(BUILD_DIR)/bzip2-1.0.6
+	@rm -rf $(BUILD_DIR)/bzip2-1.0.6
+
 system:
 	@export CC=$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-gcc
 	@export CXX=$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-g++

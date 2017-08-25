@@ -309,7 +309,10 @@ system:
 	@make system -C $(PACKAGES_DIR)/pango
 	@make system -C $(PACKAGES_DIR)/libgtk2
 	@make system -C $(PACKAGES_DIR)/libgtk3
-	@make system -C $(PACKAGES_DIR)/libxfce4util # Glib need
+	@make system -C $(PACKAGES_DIR)/gtk-engines
+	@make system -C $(PACKAGES_DIR)/adwaita-icon-theme
+	@make system -C $(PACKAGES_DIR)/nanumfont
+	@make system -C $(PACKAGES_DIR)/libxfce4util
 	@make system -C $(PACKAGES_DIR)/xfconf
 	@make system -C $(PACKAGES_DIR)/libxfce4ui
 	@make system -C $(PACKAGES_DIR)/exo
@@ -328,7 +331,7 @@ system:
 	@make system -C $(PACKAGES_DIR)/thunar-volman
 	@make system -C $(PACKAGES_DIR)/tumbler
 	@make system -C $(PACKAGES_DIR)/xfce4-appfinder
-	# @make system -C $(PACKAGES_DIR)/xfce4-settings # 보류
+	@make system -C $(PACKAGES_DIR)/xfce4-settings # 보류
 	@make system -C $(PACKAGES_DIR)/xfdesktop
 	@make system -C $(PACKAGES_DIR)/xfwm4
 	@make system -C $(PACKAGES_DIR)/libice
@@ -345,27 +348,34 @@ system:
 	@make system -C $(PACKAGES_DIR)/lxdm
 	# End
 	# @make system -C $(PACKAGES_DIR)/weston
-	# @make system -C $(PACKAGES_DIR)/libtasn1
-	# @make system -C $(PACKAGES_DIR)/p11-kit
-	# @make system -C $(PACKAGES_DIR)/libgpg-error
-	# @make system -C $(PACKAGES_DIR)/libgcrypt
-	# @make system -C $(PACKAGES_DIR)/gcr
-	# @make system -C $(PACKAGES_DIR)/gsettings-desktop-schemas
-	# @make system -C $(PACKAGES_DIR)/gnome-desktop
-	# @make system -C $(PACKAGES_DIR)/json-glib
-	# @make system -C $(PACKAGES_DIR)/libnotify
-	# @make system -C $(PACKAGES_DIR)/libsecret
-	# @make system -C $(PACKAGES_DIR)/libsoup
-	# @make system -C $(PACKAGES_DIR)/libxslt
-	# @make system -C $(PACKAGES_DIR)/ruby
-	# @make system -C $(PACKAGES_DIR)/enchant
-	# @make system -C $(PACKAGES_DIR)/gstreamer
-	# @make system -C $(PACKAGES_DIR)/gst-plugins-base
-	# @make system -C $(PACKAGES_DIR)/libwebp
-	# @make system -C $(PACKAGES_DIR)/webkitgtk
-	# @make system -C $(PACKAGES_DIR)/epiphany
+	@make system -C $(PACKAGES_DIR)/libtasn1
+	@make system -C $(PACKAGES_DIR)/p11-kit
+	@make system -C $(PACKAGES_DIR)/libgpg-error
+	@make system -C $(PACKAGES_DIR)/libgcrypt
+	@make system -C $(PACKAGES_DIR)/gcr
+	@make system -C $(PACKAGES_DIR)/gsettings-desktop-schemas
+	@make system -C $(PACKAGES_DIR)/gnome-desktop
+	@make system -C $(PACKAGES_DIR)/json-glib
+	@make system -C $(PACKAGES_DIR)/libnotify
+	@make system -C $(PACKAGES_DIR)/libsecret
+	@make system -C $(PACKAGES_DIR)/libsoup
+	@make system -C $(PACKAGES_DIR)/libxslt
+	@make system -C $(PACKAGES_DIR)/ruby
+	@make system -C $(PACKAGES_DIR)/enchant
+	@make system -C $(PACKAGES_DIR)/gstreamer
+	@make system -C $(PACKAGES_DIR)/gst-plugins-base
+	@make system -C $(PACKAGES_DIR)/libwebp
+	@make system -C $(PACKAGES_DIR)/webkitgtk
+	@make system -C $(PACKAGES_DIR)/epiphany
 	@make system -C $(PACKAGES_DIR)/glibc
 	$(PRINT_BUILD_TIME)
+
+test:
+	@make system -C $(PACKAGES_DIR)/xf86-input-evdev
+	@make system -C $(PACKAGES_DIR)/xf86-input-keyboard
+	@make system -C $(PACKAGES_DIR)/xf86-input-libinput
+	@make system -C $(PACKAGES_DIR)/xf86-input-mouse
+	@make system -C $(PACKAGES_DIR)/xfce4-settings # 보류
 
 kernel:
 	@make check

@@ -42,6 +42,10 @@ system:
 	--enable-shared )
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/xf86-input-mouse-1.9.2
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/xf86-input-mouse-1.9.2
+	@mv $(SYSROOT_DIR)/$(SYSROOT_DIR)/usr/include/xorg/xf86-mouse-properties.h $(SYSROOT_DIR)/usr/include/xorg/xf86-mouse-properties.h
+	@rm -rf $(SYSROOT_DIR)/home
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/xf86-input-mouse-1.9.2
+	@mv $(ROOTFS_DIR)/$(SYSROOT_DIR)/usr/include/xorg/xf86-mouse-properties.h $(ROOTFS_DIR)/usr/include/xorg/xf86-mouse-properties.h
+	@rm -rf $(ROOTFS_DIR)/home/*
 	@rm -rf $(BUILD_DIR)/xf86-input-mouse-1.9.2

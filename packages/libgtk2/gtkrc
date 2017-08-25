@@ -1,2 +1,2 @@
 include "/usr/share/themes/Clearlooks/gtk-2.0/gtkrc"
-gtk-icon-theme-name = "elementary"
+gtk-icon-theme-name = "hicolor"

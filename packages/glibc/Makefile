@@ -19,20 +19,28 @@ staging:
 	ac_cv_path_BASH_SHELL=/bin/bash \
 	libc_cv_forced_unwind=yes \
 	libc_cv_ssp=no \
+	libc_cv_slibdir=/lib \
 	--target=$(CONFIG_TARGET) \
 	--host=$(CONFIG_TARGET) \
 	--build=$(CONFIG_HOST) \
 	--with-pkgversion="$(CONFIG_PKG_VERSION)" \
 	--prefix=/usr \
 	--enable-obsolete-rpc \
-	--enable-kernel=2.6.32 \
+	--enable-kernel=3.2 \
 	--with-headers=$(SYSROOT_DIR)/usr/include )
 	@mkdir -p $(SYSROOT_DIR)/usr/include/gnu
 	@touch $(SYSROOT_DIR)/usr/include/gnu/stubs.h
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/glibc-2.26/glibc-build
+	@sed '/test-installation/s@$(PERL)@echo not running@' -i $(BUILD_DIR)/glibc-2.26/Makefile
 	@make -j$(CONFIG_PARALLEL_JOBS) install_root=$(SYSROOT_DIR) install -C $(BUILD_DIR)/glibc-2.26/glibc-build
 	@echo "#include <gnu/stubs-hard.h>" > $(SYSROOT_DIR)/usr/include/gnu/stubs.h
 	@cp -v $(BUILD_DIR)/glibc-2.26/nscd/nscd.conf $(SYSROOT_DIR)/etc/nscd.conf
+	@mkdir -pv $(SYSROOT_DIR)/usr/lib/tmpfiles.d $(SYSROOT_DIR)/lib/systemd/system
+	@install -v -Dm644 $(BUILD_DIR)/glibc-2.26/nscd/nscd.tmpfiles $(SYSROOT_DIR)/usr/lib/tmpfiles.d/nscd.conf
+	@install -v -Dm644 $(BUILD_DIR)/glibc-2.26/nscd/nscd.service $(SYSROOT_DIR)/lib/systemd/system/nscd.service
+	@cp -v $(PACKAGES_DIR)/glibc/nsswitch.conf $(SYSROOT_DIR)/etc/nsswitch.conf
+	@cp -v $(PACKAGES_DIR)/glibc/ld.so.conf $(SYSROOT_DIR)/etc/ld.so.conf
+	@mkdir -pv $(SYSROOT_DIR)/etc/ld.so.conf.d
 	@rm -rf $(BUILD_DIR)/glibc-2.26
 
 system:
@@ -51,20 +59,24 @@ system:
 	ac_cv_path_BASH_SHELL=/bin/bash \
 	libc_cv_forced_unwind=yes \
 	libc_cv_ssp=no \
+	libc_cv_slibdir=/lib \
 	--target=$(CONFIG_TARGET) \
 	--host=$(CONFIG_TARGET) \
 	--build=$(CONFIG_HOST) \
 	--with-pkgversion="$(CONFIG_PKG_VERSION)" \
 	--prefix=/usr \
 	--enable-obsolete-rpc \
-	--enable-kernel=2.6.32 \
+	--enable-kernel=3.2 \
 	--with-headers=$(SYSROOT_DIR)/usr/include )
 	@mkdir -p $(SYSROOT_DIR)/usr/include/gnu
 	@touch $(SYSROOT_DIR)/usr/include/gnu/stubs.h
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/glibc-2.26/glibc-build
+	@sed '/test-installation/s@$(PERL)@echo not running@' -i $(BUILD_DIR)/glibc-2.26/Makefile
 	@make -j$(CONFIG_PARALLEL_JOBS) install_root=$(ROOTFS_DIR) install -C $(BUILD_DIR)/glibc-2.26/glibc-build
 	@cp -v $(SYSROOT_DIR)/etc/nscd.conf $(ROOTFS_DIR)/etc/nscd.conf
 	@mkdir -pv $(ROOTFS_DIR)/var/cache/nscd
+	@install -v -Dm644 $(SYSROOT_DIR)/usr/lib/tmpfiles.d/nscd.conf $(ROOTFS_DIR)/usr/lib/tmpfiles.d/nscd.conf
+	@install -v -Dm644 $(SYSROOT_DIR)/lib/systemd/system/nscd.service $(ROOTFS_DIR)/lib/systemd/system/nscd.service
 	@cp -v $(PACKAGES_DIR)/glibc/nsswitch.conf $(ROOTFS_DIR)/etc/nsswitch.conf
 	@cp -v $(PACKAGES_DIR)/glibc/ld.so.conf $(ROOTFS_DIR)/etc/ld.so.conf
 	@mkdir -pv $(ROOTFS_DIR)/etc/ld.so.conf.d

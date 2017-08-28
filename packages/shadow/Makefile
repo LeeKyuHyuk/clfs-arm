@@ -23,18 +23,6 @@ system:
 	@sed -i -e 's|#ENCRYPT_METHOD DES|ENCRYPT_METHOD SHA512|' -e 's|/var/spool/mail|/var/mail|' $(BUILD_DIR)/shadow-4.5/etc/login.defs
 	@sed -i 's/1000/999/' $(BUILD_DIR)/shadow-4.5/etc/useradd
 	@( cd $(BUILD_DIR)/shadow-4.5 && \
-	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
-	ac_cv_lbl_unaligned_fail=yes \
-	ac_cv_func_mmap_fixed_mapped=yes \
-	ac_cv_func_memcmp_working=yes \
-	ac_cv_have_decl_malloc=yes \
-	gl_cv_func_malloc_0_nonnull=yes \
-	ac_cv_func_malloc_0_nonnull=yes \
-	ac_cv_func_calloc_0_nonnull=yes \
-	ac_cv_func_realloc_0_nonnull=yes \
-	lt_cv_sys_lib_search_path_spec="" \
-	ac_cv_c_bigendian=no \
-	CONFIG_SITE=/dev/null \
 	./configure \
 	--target=$(CONFIG_TARGET) \
 	--host=$(CONFIG_TARGET) \

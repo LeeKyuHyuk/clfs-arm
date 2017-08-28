@@ -59,10 +59,6 @@ system:
 	--host=$(CONFIG_TARGET) \
 	--build=$(CONFIG_HOST) \
 	--prefix=/usr \
-	--exec-prefix=/usr \
-	--sysconfdir=/etc \
-	--localstatedir=/var \
-	--program-prefix="" \
 	--disable-static \
 	--enable-shared )
 	make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/m4-1.4.18

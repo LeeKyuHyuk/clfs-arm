@@ -31,12 +31,12 @@ system:
 	ac_cv_c_bigendian=no \
 	CXX=false \
 	CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -fno-lto" \
-	ac_cv_path_KILL=/usr/bin/kill \
-	ac_cv_path_KMOD=/usr/bin/kmod \
+	ac_cv_path_KILL=/bin/kill \
+	ac_cv_path_KMOD=/bin/kmod \
 	ac_cv_path_KEXEC=/usr/sbin/kexec \
-	ac_cv_path_SULOGIN=/usr/sbin/sulogin \
-	ac_cv_path_MOUNT_PATH=/usr/bin/mount \
-	ac_cv_path_UMOUNT_PATH=/usr/bin/umount \
+	ac_cv_path_SULOGIN=/sbin/sulogin \
+	ac_cv_path_MOUNT_PATH=/bin/mount \
+	ac_cv_path_UMOUNT_PATH=/bin/umount \
 	ac_cv_path_QUOTAON=/.missing \
 	ac_cv_path_QUOTACHECK=/.missing \
 	CONFIG_SITE=/dev/null \
@@ -47,7 +47,6 @@ system:
 	--prefix=/usr \
 	--sysconfdir=/etc \
 	--localstatedir=/var \
-	--config-cache \
 	--with-rootprefix= \
 	--with-rootlibdir=/lib \
 	--enable-split-usr \

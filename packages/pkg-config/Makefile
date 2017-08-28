@@ -34,12 +34,9 @@ system:
 	--host=$(CONFIG_TARGET) \
 	--build=$(CONFIG_HOST) \
 	--prefix=/usr \
-	--exec-prefix=/usr \
-	--sysconfdir=/etc \
-	--localstatedir=/var \
-	--program-prefix="" \
 	--disable-static \
-	--enable-shared )
+	--enable-shared \
+	--disable-host-tool )
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/pkg-config-0.29.2
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/pkg-config-0.29.2
 	@$(call dependency_libs_patch)

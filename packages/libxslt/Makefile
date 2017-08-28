@@ -25,6 +25,7 @@ toolchain:
 	--localstatedir=$(TOOLS_DIR)/var \
 	--enable-shared \
 	--disable-static \
+	--without-python \
 	--with-libxml-prefix=$(TOOLS_DIR) \
 	--with-libxml-include-prefix=$(TOOLS_DIR)/include/libxml2 )
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/libxslt-1.1.29

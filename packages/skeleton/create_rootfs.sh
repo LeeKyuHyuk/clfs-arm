@@ -65,7 +65,7 @@ systemd-coredump:x:79:
 nogroup:x:99:
 users:x:999:
 EOF
-cat > $ROOTFS_DIR/etc/passwd << "EOF"
+cat > $ROOTFS_DIR/etc/shadow << "EOF"
 root::10933:0:99999:7:::
 daemon:*:10933:0:99999:7:::
 bin:*:10933:0:99999:7:::
@@ -75,7 +75,16 @@ mail:*:10933:0:99999:7:::
 www-data:*:10933:0:99999:7:::
 operator:*:10933:0:99999:7:::
 nobody:*:10933:0:99999:7:::
+dbus:*:::::::
+systemd-bus-proxy:*:::::::
+systemd-journal-gateway:*:::::::
+systemd-journal-remote:*:::::::
+systemd-journal-upload:*:::::::
+systemd-network:*:::::::
+systemd-resolve:*:::::::
+systemd-timesync:*:::::::
 EOF
+sed -i -e s,^root:[^:]*:,root:"`$TOOLS_DIR/bin/mkpasswd -m "sha-512" "$CONFIG_ROOT_PASSWD"`":, $ROOTFS_DIR/etc/shadow
 touch $ROOTFS_DIR/var/log/{btmp,lastlog,faillog,wtmp}
 echo "127.0.0.1 localhost $CONFIG_HOSTNAME" > $ROOTFS_DIR/etc/hosts
 echo "$CONFIG_HOSTNAME" > $ROOTFS_DIR/etc/hostname

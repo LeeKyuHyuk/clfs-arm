@@ -29,4 +29,7 @@ system:
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) prefix=/usr lib=lib install -C $(BUILD_DIR)/libcap-2.25/libcap
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) prefix=/usr lib=lib install -C $(BUILD_DIR)/libcap-2.25/libcap
+	@chmod -v 755 $(ROOTFS_DIR)/usr/lib/libcap.so
+	@mv -v $(ROOTFS_DIR)/usr/lib/libcap.so.* $(ROOTFS_DIR)/lib
+	@ln -sfv ../../lib/`readlink $(ROOTFS_DIR)/usr/lib/libcap.so` $(ROOTFS_DIR)/usr/lib/libcap.so
 	@rm -rf $(BUILD_DIR)/libcap-2.25

@@ -66,12 +66,8 @@ system:
 	--host=$(CONFIG_TARGET) \
 	--build=$(CONFIG_HOST) \
 	--prefix=/usr \
-	--exec-prefix=/usr \
-	--sysconfdir=/etc \
-	--localstatedir=/var \
-	--program-prefix="" \
-	--disable-static \
-	--enable-shared \
+	--bindir=/bin \
+	--with-root-prefix="" \
 	--enable-elf-shlibs \
 	--disable-libblkid \
 	--disable-libuuid \

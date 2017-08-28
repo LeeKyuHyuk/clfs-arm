@@ -76,14 +76,11 @@ system:
 	--host=$(CONFIG_TARGET) \
 	--build=$(CONFIG_HOST) \
 	--prefix=/usr \
-	--exec-prefix=/usr \
-	--sysconfdir=/etc \
-	--localstatedir=/var \
-	--program-prefix="" \
 	--disable-static \
 	--enable-shared )
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/gettext-0.19.8.1
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/gettext-0.19.8.1
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/gettext-0.19.8.1
+	@chmod -v 0755 $(ROOTFS_DIR)/usr/lib/preloadable_libintl.so
 	@rm -rf $(BUILD_DIR)/gettext-0.19.8.1

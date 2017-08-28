@@ -64,17 +64,19 @@ system:
 	--host=$(CONFIG_TARGET) \
 	--build=$(CONFIG_HOST) \
 	--prefix=/usr \
-	--exec-prefix=/usr \
+	--bindir=/bin \
 	--sysconfdir=/etc \
-	--localstatedir=/var \
-	--program-prefix="" \
+	--with-rootlibdir=/lib \
 	--disable-static \
 	--enable-shared \
-	--disable-manpages \
-	--with-zlib \
-	--disable-tools )
+	--with-xz \
+	--with-zlib )
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/kmod-24
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/kmod-24
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/kmod-24
+	@for target in depmod insmod lsmod modinfo modprobe rmmod; do \
+		ln -sfv ../bin/kmod $(ROOTFS_DIR)/sbin/$${target} ; \
+	done
+	@ln -sfv kmod $(ROOTFS_DIR)/bin/lsmod
 	@rm -rf $(BUILD_DIR)/kmod-24

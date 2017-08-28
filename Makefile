@@ -94,9 +94,9 @@ toolchain:
 	@make toolchain -C $(PACKAGES_DIR)/texinfo
 	@make toolchain -C $(PACKAGES_DIR)/zlib
 	@make toolchain -C $(PACKAGES_DIR)/pcre
+	@make toolchain -C $(PACKAGES_DIR)/libffi
 	@make toolchain -C $(PACKAGES_DIR)/libxml2
 	@make toolchain -C $(PACKAGES_DIR)/python2
-	@make toolchain -C $(PACKAGES_DIR)/libffi
 	@make toolchain -C $(PACKAGES_DIR)/glib
 	@make toolchain -C $(PACKAGES_DIR)/libcap
 	@make toolchain -C $(PACKAGES_DIR)/gperf
@@ -120,7 +120,6 @@ system:
 	@make staging system -C $(PACKAGES_DIR)/skeleton
 	@make staging system -C $(PACKAGES_DIR)/linux
 	@make staging -C $(PACKAGES_DIR)/glibc
-	@make staging-lib system-lib -C $(PACKAGES_DIR)/gcc
 	@make system -C $(PACKAGES_DIR)/man-pages
 	@make system -C $(PACKAGES_DIR)/zlib
 	@make system -C $(PACKAGES_DIR)/file
@@ -129,7 +128,7 @@ system:
 	@make system -C $(PACKAGES_DIR)/m4
 	@make system -C $(PACKAGES_DIR)/bc
 	@make system -C $(PACKAGES_DIR)/binutils
-	@make system -C $(PACKAGES_DIR)/gcc
+	@make system-lib -C $(PACKAGES_DIR)/gcc
 	@make system -C $(PACKAGES_DIR)/bzip2
 	@make system -C $(PACKAGES_DIR)/pcre
 	@make system -C $(PACKAGES_DIR)/libffi

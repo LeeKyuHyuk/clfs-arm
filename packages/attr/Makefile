@@ -37,16 +37,12 @@ system:
 	--host=$(CONFIG_TARGET) \
 	--build=$(CONFIG_HOST) \
 	--prefix=/usr \
-	--exec-prefix=/usr \
-	--sysconfdir=/etc \
-	--localstatedir=/var \
-	--program-prefix="" \
 	--disable-static \
 	--enable-shared \
 	--enable-gettext=no )
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/attr-2.4.47
-	@make -j$(CONFIG_PARALLEL_JOBS) prefix=$(SYSROOT_DIR)/usr exec_prefix=$(SYSROOT_DIR)/usr PKG_DEVLIB_DIR=$(SYSROOT_DIR)/usr/lib install-dev install-lib -C $(BUILD_DIR)/attr-2.4.47
+	@make -j$(CONFIG_PARALLEL_JOBS) prefix=$(SYSROOT_DIR)/usr PKG_DEVLIB_DIR=$(SYSROOT_DIR)/usr/lib install-dev install-lib -C $(BUILD_DIR)/attr-2.4.47
 	@sed -i -e "s,libdir=.*,libdir='$(SYSROOT_DIR)'," $(SYSROOT_DIR)/usr/lib/libattr.la
 	@$(call dependency_libs_patch)
-	@make -j$(CONFIG_PARALLEL_JOBS) prefix=$(ROOTFS_DIR)/usr exec_prefix=$(ROOTFS_DIR)/usr install install-lib -C $(BUILD_DIR)/attr-2.4.47
+	@make -j$(CONFIG_PARALLEL_JOBS) prefix=$(ROOTFS_DIR)/usr install install-lib -C $(BUILD_DIR)/attr-2.4.47
 	@rm -rf $(BUILD_DIR)/attr-2.4.47

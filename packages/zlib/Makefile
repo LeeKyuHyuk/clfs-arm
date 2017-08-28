@@ -58,4 +58,6 @@ system:
 	@make -j1 LDCONFIG=true DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/zlib-1.2.11
 	@$(call dependency_libs_patch)
 	@make -j1 LDCONFIG=true DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/zlib-1.2.11
+	@mv -v $(ROOTFS_DIR)/usr/lib/libz.so.* $(ROOTFS_DIR)/lib
+	@ln -sfv ../../lib/`readlink $(ROOTFS_DIR)/usr/lib/libz.so` $(ROOTFS_DIR)/usr/lib/libz.so
 	@rm -rf $(BUILD_DIR)/zlib-1.2.11

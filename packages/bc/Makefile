@@ -65,12 +65,9 @@ system:
 	--host=$(CONFIG_TARGET) \
 	--build=$(CONFIG_HOST) \
 	--prefix=/usr \
-	--exec-prefix=/usr \
-	--sysconfdir=/etc \
-	--localstatedir=/var \
-	--program-prefix="" \
 	--disable-static \
-	--enable-shared )
+	--enable-shared \
+	--with-readline )
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/bc-1.06.95
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/bc-1.06.95
 	@$(call dependency_libs_patch)

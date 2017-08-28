@@ -62,10 +62,8 @@ system:
 	--host=$(CONFIG_TARGET) \
 	--build=$(CONFIG_HOST) \
 	--prefix=/usr \
-	--exec-prefix=/usr \
 	--sysconfdir=/etc \
 	--localstatedir=/var \
-	--program-prefix="" \
 	--disable-static \
 	--enable-shared \
 	--disable-tests \
@@ -77,5 +75,7 @@ system:
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/dbus-1.10.22
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/dbus-1.10.22
+	@mv -v $(ROOTFS_DIR)/usr/lib/libdbus-1.so.* $(ROOTFS_DIR)/lib
+	@ln -sfv ../../lib/`readlink $(ROOTFS_DIR)/usr/lib/libdbus-1.so` $(ROOTFS_DIR)/usr/lib/libdbus-1.so
 	@ln -sfv /etc/machine-id $(ROOTFS_DIR)/var/lib/dbus
 	@rm -rf $(BUILD_DIR)/dbus-1.10.22

@@ -72,28 +72,23 @@ system:
 	--target=$(CONFIG_TARGET) \
 	--host=$(CONFIG_TARGET) \
 	--build=$(CONFIG_HOST) \
-	--exec-prefix=/usr \
-	--sysconfdir=/etc \
-	--localstatedir=/var \
-	--program-prefix="" \
-	--disable-static \
-	--enable-shared \
+	--enable-widechar \
+	--without-tinfo \
+	--without-ncursesw \
+	--without-ncurses \
+	--disable-chfn-chsh \
 	--disable-rpath \
 	--disable-makeinstall-chown \
-	--disable-chfn-chsh \
 	--disable-login \
 	--disable-nologin \
 	--disable-su \
 	--disable-setpriv \
 	--disable-runuser \
 	--disable-pylibmount \
-	--enable-widechar \
-	--without-tinfo \
-	--without-ncursesw \
-	--without-ncurses \
+	--disable-static \
+	--enable-shared \
 	--without-python \
-	--without-systemd \
-	--without-systemdsystemunitdir )
+	--enable-libmount-force-mountinfo )
 	@make -j$(CONFIG_PARALLEL_JOBS) LIBS="" -C $(BUILD_DIR)/util-linux-2.30.1
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/util-linux-2.30.1
 	@$(call dependency_libs_patch)

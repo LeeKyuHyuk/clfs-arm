@@ -26,9 +26,9 @@ system:
 	--prefix=/usr \
 	--exec-prefix= \
 	--libdir=/usr/lib \
-	--docdir=/usr/share/doc/procps-ng-3.3.12 \
 	--disable-static \
-	--disable-kill )
+	--disable-kill \
+	--with-systemd )
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/procps-ng-3.3.12
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/procps-ng-3.3.12
 	@mv -v $(ROOTFS_DIR)/usr/lib/libprocps.so.* $(ROOTFS_DIR)/lib

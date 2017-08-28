@@ -58,10 +58,18 @@ check:
 	fi;
 
 toolchain:
+	@if ! [ -f .config.mk ] ; then \
+		echo ; \
+		$(ERROR) "Please make defconfig before building." ; \
+		$(ERROR) "[Example] $ make raspberrypi2_defconfig" ; \
+		echo ; \
+		exit 1 ; \
+	fi;
 	@make toolchain -C $(SUPPORT_DIR)/systemd # Essential Toolchain Package
 	$(PRINT_BUILD_TIME)
 
 system:
+	@make check
 	@make system -C $(SUPPORT_DIR)/systemd # Essential System Package
 	@make system -C $(PACKAGES_DIR)/glibc
 	$(PRINT_BUILD_TIME)

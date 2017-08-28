@@ -1,11 +1,4 @@
 toolchain:
-	@if ! [ -f .config.mk ] ; then \
-		echo ; \
-		$(ERROR) "Please make defconfig before building." ; \
-		$(ERROR) "[Example] $ make raspberrypi2_defconfig" ; \
-		echo ; \
-		exit 1 ; \
-	fi;
 	@$(STEP) "Create toolchain directory."
 	@rm -rf $(BUILD_DIR) $(TOOLS_DIR)
 	@mkdir -pv $(BUILD_DIR) $(TOOLS_DIR)
@@ -51,8 +44,7 @@ toolchain:
 	@make toolchain -C $(PACKAGES_DIR)/genimage
 	@make toolchain -C $(PACKAGES_DIR)/mtools
 
-system:	
-	@make check
+system:
 	@rm -rf $(BUILD_DIR) $(SYSROOT_DIR) $(ROOTFS_DIR)
 	@mkdir -pv $(BUILD_DIR) $(SYSROOT_DIR) $(ROOTFS_DIR)
 	@make staging system -C $(PACKAGES_DIR)/skeleton

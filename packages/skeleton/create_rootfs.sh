@@ -141,3 +141,38 @@ cat > $ROOTFS_DIR/etc/shells << "EOF"
 
 # End /etc/shells
 EOF
+
+mkdir -pv $ROOTFS_DIR/etc/network/{if-down.d,if-post-down.d,if-pre-up.d,if-up.d}
+
+cat > $ROOTFS_DIR/etc/network/if-pre-up.d/wait_iface << "EOF"
+#!/bin/sh
+
+# In case we have a slow-to-appear interface (e.g. eth-over-USB),
+# and we need to configure it, wait until it appears, but not too
+# long either. IF_WAIT_DELAY is in seconds.
+
+if [ "${IF_WAIT_DELAY}" -a ! -e "/sys/class/net/${IFACE}" ]; then
+    printf "Waiting for interface %s to appear" "${IFACE}"
+    while [ ${IF_WAIT_DELAY} -gt 0 ]; do
+        if [ -e "/sys/class/net/${IFACE}" ]; then
+            printf "\n"
+            exit 0
+        fi
+        sleep 1
+        printf "."
+        : $((IF_WAIT_DELAY -= 1))
+    done
+    printf " timeout!\n"
+    exit 1
+fi
+EOF
+chmod 755 $ROOTFS_DIR/etc/network/if-pre-up.d/wait_iface
+
+cat > $ROOTFS_DIR/etc/network/interfaces << "EOF"
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet dhcp
+  wait-delay 15
+EOF

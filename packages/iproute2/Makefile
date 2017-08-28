@@ -38,4 +38,5 @@ system:
 	--docdir=/usr/share/doc/iproute2-4.10.0 )
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/iproute2-4.10.0
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/iproute2-4.10.0
+	@ln -svf /sbin/ip $(ROOTFS_DIR)/bin/ip
 	@rm -rf $(BUILD_DIR)/iproute2-4.10.0

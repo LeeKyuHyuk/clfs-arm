@@ -150,6 +150,9 @@ system:
 	@make system -C $(PACKAGES_DIR)/gperf
 	@make system -C $(PACKAGES_DIR)/expat
 	@make system -C $(PACKAGES_DIR)/inetutils
+	@make system -C $(PACKAGES_DIR)/dhcpcd
+	@make system -C $(PACKAGES_DIR)/debianutils
+	@make system -C $(PACKAGES_DIR)/ifupdown
 	@make system -C $(PACKAGES_DIR)/autoconf
 	@make system -C $(PACKAGES_DIR)/automake
 	@make system -C $(PACKAGES_DIR)/xz

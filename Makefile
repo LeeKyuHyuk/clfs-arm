@@ -111,6 +111,9 @@ toolchain:
 	@make toolchain -C $(PACKAGES_DIR)/fakeroot
 	@make toolchain -C $(PACKAGES_DIR)/makedevs
 	@make toolchain -C $(PACKAGES_DIR)/mkpasswd
+	@make toolchain -C $(PACKAGES_DIR)/libconfuse
+	@make toolchain -C $(PACKAGES_DIR)/genimage
+	@make toolchain -C $(PACKAGES_DIR)/mtools
 	$(PRINT_BUILD_TIME)
 
 system:

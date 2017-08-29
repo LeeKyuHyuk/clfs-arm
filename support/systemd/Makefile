@@ -108,3 +108,4 @@ system:
 	@make system -C $(PACKAGES_DIR)/tar
 	@make system -C $(PACKAGES_DIR)/texinfo
 	@make system -C $(PACKAGES_DIR)/vim
+	@make system -C $(PACKAGES_DIR)/tzdata

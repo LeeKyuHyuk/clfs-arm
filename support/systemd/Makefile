@@ -68,6 +68,7 @@ system:
 	@make system -C $(PACKAGES_DIR)/acl
 	@make system -C $(PACKAGES_DIR)/libcap
 	@make system -C $(PACKAGES_DIR)/sed
+	@make system -C $(PACKAGES_DIR)/linux-pam
 	@make system -C $(PACKAGES_DIR)/shadow
 	@make system -C $(PACKAGES_DIR)/psmisc
 	@make system -C $(PACKAGES_DIR)/iana-etc

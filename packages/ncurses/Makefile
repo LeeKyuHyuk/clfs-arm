@@ -28,7 +28,7 @@ toolchain:
 	--enable-overwrite )
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/ncurses-6.0/include
 	@make -j$(CONFIG_PARALLEL_JOBS) tic -C $(BUILD_DIR)/ncurses-6.0/progs
-	@install -v -m755 $(BUILD_DIR)/ncurses-6.0/progs/tic $(TOOLS_DIR)/usr/bin
+	@install -v -m755 $(BUILD_DIR)/ncurses-6.0/progs/tic $(TOOLS_DIR)/bin
 	@rm -rf $(BUILD_DIR)/ncurses-6.0
 
 system:

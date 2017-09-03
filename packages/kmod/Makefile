@@ -33,14 +33,14 @@ toolchain:
 	@rm -rf $(BUILD_DIR)/kmod-24
 
 system:
-	@export CC=$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-gcc
-	@export CXX=$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-g++
-	@export AR=$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-ar
-	@export AS=$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-as
-	@export LD=$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-ld
-	@export RANLIB=$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-ranlib
-	@export READELF=$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-readelf
-	@export STRIP=$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-strip
+	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
+	@export CXX=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-g++
+	@export AR=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-ar
+	@export AS=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-as
+	@export LD=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-ld
+	@export RANLIB=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-ranlib
+	@export READELF=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-readelf
+	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "kmod 24"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)

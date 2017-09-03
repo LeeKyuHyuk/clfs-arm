@@ -27,20 +27,20 @@ toolchain:
 	@rm -rf $(BUILD_DIR)/zlib-1.2.11
 
 system:
-	@export CC=$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-gcc
-	@export CXX=$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-g++
-	@export AR=$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-ar
-	@export AS=$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-as
-	@export LD=$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-ld
-	@export RANLIB=$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-ranlib
-	@export READELF=$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-readelf
-	@export STRIP=$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-strip
+	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
+	@export CXX=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-g++
+	@export AR=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-ar
+	@export AS=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-as
+	@export LD=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-ld
+	@export RANLIB=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-ranlib
+	@export READELF=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-readelf
+	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "zlib 1.2.11"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/zlib-1.2.11 && \
-	PKG_CONFIG="$(TOOLS_DIR)/usr/bin/pkg-config" \
-	CC=$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-gcc \
+	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
+	CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc \
 	ac_cv_lbl_unaligned_fail=yes \
 	ac_cv_func_mmap_fixed_mapped=yes \
 	ac_cv_func_memcmp_working=yes \

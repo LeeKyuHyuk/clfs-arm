@@ -22,9 +22,6 @@ echo '#!/bin/sh' > $BUILD_DIR/_fakeroot.fs
 echo "set -e" >> $BUILD_DIR/_fakeroot.fs
 echo "chown -h -R 0:0 $ROOTFS_DIR" >> $BUILD_DIR/_fakeroot.fs
 cat $SUPPORT_DIR/device_table.txt > $BUILD_DIR/_device_table.txt
-if [ -f $ROOTFS_DIR/bin/busybox ] ; then
-  echo "/bin/busybox	f	4755	0	0	-	-	-	-	-" >> $BUILD_DIR/_device_table.txt
-fi
 if [ -d $ROOTFS_DIR/var/lib/ntp ] ; then
 echo "/var/lib/ntp	d	755	87	87	-	-	-	-	-" >> $BUILD_DIR/_device_table.txt
 fi

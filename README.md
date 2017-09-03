@@ -12,7 +12,7 @@ Debian 9 or Ubuntu 16.04 is recommended.
 
 ``` bash
 sudo apt update
-sudo apt install gcc g++ git qemu-system
+sudo apt install gcc g++ wget git qemu-system
 ```
 
 ### Get CLFS-ARM Source code

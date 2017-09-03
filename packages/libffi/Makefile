@@ -22,16 +22,16 @@ toolchain:
 	LDFLAGS="-L$(TOOLS_DIR)/lib -Wl,-rpath,$(TOOLS_DIR)/lib" \
 	CONFIG_SITE=/dev/null \
 	./configure \
-	--prefix=$(TOOLS_DIR)/usr \
+	--prefix=$(TOOLS_DIR) \
 	--sysconfdir=$(TOOLS_DIR)/etc \
 	--localstatedir=$(TOOLS_DIR)/var \
 	--enable-shared \
 	--disable-static )
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/libffi-3.2.1
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/libffi-3.2.1
-	@mv $(TOOLS_DIR)/usr/lib/libffi-3.2.1/include/*.h $(TOOLS_DIR)/usr/include/
-	@sed -i -e '/^includedir.*/d' -e '/^Cflags:.*/d' $(TOOLS_DIR)/usr/lib/pkgconfig/libffi.pc
-	@rm -rf $(TOOLS_DIR)/usr/lib/libffi-*
+	@mv $(TOOLS_DIR)/lib/libffi-3.2.1/include/*.h $(TOOLS_DIR)/include/
+	@sed -i -e '/^includedir.*/d' -e '/^Cflags:.*/d' $(TOOLS_DIR)/lib/pkgconfig/libffi.pc
+	@rm -rf $(TOOLS_DIR)/lib/libffi-*
 	@rm -rf $(BUILD_DIR)/libffi-3.2.1
 
 system:

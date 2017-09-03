@@ -15,6 +15,8 @@ toolchain:
 	@make toolchain -C $(PACKAGES_DIR)/automake
 	@make toolchain -C $(PACKAGES_DIR)/ncurses
 	@make toolchain -C $(PACKAGES_DIR)/bison
+	@make toolchain -C $(PACKAGES_DIR)/expat
+	@make toolchain -C $(PACKAGES_DIR)/libarchive
 	@make toolchain -C $(PACKAGES_DIR)/bzip2
 	@make toolchain -C $(PACKAGES_DIR)/file
 	@make toolchain -C $(PACKAGES_DIR)/gawk
@@ -23,13 +25,13 @@ toolchain:
 	@make toolchain -C $(PACKAGES_DIR)/texinfo
 	@make toolchain -C $(PACKAGES_DIR)/zlib
 	@make toolchain -C $(PACKAGES_DIR)/pcre
+	@make toolchain -C $(PACKAGES_DIR)/xcb-proto
 	@make toolchain -C $(PACKAGES_DIR)/libffi
-	@make toolchain -C $(PACKAGES_DIR)/libxml2
 	@make toolchain -C $(PACKAGES_DIR)/python2
+	@make toolchain -C $(PACKAGES_DIR)/libxml2
 	@make toolchain -C $(PACKAGES_DIR)/glib
 	@make toolchain -C $(PACKAGES_DIR)/libcap
 	@make toolchain -C $(PACKAGES_DIR)/gperf
-	@make toolchain -C $(PACKAGES_DIR)/expat
 	@make toolchain -C $(PACKAGES_DIR)/kmod
 	@make toolchain -C $(PACKAGES_DIR)/intltool
 	@make toolchain -C $(PACKAGES_DIR)/libxslt

@@ -20,14 +20,13 @@ toolchain:
 	LDFLAGS="-L$(TOOLS_DIR)/lib -Wl,-rpath,$(TOOLS_DIR)/lib" \
 	CONFIG_SITE=/dev/null \
 	./configure \
-	--prefix=$(TOOLS_DIR)/usr \
+	--prefix=$(TOOLS_DIR) \
 	--sysconfdir=$(TOOLS_DIR)/etc \
 	--localstatedir=$(TOOLS_DIR)/var \
 	--enable-shared \
 	--disable-static \
-	--with-zlib \
-	--without-lzma \
-	--without-python )
+	--without-zlib \
+	--without-lzma )
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/libxml2-2.9.4
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/libxml2-2.9.4
 	@rm -rf $(BUILD_DIR)/libxml2-2.9.4

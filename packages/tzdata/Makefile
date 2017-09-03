@@ -7,14 +7,14 @@ MD5 := 50dc0dc50c68644c1f70804f2e7a1625
 ZONEINFO := $(ROOTFS_DIR)/usr/share/zoneinfo
 
 system:
-	@export CC=$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-gcc
-	@export CXX=$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-g++
-	@export AR=$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-ar
-	@export AS=$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-as
-	@export LD=$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-ld
-	@export RANLIB=$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-ranlib
-	@export READELF=$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-readelf
-	@export STRIP=$(TOOLS_DIR)/usr/bin/$(CONFIG_TARGET)-strip
+	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
+	@export CXX=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-g++
+	@export AR=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-ar
+	@export AS=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-as
+	@export LD=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-ld
+	@export RANLIB=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-ranlib
+	@export READELF=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-readelf
+	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "tzdata2017b"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@mkdir -p $(BUILD_DIR)/tzdata2017b

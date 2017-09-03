@@ -55,9 +55,9 @@ kernel:
 		rm -f $(ROOTFS_DIR)/lib/modules/`make -j$(CONFIG_PARALLEL_JOBS) ARCH=$(CONFIG_MODE) CROSS_COMPILE="$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-" INSTALL_MOD_PATH=$(ROOTFS_DIR) INSTALL_MOD_STRIP=1 -C $(BUILD_DIR)/linux-kernel --no-print-directory -s kernelrelease 2>/dev/null`/source ; \
 	fi
 	@if grep -q "CONFIG_DTC=y" $(BUILD_DIR)/linux-kernel/.config; then 	\
-		install -Dv -m 0755 $(BUILD_DIR)/linux-kernel/scripts/dtc/dtc $(TOOLS_DIR)/usr/bin/linux-dtc ;	\
-		if [ ! -e $(TOOLS_DIR)/usr/bin/dtc ]; then	\
-			ln -sf linux-dtc $(TOOLS_DIR)/usr/bin/dtc ;	\
+		install -Dv -m 0755 $(BUILD_DIR)/linux-kernel/scripts/dtc/dtc $(TOOLS_DIR)/bin/linux-dtc ;	\
+		if [ ! -e $(TOOLS_DIR)/bin/dtc ]; then	\
+			ln -sf linux-dtc $(TOOLS_DIR)/bin/dtc ;	\
 		fi	\
 	fi
 	@install -m 0644 -Dv $(BUILD_DIR)/linux-kernel/arch/arm/boot/zImage $(KERNEL_DIR)/zImage

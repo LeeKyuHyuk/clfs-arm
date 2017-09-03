@@ -66,11 +66,40 @@ toolchain:
 		exit 1 ; \
 	fi;
 	@make toolchain -C $(SUPPORT_DIR)/systemd # Essential Toolchain Package
+	@make toolchain -C $(PACKAGES_DIR)/openssl
+	@make toolchain -C $(PACKAGES_DIR)/util-macros
+	@make toolchain -C $(PACKAGES_DIR)/xorg/proto
+	@make toolchain -C $(PACKAGES_DIR)/libpthread-stubs
+	@make toolchain -C $(PACKAGES_DIR)/libxdmcp
+	@make toolchain -C $(PACKAGES_DIR)/libxau
+	@make toolchain -C $(PACKAGES_DIR)/libxcb
+	@make toolchain -C $(PACKAGES_DIR)/libpng
+	@make toolchain -C $(PACKAGES_DIR)/freetype
+	@make toolchain -C $(PACKAGES_DIR)/fontconfig
 	$(PRINT_BUILD_TIME)
 
 system:
 	@make check
 	@make system -C $(SUPPORT_DIR)/systemd # Essential System Package
+	@make system -C $(PACKAGES_DIR)/openssl
+	@make system -C $(PACKAGES_DIR)/openssh
+	@make system -C $(PACKAGES_DIR)/cacerts
+	@make system -C $(PACKAGES_DIR)/wget
+	@make system -C $(PACKAGES_DIR)/ntp
+	@make system -C $(PACKAGES_DIR)/which
+	@make system -C $(PACKAGES_DIR)/util-macros
+	@make system -C $(PACKAGES_DIR)/xorg/proto
+	@make system -C $(PACKAGES_DIR)/xcb-proto
+	@make system -C $(PACKAGES_DIR)/libpthread-stubs
+	@make system -C $(PACKAGES_DIR)/libxdmcp
+	@make system -C $(PACKAGES_DIR)/libxau
+	@make system -C $(PACKAGES_DIR)/libxcb
+	@make system -C $(PACKAGES_DIR)/libpng
+	@make system -C $(PACKAGES_DIR)/freetype
+	@make system -C $(PACKAGES_DIR)/harfbuzz
+	@make system -C $(PACKAGES_DIR)/fontconfig
+	@make system -C $(PACKAGES_DIR)/xorg/lib
+	@make system -C $(PACKAGES_DIR)/icu
 	@make system -C $(PACKAGES_DIR)/glibc
 	$(PRINT_BUILD_TIME)
 

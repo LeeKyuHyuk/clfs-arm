@@ -39,7 +39,7 @@ toolchain:
 	--without-emacs )
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/gettext-0.19.8.1/gettext-tools
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/gettext-0.19.8.1/gettext-tools
-	@sed -i -e '/read dummy/d' $(TOOLS_DIR)/usr/bin/gettextize
+	@sed -i -e '/read dummy/d' $(TOOLS_DIR)/bin/gettextize
 	@rm -rf $(BUILD_DIR)/gettext-0.19.8.1
 
 system:

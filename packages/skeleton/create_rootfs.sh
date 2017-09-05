@@ -2,6 +2,7 @@
 $STEP "Create root file system directory."
 mkdir -pv $ROOTFS_DIR/{dev,proc,sys,run}
 mkdir -pv $ROOTFS_DIR/{bin,boot,etc/{opt,sysconfig},home,lib/firmware,mnt,opt}
+mkdir -pv $ROOTFS_DIR/home/clfs
 mkdir -pv $ROOTFS_DIR/{media/{floppy,cdrom},sbin,srv,var}
 install -dv -m 0750 $ROOTFS_DIR/root
 install -dv -m 1777 $ROOTFS_DIR/tmp $ROOTFS_DIR/var/tmp
@@ -31,6 +32,7 @@ systemd-resolve:x:77:77:systemd Resolver:/:/bin/false
 systemd-timesync:x:78:78:systemd Time Synchronization:/:/bin/false
 systemd-coredump:x:79:79:systemd Core Dumper:/:/bin/false
 nobody:x:99:99:Unprivileged User:/dev/null:/bin/false
+clfs:x:1000:1000::/home/clfs:/bin/bash
 EOF
 cat > $ROOTFS_DIR/etc/group << "EOF"
 root:x:0:
@@ -64,6 +66,7 @@ systemd-timesync:x:78:
 systemd-coredump:x:79:
 nogroup:x:99:
 users:x:999:
+clfs:!:1000:
 EOF
 cat > $ROOTFS_DIR/etc/shadow << "EOF"
 root::10933:0:99999:7:::
@@ -83,6 +86,7 @@ systemd-journal-upload:*:::::::
 systemd-network:*:::::::
 systemd-resolve:*:::::::
 systemd-timesync:*:::::::
+clfs:$6$4RrK1qQRb4TL5yar$6X3UoofCf32P9cmbdprzkpjwsZ5ZS7sD54twEeHmVwDZAnjFdwZfpPvAmMp2ozcexbmWhFFE.ICyDLcqfGwcK/:17414:0:99999:7:::
 EOF
 sed -i -e s,^root:[^:]*:,root:"`$TOOLS_DIR/bin/mkpasswd -m "sha-512" "$CONFIG_ROOT_PASSWD"`":, $ROOTFS_DIR/etc/shadow
 touch $ROOTFS_DIR/var/log/{btmp,lastlog,faillog,wtmp}

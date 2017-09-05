@@ -1,0 +1,13 @@
+Signed-off-by: KyuHyuk Lee <lee@kyuhyuk.kr>
+
+--- configure.orig	2017-08-25 03:02:19.860858131 +0900
++++ configure	2017-08-25 03:04:52.194451310 +0900
+@@ -13885,7 +13885,7 @@
+ fi
+ rm -f conftest.mmap conftest.txt
+ 
+-
++cross_compiling=no
+ if test "$cross_compiling" = yes; then :
+   { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+ $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}

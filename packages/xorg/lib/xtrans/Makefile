@@ -4,6 +4,31 @@ SOURCE := $(SOURCES_DIR)/xtrans-1.3.5.tar.bz2
 SOURCE_URL := https://www.x.org/pub/individual/lib/xtrans-1.3.5.tar.bz2
 MD5 := c5ba432dd1514d858053ffe9f4737dd8
 
+toolchain:
+	@$(STEP) "xtrans 1.3.5"
+	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
+	@( cd $(BUILD_DIR)/xtrans-1.3.5 && \
+	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
+	PKG_CONFIG_SYSROOT_DIR="/" \
+	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
+	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
+	PKG_CONFIG_LIBDIR="$(TOOLS_DIR)/lib/pkgconfig:$(TOOLS_DIR)/share/pkgconfig" \
+	CPPFLAGS="-I$(TOOLS_DIR)/include" \
+	CFLAGS="-O2 -I$(TOOLS_DIR)/include" \
+	CXXFLAGS="-O2 -I$(TOOLS_DIR)/include" \
+	LDFLAGS="-L$(TOOLS_DIR)/lib -Wl,-rpath,$(TOOLS_DIR)/lib" \
+	CONFIG_SITE=/dev/null \
+	./configure \
+	--prefix=$(TOOLS_DIR) \
+	--sysconfdir=$(TOOLS_DIR)/etc \
+	--localstatedir=$(TOOLS_DIR)/var \
+	--enable-shared \
+	--disable-static )
+	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/xtrans-1.3.5
+	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/xtrans-1.3.5
+	@rm -rf $(BUILD_DIR)/xtrans-1.3.5
+
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
 	@export CXX=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-g++

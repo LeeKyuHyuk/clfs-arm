@@ -4,6 +4,31 @@ SOURCE := $(SOURCES_DIR)/libXpm-3.5.12.tar.bz2
 SOURCE_URL := https://www.x.org/pub/individual/lib/libXpm-3.5.12.tar.bz2
 MD5 := 20f4627672edb2bd06a749f11aa97302
 
+toolchain:
+	@$(STEP) "libXpm 3.5.12"
+	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
+	@( cd $(BUILD_DIR)/libXpm-3.5.12 && \
+	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
+	PKG_CONFIG_SYSROOT_DIR="/" \
+	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
+	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
+	PKG_CONFIG_LIBDIR="$(TOOLS_DIR)/lib/pkgconfig:$(TOOLS_DIR)/share/pkgconfig" \
+	CPPFLAGS="-I$(TOOLS_DIR)/include" \
+	CFLAGS="-O2 -I$(TOOLS_DIR)/include" \
+	CXXFLAGS="-O2 -I$(TOOLS_DIR)/include" \
+	LDFLAGS="-L$(TOOLS_DIR)/lib -Wl,-rpath,$(TOOLS_DIR)/lib" \
+	CONFIG_SITE=/dev/null \
+	./configure \
+	--prefix=$(TOOLS_DIR) \
+	--sysconfdir=$(TOOLS_DIR)/etc \
+	--localstatedir=$(TOOLS_DIR)/var \
+	--enable-shared \
+	--disable-static )
+	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/libXpm-3.5.12
+	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/libXpm-3.5.12
+	@rm -rf $(BUILD_DIR)/libXpm-3.5.12
+
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
 	@export CXX=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-g++

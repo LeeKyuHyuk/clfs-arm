@@ -4,6 +4,31 @@ SOURCE := $(SOURCES_DIR)/libICE-1.0.9.tar.bz2
 SOURCE_URL := https://www.x.org/pub/individual/lib/libICE-1.0.9.tar.bz2
 MD5 := addfb1e897ca8079531669c7c7711726
 
+toolchain:
+	@$(STEP) "libICE 1.0.9"
+	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
+	@( cd $(BUILD_DIR)/libICE-1.0.9 && \
+	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
+	PKG_CONFIG_SYSROOT_DIR="/" \
+	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
+	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
+	PKG_CONFIG_LIBDIR="$(TOOLS_DIR)/lib/pkgconfig:$(TOOLS_DIR)/share/pkgconfig" \
+	CPPFLAGS="-I$(TOOLS_DIR)/include" \
+	CFLAGS="-O2 -I$(TOOLS_DIR)/include" \
+	CXXFLAGS="-O2 -I$(TOOLS_DIR)/include" \
+	LDFLAGS="-L$(TOOLS_DIR)/lib -Wl,-rpath,$(TOOLS_DIR)/lib" \
+	CONFIG_SITE=/dev/null \
+	./configure \
+	--prefix=$(TOOLS_DIR) \
+	--sysconfdir=$(TOOLS_DIR)/etc \
+	--localstatedir=$(TOOLS_DIR)/var \
+	--enable-shared \
+	--disable-static )
+	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/libICE-1.0.9
+	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/libICE-1.0.9
+	@rm -rf $(BUILD_DIR)/libICE-1.0.9
+
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
 	@export CXX=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-g++

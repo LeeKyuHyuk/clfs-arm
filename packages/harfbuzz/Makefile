@@ -65,6 +65,7 @@ system:
 	--program-prefix="" \
 	--disable-static \
 	--enable-shared \
+	--without-icu \
 	--with-gobject )
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/harfbuzz-1.4.6
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/harfbuzz-1.4.6

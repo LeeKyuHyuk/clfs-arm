@@ -1,3 +1,37 @@
+toolchain:
+	@make toolchain -C $(PACKAGES_DIR)/xorg/lib/xtrans
+	@make toolchain -C $(PACKAGES_DIR)/xorg/lib/libX11
+	@make toolchain -C $(PACKAGES_DIR)/xorg/lib/libXext
+	@make toolchain -C $(PACKAGES_DIR)/xorg/lib/libFS
+	@make toolchain -C $(PACKAGES_DIR)/xorg/lib/libICE
+	@make toolchain -C $(PACKAGES_DIR)/xorg/lib/libSM
+	@make toolchain -C $(PACKAGES_DIR)/xorg/lib/libXScrnSaver
+	@make toolchain -C $(PACKAGES_DIR)/xorg/lib/libXt
+	@make toolchain -C $(PACKAGES_DIR)/xorg/lib/libXmu
+	@make toolchain -C $(PACKAGES_DIR)/xorg/lib/libXpm
+	@make toolchain -C $(PACKAGES_DIR)/xorg/lib/libXaw
+	@make toolchain -C $(PACKAGES_DIR)/xorg/lib/libXfixes
+	@make toolchain -C $(PACKAGES_DIR)/xorg/lib/libXcomposite
+	@make toolchain -C $(PACKAGES_DIR)/xorg/lib/libXrender
+	@make toolchain -C $(PACKAGES_DIR)/xorg/lib/libXcursor
+	@make toolchain -C $(PACKAGES_DIR)/xorg/lib/libXdamage
+	@make toolchain -C $(PACKAGES_DIR)/xorg/lib/libfontenc
+	@make toolchain -C $(PACKAGES_DIR)/xorg/lib/libXfont2
+	@make toolchain -C $(PACKAGES_DIR)/xorg/lib/libXft
+	@make toolchain -C $(PACKAGES_DIR)/xorg/lib/libXi
+	@make toolchain -C $(PACKAGES_DIR)/xorg/lib/libXinerama
+	@make toolchain -C $(PACKAGES_DIR)/xorg/lib/libXrandr
+	@make toolchain -C $(PACKAGES_DIR)/xorg/lib/libXres
+	@make toolchain -C $(PACKAGES_DIR)/xorg/lib/libXtst
+	@make toolchain -C $(PACKAGES_DIR)/xorg/lib/libXv
+	@make toolchain -C $(PACKAGES_DIR)/xorg/lib/libXvMC
+	@make toolchain -C $(PACKAGES_DIR)/xorg/lib/libXxf86dga
+	@make toolchain -C $(PACKAGES_DIR)/xorg/lib/libXxf86vm
+	@make toolchain -C $(PACKAGES_DIR)/xorg/lib/libdmx
+	@make toolchain -C $(PACKAGES_DIR)/xorg/lib/libpciaccess
+	@make toolchain -C $(PACKAGES_DIR)/xorg/lib/libxkbfile
+	@make toolchain -C $(PACKAGES_DIR)/xorg/lib/libxshmfence
+
 system:
 	@make system -C $(PACKAGES_DIR)/xorg/lib/xtrans
 	@make system -C $(PACKAGES_DIR)/xorg/lib/libX11

@@ -49,4 +49,5 @@ system:
 	@cp -v $(PACKAGES_DIR)/linux-pam/system-session $(ROOTFS_DIR)/etc/pam.d/
 	@cp -v $(PACKAGES_DIR)/linux-pam/system-password $(ROOTFS_DIR)/etc/pam.d/
 	@cp -v $(PACKAGES_DIR)/linux-pam/other $(ROOTFS_DIR)/etc/pam.d/
+	@cp -v $(PACKAGES_DIR)/linux-pam/systemd-user $(ROOTFS_DIR)/etc/pam.d/
 	@rm -rf $(BUILD_DIR)/Linux-PAM-1.3.0

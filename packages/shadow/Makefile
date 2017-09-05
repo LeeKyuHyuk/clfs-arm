@@ -32,4 +32,33 @@ system:
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/shadow-4.5
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/shadow-4.5
 	@sed -i 's/yes/no/' $(ROOTFS_DIR)/etc/default/useradd
+	@install -v -m644 $(ROOTFS_DIR)/etc/login.defs $(ROOTFS_DIR)/etc/login.defs.orig
+	@for FUNCTION in FAIL_DELAY \
+									FAILLOG_ENAB \
+									LASTLOG_ENAB \
+									MAIL_CHECK_ENAB \
+									OBSCURE_CHECKS_ENAB \
+									PORTTIME_CHECKS_ENAB \
+									QUOTAS_ENAB \
+									CONSOLE MOTD_FILE \
+									FTMP_FILE NOLOGINS_FILE \
+									ENV_HZ PASS_MIN_LEN \
+									SU_WHEEL_ONLY \
+									CRACKLIB_DICTPATH \
+									PASS_CHANGE_TRIES \
+									PASS_ALWAYS_WARN \
+									CHFN_AUTH \
+									ENCRYPT_METHOD \
+									ENVIRON_FILE \
+									; do \
+    sed -i "s/^$${FUNCTION}/# &/" $(ROOTFS_DIR)/etc/login.defs ; \
+	done
+	@cp -v $(PACKAGES_DIR)/shadow/login $(ROOTFS_DIR)/etc/pam.d/login
+	@cp -v $(PACKAGES_DIR)/shadow/passwd $(ROOTFS_DIR)/etc/pam.d/passwd
+	@cp -v $(PACKAGES_DIR)/shadow/su $(ROOTFS_DIR)/etc/pam.d/su
+	@cp -v $(PACKAGES_DIR)/shadow/chage $(ROOTFS_DIR)/etc/pam.d/chage
+	@for PROGRAM in chfn chgpasswd chpasswd chsh groupadd groupdel groupmems groupmod newusers useradd userdel usermod ; do \
+		install -v -m644 $(ROOTFS_DIR)/etc/pam.d/chage $(ROOTFS_DIR)/etc/pam.d/$${PROGRAM} ; \
+		sed -i "s/chage/$${PROGRAM}/" $(ROOTFS_DIR)/etc/pam.d/$${PROGRAM} ; \
+	done
 	@rm -rf $(BUILD_DIR)/shadow-4.5

@@ -83,4 +83,5 @@ system:
 	@ln -sfv /run/systemd/resolve/resolv.conf $(ROOTFS_DIR)/etc/resolv.conf
 	@cp -v $(PACKAGES_DIR)/systemd/83-duplicate_devs.rules $(ROOTFS_DIR)/etc/udev/rules.d/83-duplicate_devs.rules
 	@cp -v $(PACKAGES_DIR)/systemd/adjtime $(ROOTFS_DIR)/etc/adjtime
+	@cp -v $(PACKAGES_DIR)/linux-pam/systemd-user $(ROOTFS_DIR)/etc/pam.d/
 	@rm -rf $(BUILD_DIR)/systemd-234-lfs

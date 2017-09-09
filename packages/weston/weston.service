@@ -1,0 +1,16 @@
+[Unit]
+Description=Weston launcher
+RequiresMountsFor=/run
+After=getty@tty1.service
+
+[Service]
+Restart=alway
+RestartSec=10
+User=root
+PermissionsStartOnly=true
+EnvironmentFile=-/etc/default/weston
+ExecStartPre=/bin/mkdir -p /run/shm/wayland
+ExecStart=/bin/chmod 0777 /run/shm/wayland
+
+[Install]
+WantedBy=multi-user.target

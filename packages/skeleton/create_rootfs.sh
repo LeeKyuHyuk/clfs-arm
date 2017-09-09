@@ -2,7 +2,6 @@
 $STEP "Create root file system directory."
 mkdir -pv $ROOTFS_DIR/{dev,proc,sys,run}
 mkdir -pv $ROOTFS_DIR/{bin,boot,etc/{opt,sysconfig},home,lib/firmware,mnt,opt}
-mkdir -pv $ROOTFS_DIR/home/clfs
 mkdir -pv $ROOTFS_DIR/{media/{floppy,cdrom},sbin,srv,var}
 install -dv -m 0750 $ROOTFS_DIR/root
 install -dv -m 1777 $ROOTFS_DIR/tmp $ROOTFS_DIR/var/tmp
@@ -12,8 +11,8 @@ mkdir -v $ROOTFS_DIR/usr/{,local/}share/{misc,terminfo,zoneinfo}
 mkdir -v $ROOTFS_DIR/usr/libexec
 mkdir -pv $ROOTFS_DIR/usr/{,local/}share/man/man{1..8}
 mkdir -v $ROOTFS_DIR/var/{log,mail,spool}
-ln -svf /run $ROOTFS_DIR/var/run
-ln -svf /run/lock $ROOTFS_DIR/var/lock
+ln -svf ../run $ROOTFS_DIR/var/run
+ln -svf ../run/lock $ROOTFS_DIR/var/lock
 mkdir -pv $ROOTFS_DIR/var/{opt,cache,lib/{color,misc,locate},local}
 
 $STEP "Creating Essential Files and Symlinks"
@@ -259,6 +258,11 @@ for script in /etc/profile.d/*.sh ; do
 done
 
 unset script RED GREEN NORMAL
+
+# Set some defaults for graphical systems
+export XDG_DATA_DIRS=/usr/share/
+export XDG_CONFIG_DIRS=/etc/xdg/
+export XDG_RUNTIME_DIR=/tmp/xdg-$USER
 
 # End /etc/profile
 EOF

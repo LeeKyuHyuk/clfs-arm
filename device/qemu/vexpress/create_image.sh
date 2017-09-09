@@ -2,6 +2,9 @@
 set -o nounset
 set -o errexit
 
+$STEP "Creating clfs home directory."
+mkdir -pv $ROOTFS_DIR/home/clfs
+
 $STEP "Creating the fstab"
 rm -f $ROOTFS_DIR/etc/fstab
 cat > $ROOTFS_DIR/etc/fstab << "EOF"
@@ -22,6 +25,15 @@ echo '#!/bin/sh' > $BUILD_DIR/_fakeroot.fs
 echo "set -e" >> $BUILD_DIR/_fakeroot.fs
 echo "chown -h -R 0:0 $ROOTFS_DIR" >> $BUILD_DIR/_fakeroot.fs
 cat $SUPPORT_DIR/device_table.txt > $BUILD_DIR/_device_table.txt
+if [ -f $ROOTFS_DIR/usr/bin/sudo ] ; then
+echo "/usr/bin/sudo	f	4755	0	0	-	-	-	-	-" >> $BUILD_DIR/_device_table.txt
+fi
+if [ -f $ROOTFS_DIR/usr/bin/weston ] ; then
+echo "/usr/bin/weston	f	6755	0	0	-	-	-	-	-" >> $BUILD_DIR/_device_table.txt
+fi
+if [ -f $ROOTFS_DIR/usr/bin/weston-launch ] ; then
+echo "/usr/bin/weston-launch	f	6755	0	0	-	-	-	-	-" >> $BUILD_DIR/_device_table.txt
+fi
 if [ -d $ROOTFS_DIR/home/clfs ] ; then
 echo "/home/clfs	d	755	1000	1000	-	-	-	-	-" >> $BUILD_DIR/_device_table.txt
 fi

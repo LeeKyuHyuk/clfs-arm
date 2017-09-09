@@ -88,8 +88,7 @@ system:
 	--disable-static \
 	--enable-shared \
 	--enable-broadway-backend \
-	--enable-x11-backend \
-	--enable-wayland-backend )
+	--enable-x11-backend )
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/gtk+-2.24.30
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/gtk+-2.24.30
 	@$(call dependency_libs_patch)

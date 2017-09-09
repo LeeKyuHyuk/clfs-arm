@@ -1,14 +1,14 @@
 include $(SUPPORT_DIR)/functions.mk
 
-SOURCE := $(SOURCES_DIR)/xorg-server-1.19.3.tar.bz2
-SOURCE_URL := https://www.x.org/releases/individual/xserver/xorg-server-1.19.3.tar.bz2
-MD5 := 015d2fc4b9f2bfe7a626edb63a62c65e
+SOURCE := $(SOURCES_DIR)/font-util-1.3.1.tar.bz2
+SOURCE_URL := https://www.x.org/archive/individual/font/font-util-1.3.1.tar.bz2
+MD5 := 23756dab809f9ec5011bb27fb2c3c7d6
 
 toolchain:
-	@$(STEP) "xorg-server 1.19.3"
+	@$(STEP) "font-util 1.3.1"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
-	@( cd $(BUILD_DIR)/xorg-server-1.19.3 && \
+	@( cd $(BUILD_DIR)/font-util-1.3.1 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
 	PKG_CONFIG_SYSROOT_DIR="/" \
 	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
@@ -25,9 +25,9 @@ toolchain:
 	--localstatedir=$(TOOLS_DIR)/var \
 	--enable-shared \
 	--disable-static )
-	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/xorg-server-1.19.3
-	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/xorg-server-1.19.3
-	@rm -rf $(BUILD_DIR)/xorg-server-1.19.3
+	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/font-util-1.3.1
+	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/font-util-1.3.1
+	@rm -rf $(BUILD_DIR)/font-util-1.3.1
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -38,12 +38,10 @@ system:
 	@export RANLIB=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-ranlib
 	@export READELF=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-readelf
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
-	@$(STEP) "xorg-server 1.19.3"
+	@$(STEP) "font-util 1.3.1"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
-	@patch -Np1 -i $(PACKAGES_DIR)/xorg/server/configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch -d $(BUILD_DIR)/xorg-server-1.19.3
-	@( cd $(BUILD_DIR)/xorg-server-1.19.3 && autoconf )
-	@( cd $(BUILD_DIR)/xorg-server-1.19.3 && \
+	@( cd $(BUILD_DIR)/font-util-1.3.1 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
 	ac_cv_lbl_unaligned_fail=yes \
 	ac_cv_func_mmap_fixed_mapped=yes \
@@ -56,7 +54,6 @@ system:
 	lt_cv_sys_lib_search_path_spec="" \
 	ac_cv_c_bigendian=no \
 	CONFIG_SITE=/dev/null \
-	CFLAGS="-I$(SYSROOT_DIR)/usr/include/pixman-1 -O2" \
 	./configure \
 	--target=$(CONFIG_TARGET) \
 	--host=$(CONFIG_TARGET) \
@@ -67,26 +64,9 @@ system:
 	--localstatedir=/var \
 	--program-prefix="" \
 	--disable-static \
-	--enable-shared \
-	--with-fontrootdir=/usr/share/fonts/X11/ \
-	--disable-docs \
-	--disable-devel-docs \
-	--enable-xwayland \
-	--enable-xorg \
-	--enable-libdrm \
-	--enable-config-udev \
-	--enable-config-udev-kms \
-	--enable-config-dbus \
-	--disable-libunwind \
-	--enable-glamor \
-	--enable-suid-wrapper \
-	--with-sha1=libsha1 \
-	--disable-xvfb \
-	--disable-xnest \
-	--disable-xquartz \
-	--disable-xwin )
-	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/xorg-server-1.19.3
-	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/xorg-server-1.19.3
+	--enable-shared )
+	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/font-util-1.3.1
+	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/font-util-1.3.1
 	@$(call dependency_libs_patch)
-	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/xorg-server-1.19.3
-	@rm -rf $(BUILD_DIR)/xorg-server-1.19.3
+	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/font-util-1.3.1
+	@rm -rf $(BUILD_DIR)/font-util-1.3.1

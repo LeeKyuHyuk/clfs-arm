@@ -66,10 +66,12 @@ system:
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/weston-2.0.0
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/weston-2.0.0
-	@echo "weston-launch:x:1001:clfs" >> $(ROOTFS_DIR)/etc/group
-	@echo "# Auto start weston" >> $(ROOTFS_DIR)/etc/profile
-	@echo "export XDG_RUNTIME_DIR=/run/shm/wayland" >> $(ROOTFS_DIR)/etc/profile
-	@echo "exec /usr/bin/weston-launch" >> $(ROOTFS_DIR)/etc/profile
+	@echo 'weston-launch:x:1001:clfs' >> $(ROOTFS_DIR)/etc/group
+	@echo '# Auto start weston' >> $(ROOTFS_DIR)/etc/profile
+	@echo 'export XDG_RUNTIME_DIR=/run/shm/wayland' >> $(ROOTFS_DIR)/etc/profile
+	@echo 'if [[ -z $$DISPLAY ]] && [[ $$(tty) = /dev/tty1 ]] && [[ $$USER = clfs ]]; then' >> $(ROOTFS_DIR)/etc/profile
+	@echo 'exec /usr/bin/weston-launch' >> $(ROOTFS_DIR)/etc/profile
+	@echo 'fi' >> $(ROOTFS_DIR)/etc/profile
 	@install -Dv -m 644 $(PACKAGES_DIR)/weston/weston.service $(ROOTFS_DIR)/usr/lib/systemd/system/weston.service
 	@mkdir -p $(ROOTFS_DIR)/etc/systemd/system/multi-user.target.wants
 	@ln -fs ../../../../usr/lib/systemd/system/weston.service $(ROOTFS_DIR)/etc/systemd/system/multi-user.target.wants/weston.service

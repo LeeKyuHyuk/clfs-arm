@@ -6,7 +6,6 @@ After=getty@tty1.service
 [Service]
 Restart=alway
 RestartSec=10
-User=root
 PermissionsStartOnly=true
 EnvironmentFile=-/etc/default/weston
 ExecStartPre=/bin/mkdir -p /run/shm/wayland

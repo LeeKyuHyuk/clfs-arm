@@ -5,6 +5,9 @@ set -o errexit
 $STEP "Creating clfs home directory."
 mkdir -pv $ROOTFS_DIR/home/clfs
 
+$STEP "Setting automatic login"
+sed -i 's/^ExecStart.*$/ExecStart=-\/sbin\/agetty -a clfs %I 38400/' $ROOTFS_DIR/lib/systemd/system/getty@.service
+
 $STEP "Creating the fstab"
 rm -f $ROOTFS_DIR/etc/fstab
 cat > $ROOTFS_DIR/etc/fstab << "EOF"

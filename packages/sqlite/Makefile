@@ -1,8 +1,8 @@
 include $(SUPPORT_DIR)/functions.mk
 
-SOURCE := $(SOURCES_DIR)/libjpeg-turbo-1.5.2.tar.gz
-SOURCE_URL := https://downloads.sourceforge.net/project/libjpeg-turbo/1.5.2/libjpeg-turbo-1.5.2.tar.gz
-MD5 := 6b4923e297a7eaa255f08511017a8818
+SOURCE := $(SOURCES_DIR)/sqlite-autoconf-3190300.tar.gz
+SOURCE_URL := https://sqlite.org/2017/sqlite-autoconf-3190300.tar.gz
+MD5 := c93070d5bf136ce271db23d2dfbc2435
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -13,10 +13,10 @@ system:
 	@export RANLIB=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-ranlib
 	@export READELF=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-readelf
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
-	@$(STEP) "libjpeg-turbo 1.5.2"
+	@$(STEP) "sqlite 3190300"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
-	@( cd $(BUILD_DIR)/libjpeg-turbo-1.5.2 && \
+	@( cd $(BUILD_DIR)/sqlite-autoconf-3190300 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
 	ac_cv_lbl_unaligned_fail=yes \
 	ac_cv_func_mmap_fixed_mapped=yes \
@@ -40,10 +40,12 @@ system:
 	--program-prefix="" \
 	--disable-static \
 	--enable-shared \
-	--with-jpeg8 \
-	--with-simd )
-	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/libjpeg-turbo-1.5.2
-	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/libjpeg-turbo-1.5.2
+	--disable-static-shell \
+	--enable-threadsafe \
+	--disable-editline \
+	--disable-readline )
+	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/sqlite-autoconf-3190300
+	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/sqlite-autoconf-3190300
 	@$(call dependency_libs_patch)
-	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/libjpeg-turbo-1.5.2
-	@rm -rf $(BUILD_DIR)/libjpeg-turbo-1.5.2
+	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/sqlite-autoconf-3190300
+	@rm -rf $(BUILD_DIR)/sqlite-autoconf-3190300

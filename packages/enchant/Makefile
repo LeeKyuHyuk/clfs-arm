@@ -1,8 +1,8 @@
 include $(SUPPORT_DIR)/functions.mk
 
-SOURCE := $(SOURCES_DIR)/libjpeg-turbo-1.5.2.tar.gz
-SOURCE_URL := https://downloads.sourceforge.net/project/libjpeg-turbo/1.5.2/libjpeg-turbo-1.5.2.tar.gz
-MD5 := 6b4923e297a7eaa255f08511017a8818
+SOURCE := $(SOURCES_DIR)/enchant-1.6.0.tar.gz
+SOURCE_URL := http://www.abisource.com/downloads/enchant/1.6.0/enchant-1.6.0.tar.gz
+MD5 := de11011aff801dc61042828041fb59c7
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -13,10 +13,10 @@ system:
 	@export RANLIB=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-ranlib
 	@export READELF=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-readelf
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
-	@$(STEP) "libjpeg-turbo 1.5.2"
+	@$(STEP) "enchant 1.6.0"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
-	@( cd $(BUILD_DIR)/libjpeg-turbo-1.5.2 && \
+	@( cd $(BUILD_DIR)/enchant-1.6.0 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
 	ac_cv_lbl_unaligned_fail=yes \
 	ac_cv_func_mmap_fixed_mapped=yes \
@@ -39,11 +39,9 @@ system:
 	--localstatedir=/var \
 	--program-prefix="" \
 	--disable-static \
-	--enable-shared \
-	--with-jpeg8 \
-	--with-simd )
-	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/libjpeg-turbo-1.5.2
-	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/libjpeg-turbo-1.5.2
+	--enable-shared )
+	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/enchant-1.6.0
+	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/enchant-1.6.0
 	@$(call dependency_libs_patch)
-	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/libjpeg-turbo-1.5.2
-	@rm -rf $(BUILD_DIR)/libjpeg-turbo-1.5.2
+	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/enchant-1.6.0
+	@rm -rf $(BUILD_DIR)/enchant-1.6.0

@@ -1,8 +1,8 @@
 include $(SUPPORT_DIR)/functions.mk
 
-SOURCE := $(SOURCES_DIR)/libjpeg-turbo-1.5.2.tar.gz
-SOURCE_URL := https://downloads.sourceforge.net/project/libjpeg-turbo/1.5.2/libjpeg-turbo-1.5.2.tar.gz
-MD5 := 6b4923e297a7eaa255f08511017a8818
+SOURCE := $(SOURCES_DIR)/gst-plugins-base-1.12.2.tar.xz
+SOURCE_URL := https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.12.2.tar.xz
+MD5 := 77f5379c4ca677616b415e3b3ff95578
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -13,10 +13,10 @@ system:
 	@export RANLIB=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-ranlib
 	@export READELF=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-readelf
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
-	@$(STEP) "libjpeg-turbo 1.5.2"
+	@$(STEP) "gst-plugins-base 1.12.2"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
-	@( cd $(BUILD_DIR)/libjpeg-turbo-1.5.2 && \
+	@( cd $(BUILD_DIR)/gst-plugins-base-1.12.2 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
 	ac_cv_lbl_unaligned_fail=yes \
 	ac_cv_func_mmap_fixed_mapped=yes \
@@ -40,10 +40,10 @@ system:
 	--program-prefix="" \
 	--disable-static \
 	--enable-shared \
-	--with-jpeg8 \
-	--with-simd )
-	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/libjpeg-turbo-1.5.2
-	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/libjpeg-turbo-1.5.2
+	--with-package-name="$(CONFIG_PKG_VERSION)" \
+	--with-package-origin="$(CONFIG_BUG_URL)" )
+	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/gst-plugins-base-1.12.2
+	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/gst-plugins-base-1.12.2
 	@$(call dependency_libs_patch)
-	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/libjpeg-turbo-1.5.2
-	@rm -rf $(BUILD_DIR)/libjpeg-turbo-1.5.2
+	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/gst-plugins-base-1.12.2
+	@rm -rf $(BUILD_DIR)/gst-plugins-base-1.12.2

@@ -4,44 +4,7 @@ SOURCE := $(SOURCES_DIR)/icu4c-59_1-src.tgz
 SOURCE_URL := http://download.icu-project.org/files/icu4c/59.1/icu4c-59_1-src.tgz
 MD5 := 54923fa9fab5b2b83f235fb72523de37
 
-toolchain:
-	@$(STEP) "icu 59.1"
-	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
-	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
-	@patch -Np1 -i $(PACKAGES_DIR)/icu/dont-build-static-dynamic-twice.patch -d $(BUILD_DIR)/icu
-	@patch -Np1 -i $(PACKAGES_DIR)/icu/workaround-toolchain-bugs.patch -d $(BUILD_DIR)/icu
-	@patch -Np1 -i $(PACKAGES_DIR)/icu/detect-compiler-symbol-prefix.patch -d $(BUILD_DIR)/icu
-	@patch -Np1 -i $(PACKAGES_DIR)/icu/link-icudata-as-data-only.patch -d $(BUILD_DIR)/icu
-	@patch -Np1 -i $(PACKAGES_DIR)/icu/fix-static-linking-with-icu-uc.patch -d $(BUILD_DIR)/icu
-	@( cd $(BUILD_DIR)/icu/source && \
-	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
-	PKG_CONFIG_SYSROOT_DIR="/" \
-	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
-	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
-	PKG_CONFIG_LIBDIR="$(TOOLS_DIR)/lib/pkgconfig:$(TOOLS_DIR)/share/pkgconfig" \
-	CPPFLAGS="-I$(TOOLS_DIR)/include" \
-	CFLAGS="-O2 -I$(TOOLS_DIR)/include" \
-	CXXFLAGS="-O2 -I$(TOOLS_DIR)/include" \
-	LDFLAGS="-L$(TOOLS_DIR)/lib -Wl,-rpath,$(TOOLS_DIR)/lib" \
-	CONFIG_SITE=/dev/null \
-	./configure \
-	--prefix=$(TOOLS_DIR) \
-	--sysconfdir=$(TOOLS_DIR)/etc \
-	--localstatedir=$(TOOLS_DIR)/var \
-	--enable-shared \
-	--disable-static \
-	--disable-samples \
-	--disable-tests \
-	--disable-extras \
-	--disable-icuio \
-	--disable-layout \
-	--disable-renaming )
-	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/icu/source
-	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/icu/source
-	@mv -v $(BUILD_DIR)/icu $(BUILD_DIR)/host-icu
-
 system:
-	@make toolchain -C $(PACKAGES_DIR)/icu
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
 	@export CXX=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-g++
 	@export AR=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-ar
@@ -58,6 +21,9 @@ system:
 	@patch -Np1 -i $(PACKAGES_DIR)/icu/detect-compiler-symbol-prefix.patch -d $(BUILD_DIR)/icu
 	@patch -Np1 -i $(PACKAGES_DIR)/icu/link-icudata-as-data-only.patch -d $(BUILD_DIR)/icu
 	@patch -Np1 -i $(PACKAGES_DIR)/icu/fix-static-linking-with-icu-uc.patch -d $(BUILD_DIR)/icu
+	@mkdir -p $(BUILD_DIR)/icu/source/host
+	@( cd $(BUILD_DIR)/icu/source/host && $(BUILD_DIR)/icu/source/runConfigureICU	Linux/gcc )
+	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/icu/source/host
 	@( cd $(BUILD_DIR)/icu/source && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
 	ac_cv_lbl_unaligned_fail=yes \
@@ -81,12 +47,11 @@ system:
 	--program-prefix="" \
 	--disable-static \
 	--enable-shared \
-	--with-cross-build=$(BUILD_DIR)/host-icu/source \
+	--with-cross-build=$(BUILD_DIR)/icu/source/host \
 	--disable-samples \
 	--disable-tests )
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/icu/source
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/icu/source
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/icu/source
-	@rm -rf $(BUILD_DIR)/host-icu
 	@rm -rf $(BUILD_DIR)/icu

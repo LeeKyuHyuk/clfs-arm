@@ -1,8 +1,8 @@
 include $(SUPPORT_DIR)/functions.mk
 
-SOURCE := $(SOURCES_DIR)/libjpeg-turbo-1.5.2.tar.gz
-SOURCE_URL := https://downloads.sourceforge.net/project/libjpeg-turbo/1.5.2/libjpeg-turbo-1.5.2.tar.gz
-MD5 := 6b4923e297a7eaa255f08511017a8818
+SOURCE := $(SOURCES_DIR)/libsecret-0.18.5.tar.xz
+SOURCE_URL := ftp://ftp.gnome.org/pub/gnome/sources/libsecret/0.18/libsecret-0.18.5.tar.xz
+MD5 := 2d688825921313da8731313b0a7f394c
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -13,10 +13,10 @@ system:
 	@export RANLIB=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-ranlib
 	@export READELF=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-readelf
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
-	@$(STEP) "libjpeg-turbo 1.5.2"
+	@$(STEP) "libsecret 0.18.5"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
-	@( cd $(BUILD_DIR)/libjpeg-turbo-1.5.2 && \
+	@( cd $(BUILD_DIR)/libsecret-0.18.5 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
 	ac_cv_lbl_unaligned_fail=yes \
 	ac_cv_func_mmap_fixed_mapped=yes \
@@ -40,10 +40,14 @@ system:
 	--program-prefix="" \
 	--disable-static \
 	--enable-shared \
-	--with-jpeg8 \
-	--with-simd )
-	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/libjpeg-turbo-1.5.2
-	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/libjpeg-turbo-1.5.2
+	--disable-manpages \
+	--disable-strict \
+	--disable-coverage \
+	--enable-introspection=no \
+	--enable-vala=no \
+	--with-libgcrypt-prefix=$(SYSROOT_DIR)/usr )
+	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/libsecret-0.18.5
+	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/libsecret-0.18.5
 	@$(call dependency_libs_patch)
-	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/libjpeg-turbo-1.5.2
-	@rm -rf $(BUILD_DIR)/libjpeg-turbo-1.5.2
+	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/libsecret-0.18.5
+	@rm -rf $(BUILD_DIR)/libsecret-0.18.5

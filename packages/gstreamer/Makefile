@@ -1,14 +1,14 @@
 include $(SUPPORT_DIR)/functions.mk
 
-SOURCE := $(SOURCES_DIR)/harfbuzz-1.4.6.tar.bz2
-SOURCE_URL := https://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.4.6.tar.bz2
-MD5 := e246c08a3bac98e31e731b2a1bf97edf
+SOURCE := $(SOURCES_DIR)/gstreamer-1.12.2.tar.xz
+SOURCE_URL := https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.12.2.tar.xz
+MD5 := 4748860621607ffd96244fb79c86c238
 
 toolchain:
-	@$(STEP) "harfbuzz 1.4.6"
+	@$(STEP) "gstreamer 1.12.2"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
-	@( cd $(BUILD_DIR)/harfbuzz-1.4.6 && \
+	@( cd $(BUILD_DIR)/gstreamer-1.12.2 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
 	PKG_CONFIG_SYSROOT_DIR="/" \
 	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
@@ -25,9 +25,9 @@ toolchain:
 	--localstatedir=$(TOOLS_DIR)/var \
 	--enable-shared \
 	--disable-static )
-	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/harfbuzz-1.4.6
-	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/harfbuzz-1.4.6
-	@rm -rf $(BUILD_DIR)/harfbuzz-1.4.6
+	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/gstreamer-1.12.2
+	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/gstreamer-1.12.2
+	@rm -rf $(BUILD_DIR)/gstreamer-1.12.2
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -38,11 +38,18 @@ system:
 	@export RANLIB=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-ranlib
 	@export READELF=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-readelf
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
-	@$(STEP) "harfbuzz 1.4.6"
+	@$(STEP) "gstreamer 1.12.2"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
-	@( cd $(BUILD_DIR)/harfbuzz-1.4.6 && \
+	@( cd $(BUILD_DIR)/gstreamer-1.12.2 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
+	PKG_CONFIG_LIBDIR=$(SYSROOT_DIR)/usr/lib/pkgconfig:$(SYSROOT_DIR)/usr/share/pkgconfig \
+	PKG_CONFIG_SYSROOT_DIR=$(SYSROOT_DIR) \
+	CFLAGS="--sysroot=$(SYSROOT_DIR)" \
+	CPPFLAGS="--sysroot=$(SYSROOT_DIR)" \
+	OBJCFLAGS="--sysroot=$(SYSROOT_DIR)" \
+	CXXFLAGS="--sysroot=$(SYSROOT_DIR)" \
+	LDFLAGS="--sysroot=$(SYSROOT_DIR)" \
 	ac_cv_lbl_unaligned_fail=yes \
 	ac_cv_func_mmap_fixed_mapped=yes \
 	ac_cv_func_memcmp_working=yes \
@@ -54,7 +61,7 @@ system:
 	lt_cv_sys_lib_search_path_spec="" \
 	ac_cv_c_bigendian=no \
 	CONFIG_SITE=/dev/null \
-	./configure \
+	./autogen.sh \
 	--target=$(CONFIG_TARGET) \
 	--host=$(CONFIG_TARGET) \
 	--build=$(CONFIG_HOST) \
@@ -65,18 +72,18 @@ system:
 	--program-prefix="" \
 	--disable-static \
 	--enable-shared \
-	--with-coretext=no \
-	--with-uniscribe=no \
-	--with-cairo=yes \
-	--with-icu=yes \
-	--with-freetype=yes \
-	--with-glib=yes )
-	@rm -rf $(BUILD_DIR)/harfbuzz-1.4.6/test
-	@mkdir -p $(BUILD_DIR)/harfbuzz-1.4.6/test
-	@echo "all:" > $(BUILD_DIR)/harfbuzz-1.4.6/test/Makefile
-	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/harfbuzz-1.4.6
-	@echo "install:" > $(BUILD_DIR)/harfbuzz-1.4.6/test/Makefile
-	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/harfbuzz-1.4.6
+	--disable-gtk-doc \
+	--disable-benchmarks \
+	--disable-debug \
+	--disable-examples \
+	--disable-tests \
+	--disable-failing-tests \
+	--disable-loadsave \
+	--disable-gst-debug \
+	--with-package-name="$(CONFIG_PKG_VERSION)" \
+	--with-package-origin="$(CONFIG_BUG_URL)" )
+	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/gstreamer-1.12.2
+	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/gstreamer-1.12.2
 	@$(call dependency_libs_patch)
-	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/harfbuzz-1.4.6
-	@rm -rf $(BUILD_DIR)/harfbuzz-1.4.6
+	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/gstreamer-1.12.2
+	@rm -rf $(BUILD_DIR)/gstreamer-1.12.2

@@ -19,6 +19,7 @@ system:
 	@cp -v $(PACKAGES_DIR)/lxdm/lxdm $(BUILD_DIR)/lxdm-0.5.3/pam/lxdm
 	@sed -i 's:sysconfig/i18n:profile.d/i18n.sh:g' $(BUILD_DIR)/lxdm-0.5.3/data/lxdm.in
 	@sed -i 's:/etc/xprofile:/etc/profile:g' $(BUILD_DIR)/lxdm-0.5.3/data/Xsession
+	@sed -e 's/^bg/#&/' -e '/reset=1/ s/# //' -e 's/logou$$/logout/' -e "/arg=/a arg=/usr/bin/X" -i $(BUILD_DIR)/lxdm-0.5.3/data/lxdm.conf.in
 	@( cd $(BUILD_DIR)/lxdm-0.5.3 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
 	ac_cv_lbl_unaligned_fail=yes \
@@ -49,4 +50,6 @@ system:
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/lxdm-0.5.3
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/lxdm-0.5.3
+	@mkdir -p $(ROOTFS_DIR)/etc/systemd/system/multi-user.target.wants
+	@ln -sfv /lib/systemd/system/lxdm.service $(ROOTFS_DIR)/etc/systemd/system/multi-user.target.wants/lxdm.service
 	@rm -rf $(BUILD_DIR)/lxdm-0.5.3

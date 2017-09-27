@@ -103,7 +103,7 @@ system:
 	--enable-opengl \
 	--enable-dri \
 	--disable-va \
-	--with-platforms=drm,wayland,x11 \
+	--with-platforms=drm,x11 \
 	--enable-gbm \
 	--enable-egl \
 	--enable-gles1 \

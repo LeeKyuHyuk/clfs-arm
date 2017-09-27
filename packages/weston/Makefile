@@ -4,7 +4,6 @@ SOURCE := $(SOURCES_DIR)/weston-2.0.0.tar.xz
 SOURCE_URL := https://wayland.freedesktop.org/releases/weston-2.0.0.tar.xz
 MD5 := 15f38945942bf2a91fe2687145fb4c7d
 
-
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
 	@export CXX=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-g++
@@ -70,7 +69,7 @@ system:
 	@echo '# Auto start weston' >> $(ROOTFS_DIR)/etc/profile
 	@echo 'export XDG_RUNTIME_DIR=/run/shm/wayland' >> $(ROOTFS_DIR)/etc/profile
 	@echo 'if [[ -z $$DISPLAY ]] && [[ $$(tty) = /dev/tty1 ]] && [[ $$USER = clfs ]]; then' >> $(ROOTFS_DIR)/etc/profile
-	@echo 'exec /usr/bin/weston-launch' >> $(ROOTFS_DIR)/etc/profile
+	@echo 'exec /usr/bin/weston-launch -- --modules=xwayland.so' >> $(ROOTFS_DIR)/etc/profile
 	@echo 'fi' >> $(ROOTFS_DIR)/etc/profile
 	@install -Dv -m 644 $(PACKAGES_DIR)/weston/weston.service $(ROOTFS_DIR)/usr/lib/systemd/system/weston.service
 	@mkdir -p $(ROOTFS_DIR)/etc/systemd/system/multi-user.target.wants

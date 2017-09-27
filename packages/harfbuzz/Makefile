@@ -71,11 +71,7 @@ system:
 	--with-icu=yes \
 	--with-freetype=yes \
 	--with-glib=yes )
-	@rm -rf $(BUILD_DIR)/harfbuzz-1.4.6/test
-	@mkdir -p $(BUILD_DIR)/harfbuzz-1.4.6/test
-	@echo "all:" > $(BUILD_DIR)/harfbuzz-1.4.6/test/Makefile
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/harfbuzz-1.4.6
-	@echo "install:" > $(BUILD_DIR)/harfbuzz-1.4.6/test/Makefile
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/harfbuzz-1.4.6
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/harfbuzz-1.4.6

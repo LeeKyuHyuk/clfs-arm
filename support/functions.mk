@@ -11,10 +11,10 @@ endef
 define dependency_libs_patch
 	@for lib in $(SYSROOT_DIR)/usr/lib/*.la ; do \
 		while ! [ `grep " /usr/lib/\(.*\).la" $${lib}` -n ] ; do \
-			sed -i "s@ /usr/lib/\(.*\).la@ $(SYSROOT_DIR)/usr/lib/\1.la@g" $${lib} 2>&1 >/dev/null ; \
+			sed -i "s@ /usr/lib/\(.*\).la@ $(SYSROOT_DIR)/usr/lib/\1.la@g" $${lib} ; \
 		done ; \
 		while ! [ `grep " /lib/\(.*\).la" $${lib}` -n ] ; do \
-			sed -i "s@ /lib/\(.*\).la@ $(SYSROOT_DIR)/lib/\1.la@g" $${lib} 2>&1 >/dev/null ; \
+			sed -i "s@ /lib/\(.*\).la@ $(SYSROOT_DIR)/lib/\1.la@g" $${lib} ; \
 		done ; \
-	done;
+	done; 2>&1 >/dev/null
 endef

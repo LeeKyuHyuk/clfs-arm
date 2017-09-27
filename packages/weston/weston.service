@@ -4,12 +4,16 @@ RequiresMountsFor=/run
 After=getty@tty1.service
 
 [Service]
-Restart=alway
+Restart=always
 RestartSec=10
 PermissionsStartOnly=true
 EnvironmentFile=-/etc/default/weston
 ExecStartPre=/bin/mkdir -p /run/shm/wayland
-ExecStart=/bin/chmod 0777 /run/shm/wayland
+ExecStartPre=/bin/chmod 0700 /run/shm/wayland
+ExecStartPre=/usr/bin/gdk-pixbuf-query-loaders --update-cache
+ExecStartPre=/usr/bin/gtk-query-immodules-2.0 --update-cache
+ExecStartPre=/usr/bin/gtk-query-immodules-3.0 --update-cache
+ExecStart=/usr/bin/glib-compile-schemas /usr/share/glib-2.0/schemas
 
 [Install]
 WantedBy=multi-user.target

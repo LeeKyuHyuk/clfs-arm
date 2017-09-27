@@ -68,7 +68,6 @@ system:
 	--disable-malloc0returnsnull )
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/libX11-1.6.5
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/libX11-1.6.5
-	@ln -svf $(SYSROOT_DIR)/usr/include/X11/Xlocale.h $(SYSROOT_DIR)/usr/include/xlocale.h
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/libX11-1.6.5
 	@rm -rf $(BUILD_DIR)/libX11-1.6.5

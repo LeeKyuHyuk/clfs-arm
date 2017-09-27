@@ -2,11 +2,10 @@
 set -o nounset
 set -o errexit
 
+make toolchain -C $PACKAGES_DIR/makedevs
+
 $STEP "Creating clfs home directory."
 mkdir -pv $ROOTFS_DIR/home/clfs
-
-$STEP "Setting automatic login"
-sed -i 's/^ExecStart.*$/ExecStart=-\/sbin\/agetty -a clfs %I 38400/' $ROOTFS_DIR/lib/systemd/system/getty@.service
 
 $STEP "Creating the fstab"
 rm -f $ROOTFS_DIR/etc/fstab
@@ -31,12 +30,6 @@ cat $SUPPORT_DIR/device_table.txt > $BUILD_DIR/_device_table.txt
 if [ -f $ROOTFS_DIR/usr/bin/sudo ] ; then
 echo "/usr/bin/sudo	f	4755	0	0	-	-	-	-	-" >> $BUILD_DIR/_device_table.txt
 fi
-if [ -f $ROOTFS_DIR/usr/bin/weston ] ; then
-echo "/usr/bin/weston	f	6755	0	0	-	-	-	-	-" >> $BUILD_DIR/_device_table.txt
-fi
-if [ -f $ROOTFS_DIR/usr/bin/weston-launch ] ; then
-echo "/usr/bin/weston-launch	f	6755	0	0	-	-	-	-	-" >> $BUILD_DIR/_device_table.txt
-fi
 if [ -d $ROOTFS_DIR/home/clfs ] ; then
 echo "/home/clfs	d	755	1000	1000	-	-	-	-	-" >> $BUILD_DIR/_device_table.txt
 fi
@@ -50,6 +43,6 @@ if [ -d $ROOTFS_DIR/usr/libexec/dbus-daemon-launch-helper ] ; then
 echo "/usr/libexec/dbus-daemon-launch-helper	d	4750	0	18	-	-	-	-	-" >> $BUILD_DIR/_device_table.txt
 fi
 echo "$TOOLS_DIR/bin/makedevs -d $BUILD_DIR/_device_table.txt $ROOTFS_DIR" >> $BUILD_DIR/_fakeroot.fs
-echo "/sbin/mkfs.ext2 -d $ROOTFS_DIR -r 1 -N 0 -m 5 $IMAGES_DIR/rootfs.ext2 2000M" >> $BUILD_DIR/_fakeroot.fs
+echo "$TOOLS_DIR/sbin/mkfs.ext2 -d $ROOTFS_DIR -r 1 -N 0 -m 5 $IMAGES_DIR/rootfs.ext2 2000M" >> $BUILD_DIR/_fakeroot.fs
 chmod a+x $BUILD_DIR/_fakeroot.fs
 $TOOLS_DIR/bin/fakeroot -- $BUILD_DIR/_fakeroot.fs

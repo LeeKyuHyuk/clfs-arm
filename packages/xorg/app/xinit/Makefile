@@ -45,4 +45,5 @@ system:
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/xinit-1.3.4
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/xinit-1.3.4
+	@sed -i 's/\(mcookie=\)\(.*\)/\1`\/usr\/bin\/mcookie`/' $(ROOTFS_DIR)/usr/bin/startx
 	@rm -rf $(BUILD_DIR)/xinit-1.3.4

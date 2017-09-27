@@ -71,7 +71,7 @@ system:
 	--with-fontrootdir=/usr/share/fonts/X11/ \
 	--disable-docs \
 	--disable-devel-docs \
-	--enable-xwayland \
+	--disable-xwayland \
 	--enable-xorg \
 	--enable-libdrm \
 	--enable-config-udev \
@@ -80,11 +80,7 @@ system:
 	--disable-libunwind \
 	--enable-glamor \
 	--enable-suid-wrapper \
-	--with-sha1=libsha1 \
-	--disable-xvfb \
-	--disable-xnest \
-	--disable-xquartz \
-	--disable-xwin )
+	--with-sha1=libsha1 )
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/xorg-server-1.19.3
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/xorg-server-1.19.3
 	@$(call dependency_libs_patch)

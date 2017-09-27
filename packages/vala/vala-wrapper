@@ -1,0 +1,2 @@
+#!/bin/sh
+$0-@VALA_VERSION@ --vapidir=${SYSROOT_DIR}/usr/share/vala/vapi --girdir=${SYSROOT_DIR}/usr/share/gir-1.0 $@

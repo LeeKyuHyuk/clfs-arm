@@ -236,11 +236,6 @@ fi
 export HISTSIZE=1000
 export HISTIGNORE="&:[bf]g:exit"
 
-# Set some defaults for graphical systems
-export XDG_DATA_DIRS=/usr/share/
-export XDG_CONFIG_DIRS=/etc/xdg/
-export XDG_RUNTIME_DIR=/tmp/xdg-$USER
-
 # Setup a red prompt for root and a green one for users.
 NORMAL="\[\e[0m\]"
 RED="\[\e[1;31m\]"
@@ -262,6 +257,7 @@ unset script RED GREEN NORMAL
 # Set some defaults for graphical systems
 export XDG_DATA_DIRS=/usr/share/
 export XDG_CONFIG_DIRS=/etc/xdg/
+export XDG_CONFIG_HOME=/etc/xdg/
 export XDG_RUNTIME_DIR=/tmp/xdg-$USER
 
 # End /etc/profile

@@ -34,4 +34,5 @@ system:
 	-Wno-dev ..  )
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/tint2-15.1-63c3690fa8efb1cd2dd23969f219f9b7a37a65b6/build
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/tint2-15.1-63c3690fa8efb1cd2dd23969f219f9b7a37a65b6/build
+	@echo "tint2 &" > $(ROOTFS_DIR)/etc/xdg/openbox/autostart
 	@rm -rf $(BUILD_DIR)/tint2-15.1-63c3690fa8efb1cd2dd23969f219f9b7a37a65b6

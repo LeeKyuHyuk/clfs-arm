@@ -41,4 +41,13 @@ system:
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/openbox-3.6.1
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/openbox-3.6.1
+	@install -Dv -m 644 $(PACKAGES_DIR)/openbox/openbox.service $(ROOTFS_DIR)/usr/lib/systemd/system/openbox.service
+	@mkdir -p $(ROOTFS_DIR)/etc/systemd/system/multi-user.target.wants
+	@ln -fs ../../../../usr/lib/systemd/system/openbox.service $(ROOTFS_DIR)/etc/systemd/system/multi-user.target.wants/openbox.service
+	@$(STEP) "Setting automatic login"
+	@sed -i 's/^ExecStart.*$$/ExecStart=-\/sbin\/agetty -a clfs %I 38400/' $(ROOTFS_DIR)/lib/systemd/system/getty@.service
+	@echo '# Auto start openbox' >> $(ROOTFS_DIR)/etc/profile
+	@echo 'if [[ -z $$DISPLAY ]] && [[ $$(tty) = /dev/tty1 ]] && [[ $$USER = clfs ]]; then' >> $(ROOTFS_DIR)/etc/profile
+	@echo 'exec /usr/bin/startx /usr/bin/openbox-session -- vt1 &> /dev/null' >> $(ROOTFS_DIR)/etc/profile
+	@echo 'fi' >> $(ROOTFS_DIR)/etc/profile
 	@rm -rf $(BUILD_DIR)/openbox-3.6.1

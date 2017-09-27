@@ -177,7 +177,6 @@ system:
 	@make system -C $(PACKAGES_DIR)/libnotify
 	# @make system -C $(PACKAGES_DIR)/epiphany
 	@make system -C $(PACKAGES_DIR)/openbox
-	@make system -C $(PACKAGES_DIR)/lxdm
 	@make system -C $(PACKAGES_DIR)/imlib2
 	@make system -C $(PACKAGES_DIR)/libstartup-notification
 	@make system -C $(PACKAGES_DIR)/tint2

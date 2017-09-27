@@ -1,0 +1,18 @@
+[Unit]
+Description=Openbox launcher
+RequiresMountsFor=/run
+After=getty@tty1.service
+
+[Service]
+Restart=always
+RestartSec=10
+PermissionsStartOnly=true
+EnvironmentFile=-/etc/profile
+ExecStartPre=/bin/chmod 666 /dev/fb0
+ExecStartPre=/usr/bin/gdk-pixbuf-query-loaders --update-cache
+ExecStartPre=/usr/bin/gtk-query-immodules-2.0 --update-cache
+ExecStartPre=/usr/bin/gtk-query-immodules-3.0 --update-cache
+ExecStart=/usr/bin/glib-compile-schemas /usr/share/glib-2.0/schemas
+
+[Install]
+WantedBy=multi-user.target

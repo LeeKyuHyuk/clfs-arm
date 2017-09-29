@@ -48,6 +48,7 @@ system:
 	@sed -i 's/^ExecStart.*$$/ExecStart=-\/sbin\/agetty -a clfs %I 38400/' $(ROOTFS_DIR)/lib/systemd/system/getty@.service
 	@echo '# Auto start openbox' >> $(ROOTFS_DIR)/etc/profile
 	@echo 'if [[ -z $$DISPLAY ]] && [[ $$(tty) = /dev/tty1 ]] && [[ $$USER = clfs ]]; then' >> $(ROOTFS_DIR)/etc/profile
+	@echo 'echo -e "\e[1m\e[32mCLFS-ARM booting ... Please wait..!\e[0m"' >> $(ROOTFS_DIR)/etc/profile
 	@echo 'exec /usr/bin/startx /usr/bin/openbox-session -- vt1 &> /dev/null' >> $(ROOTFS_DIR)/etc/profile
 	@echo 'fi' >> $(ROOTFS_DIR)/etc/profile
 	@rm -rf $(BUILD_DIR)/openbox-3.6.1

@@ -1,0 +1,5 @@
+1.0
+DISTRIB_ID="CLFS-ARM"
+DISTRIB_RELEASE="1.0"
+DISTRIB_CODENAME="Absinthe"
+DISTRIB_DESCRIPTION="Cross Linux From Scratch (CLFS) on the ARM architecture"

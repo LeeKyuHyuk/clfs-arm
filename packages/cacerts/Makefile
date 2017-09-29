@@ -1,8 +1,8 @@
 include $(SUPPORT_DIR)/functions.mk
 
-SOURCE := $(PACKAGES_DIR)/cacerts/make-ca.sh-20170514
-SOURCE_URL := http://anduin.linuxfromscratch.org/BLFS/other/make-ca.sh-20170514
-MD5 := bc851e234a2a9c834c10d81ea02119b8
+SOURCE := $(PACKAGES_DIR)/cacerts/ca-certificates_20161130.tar.xz
+SOURCE_URL := http://snapshot.debian.org/archive/debian/20161205T153846Z/pool/main/c/ca-certificates/ca-certificates_20161130.tar.xz
+MD5 := 1a0a3a1b3390dc83affed4b0c2ae1c05
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -15,9 +15,17 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "Certificate Authority Certificates"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
-	@install -vdm755 $(ROOTFS_DIR)/etc/ssl/local
-	@mkdir -p $(BUILD_DIR)/cacerts
-	@wget http://www.cacert.org/certs/root.crt -P $(BUILD_DIR)/cacerts
-	@$(TOOLS_DIR)/bin/openssl x509 -in $(BUILD_DIR)/cacerts/root.crt -text -fingerprint -setalias "CAcert Class 1 root" -addtrust serverAuth -addtrust emailProtection -addtrust codeSigning > $(ROOTFS_DIR)/etc/ssl/local/CAcert_Class_1_root.pem
-	@chmod -v 755 $(SOURCE)
-	@rm -rf  $(BUILD_DIR)/cacerts
+	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
+	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/ca-certificates all
+	@install -dv -m 0755 $(ROOTFS_DIR)/usr/share/ca-certificates
+	@install -dv -m 0755 $(ROOTFS_DIR)/etc/ssl/certs
+	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/ca-certificates install DESTDIR=$(ROOTFS_DIR)
+	@rm -f $(ROOTFS_DIR)/usr/sbin/update-ca-certificates
+	@rm -f $(ROOTFS_DIR)/etc/ssl/certs/*
+	@( cd $(ROOTFS_DIR) && \
+	for i in `find usr/share/ca-certificates -name "*.crt"` ; do \
+		ln -sf ../../../$$i etc/ssl/certs/`basename $${i} .crt`.pem ;\
+		cat $$i >>etc/ssl/certs/ca-certificates.crt ;\
+	done )
+	@$(TOOLS_DIR)/bin/c_rehash $(ROOTFS_DIR)/etc/ssl/certs
+	@rm -rf $(BUILD_DIR)/ca-certificates

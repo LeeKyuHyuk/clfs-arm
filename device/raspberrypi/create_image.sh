@@ -7,6 +7,10 @@ make toolchain -C $PACKAGES_DIR/makedevs
 $STEP "Creating clfs home directory."
 mkdir -pv $ROOTFS_DIR/home/clfs
 
+$STEP "Copy the supplied Broadcom libraries."
+cp -rv $DEVICE_DIR/raspberrypi/hardfp/opt/vc $ROOTFS_DIR/opt
+echo "/opt/vc/lib" >> $ROOTFS_DIR/etc/ld.so.conf.d/broadcom.conf
+
 $STEP "Creating the fstab"
 rm -f $ROOTFS_DIR/etc/fstab
 cat > $ROOTFS_DIR/etc/fstab << "EOF"

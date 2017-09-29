@@ -113,3 +113,4 @@ system:
 	@make system -C $(PACKAGES_DIR)/texinfo
 	@make system -C $(PACKAGES_DIR)/vim
 	@make system -C $(PACKAGES_DIR)/tzdata
+	@make system -C $(PACKAGES_DIR)/lsb_release

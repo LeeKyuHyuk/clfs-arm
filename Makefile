@@ -166,7 +166,6 @@ system:
 	@make system -C $(PACKAGES_DIR)/gstreamer
 	@make system -C $(PACKAGES_DIR)/gst-plugins-base
 	@make system -C $(PACKAGES_DIR)/libwebp
-	# @make system -C $(PACKAGES_DIR)/webkitgtk
 	@make system -C $(PACKAGES_DIR)/libtasn1
 	@make system -C $(PACKAGES_DIR)/p11-kit
 	@make system -C $(PACKAGES_DIR)/gcr
@@ -175,11 +174,17 @@ system:
 	@make system -C $(PACKAGES_DIR)/gnome-desktop
 	@make system -C $(PACKAGES_DIR)/json-glib
 	@make system -C $(PACKAGES_DIR)/libnotify
-	# @make system -C $(PACKAGES_DIR)/epiphany
+	@make system -C $(PACKAGES_DIR)/nspr
+	@make system -C $(PACKAGES_DIR)/nss
 	@make system -C $(PACKAGES_DIR)/openbox
 	@make system -C $(PACKAGES_DIR)/imlib2
 	@make system -C $(PACKAGES_DIR)/libstartup-notification
 	@make system -C $(PACKAGES_DIR)/tint2
+	@make system -C $(PACKAGES_DIR)/gmp
+	@make system -C $(PACKAGES_DIR)/nettle
+	@make system -C $(PACKAGES_DIR)/gnutls
+	@make system -C $(PACKAGES_DIR)/webkitgtk
+	@make system -C $(PACKAGES_DIR)/epiphany
 	@make system -C $(PACKAGES_DIR)/glibc
 	$(PRINT_BUILD_TIME)
 

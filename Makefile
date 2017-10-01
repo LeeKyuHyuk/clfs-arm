@@ -180,11 +180,20 @@ system:
 	@make system -C $(PACKAGES_DIR)/imlib2
 	@make system -C $(PACKAGES_DIR)/libstartup-notification
 	@make system -C $(PACKAGES_DIR)/tint2
-	@make system -C $(PACKAGES_DIR)/gmp
-	@make system -C $(PACKAGES_DIR)/nettle
-	@make system -C $(PACKAGES_DIR)/gnutls
-	@make system -C $(PACKAGES_DIR)/webkitgtk
-	@make system -C $(PACKAGES_DIR)/epiphany
+	# @make system -C $(PACKAGES_DIR)/gmp
+	# @make system -C $(PACKAGES_DIR)/nettle
+	# @make system -C $(PACKAGES_DIR)/gnutls
+	# @make system -C $(PACKAGES_DIR)/glib-networking
+	# @make system -C $(PACKAGES_DIR)/webkitgtk
+	# @make system -C $(PACKAGES_DIR)/epiphany
+	@make system -C $(PACKAGES_DIR)/lxmenu-data
+	@make system-extra -C $(PACKAGES_DIR)/libfm
+	@make system -C $(PACKAGES_DIR)/menu-cache
+	@make system -C $(PACKAGES_DIR)/libfm
+	@make system -C $(PACKAGES_DIR)/pcmanfm
+	@make system -C $(PACKAGES_DIR)/openjpeg
+	@make system -C $(PACKAGES_DIR)/poppler
+	@make system -C $(PACKAGES_DIR)/epdfview
 	@make system -C $(PACKAGES_DIR)/glibc
 	$(PRINT_BUILD_TIME)
 
@@ -210,7 +219,7 @@ run:
 		$(ERROR) "QEMU Emulate only supports 'qemu_vexpress'." ; \
 		exit 1 ; \
 	fi;
-	@qemu-system-arm -M vexpress-a9 -smp 1 -m 1024 -kernel $(KERNEL_DIR)/zImage -dtb $(KERNEL_DIR)/vexpress-v2p-ca9.dtb -drive file=$(IMAGES_DIR)/rootfs.ext2,if=sd,format=raw -append "init=/sbin/init console=ttyAMA0,115200 root=/dev/mmcblk0 ip=dhcp" -serial stdio -net user -show-cursor
+	@qemu-system-arm -M vexpress-a9 -smp 1 -m 1G -kernel $(KERNEL_DIR)/zImage -dtb $(KERNEL_DIR)/vexpress-v2p-ca9.dtb -drive file=$(IMAGES_DIR)/rootfs.ext2,if=sd,format=raw -append "init=/sbin/init console=ttyAMA0,115200 root=/dev/mmcblk0 ip=dhcp" -serial stdio -net user -show-cursor
 
 flash:
 	@chmod 755 $(DEVICE_DIR)/raspberrypi/image-usb-stick

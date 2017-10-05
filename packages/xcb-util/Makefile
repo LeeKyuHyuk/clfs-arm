@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := xcb-util
+TARGET_DEPENDENCIES := libxcb
 SOURCE := $(SOURCES_DIR)/xcb-util-0.4.0.tar.bz2
 SOURCE_URL := http://xcb.freedesktop.org/dist/xcb-util-0.4.0.tar.bz2
 MD5 := 2e97feed81919465a04ccc71e4073313
@@ -15,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "xcb-util 0.4.0"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/xcb-util-0.4.0 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -45,3 +48,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/xcb-util-0.4.0
 	@rm -rf $(BUILD_DIR)/xcb-util-0.4.0
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

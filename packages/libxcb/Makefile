@@ -1,5 +1,8 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := libxcb
+HOST_DEPENDENCIES := libxau libxdmcp xcb-proto libpthread-stubs
+TARGET_DEPENDENCIES := libxau libxdmcp xcb-proto libpthread-stubs
 SOURCE := $(SOURCES_DIR)/libxcb-1.12.tar.bz2
 SOURCE_URL := https://xcb.freedesktop.org/dist/libxcb-1.12.tar.bz2
 MD5 := 28e552bd78bc1050b6b26ca1db0e5bb6
@@ -7,6 +10,7 @@ MD5 := 28e552bd78bc1050b6b26ca1db0e5bb6
 toolchain:
 	@$(STEP) "libXcb 1.12"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/libxcb-1.12 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -28,6 +32,7 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/libxcb-1.12
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/libxcb-1.12
 	@rm -rf $(BUILD_DIR)/libxcb-1.12
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -40,6 +45,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "libXcb 1.12"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@sed -i "s/pthread-stubs//" $(BUILD_DIR)/libxcb-1.12/configure
 	@sed -i "s|XCBPROTO_XCBINCLUDEDIR=|XCBPROTO_XCBINCLUDEDIR=$(SYSROOT_DIR)/|" $(BUILD_DIR)/libxcb-1.12/configure.ac
@@ -74,3 +80,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/libxcb-1.12
 	@rm -rf $(BUILD_DIR)/libxcb-1.12
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

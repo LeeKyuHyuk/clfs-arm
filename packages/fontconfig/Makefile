@@ -1,5 +1,8 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := fontconfig
+HOST_DEPENDENCIES := freetype expat pkgconf gperf
+TARGET_DEPENDENCIES := freetype expat
 SOURCE := $(SOURCES_DIR)/fontconfig-2.12.1.tar.gz
 SOURCE_URL := https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.12.1.tar.gz
 MD5 := ce55e525c37147eee14cc2de6cc09f6c
@@ -7,6 +10,7 @@ MD5 := ce55e525c37147eee14cc2de6cc09f6c
 toolchain:
 	@$(STEP) "fontconfig 2.12.1"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@patch -Np1 -i $(PACKAGES_DIR)/fontconfig/Avoid-conflicts-with-integer-width-macros-from-TS-1866.patch -d $(BUILD_DIR)/fontconfig-2.12.1
 	@( cd $(BUILD_DIR)/fontconfig-2.12.1 && \
@@ -29,6 +33,7 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/fontconfig-2.12.1
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/fontconfig-2.12.1
 	@rm -rf $(BUILD_DIR)/fontconfig-2.12.1
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -41,6 +46,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "fontconfig 2.12.1"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@patch -Np1 -i $(PACKAGES_DIR)/fontconfig/Avoid-conflicts-with-integer-width-macros-from-TS-1866.patch -d $(BUILD_DIR)/fontconfig-2.12.1
 	@( cd $(BUILD_DIR)/fontconfig-2.12.1 && \
@@ -75,3 +81,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/fontconfig-2.12.1
 	@rm -rf $(BUILD_DIR)/fontconfig-2.12.1
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

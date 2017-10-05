@@ -1,5 +1,6 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := xhost
 SOURCE := $(SOURCES_DIR)/xhost-1.0.7.tar.bz2
 SOURCE_URL := ftp://ftp.x.org/pub/individual/app/xhost-1.0.7.tar.bz2
 MD5 := f5d490738b148cb7f2fe760f40f92516
@@ -15,6 +16,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "xhost 1.0.7"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/xhost-1.0.7 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -46,3 +48,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/xhost-1.0.7
 	@rm -rf $(BUILD_DIR)/xhost-1.0.7
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

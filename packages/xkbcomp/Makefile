@@ -1,33 +1,10 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := xkbcomp
+TARGET_DEPENDENCIES := xlib
 SOURCE := $(SOURCES_DIR)/xkbcomp-1.4.0.tar.bz2
 SOURCE_URL := https://www.x.org/releases/individual/app/xkbcomp-1.4.0.tar.bz2
 MD5 := cc22b232bc78a303371983e1b48794ab
-
-toolchain:
-	@$(STEP) "xkbcomp 1.4.0"
-	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
-	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
-	@( cd $(BUILD_DIR)/xkbcomp-1.4.0 && \
-	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
-	PKG_CONFIG_SYSROOT_DIR="/" \
-	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
-	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
-	PKG_CONFIG_LIBDIR="$(TOOLS_DIR)/lib/pkgconfig:$(TOOLS_DIR)/share/pkgconfig" \
-	CPPFLAGS="-I$(TOOLS_DIR)/include" \
-	CFLAGS="-O2 -I$(TOOLS_DIR)/include" \
-	CXXFLAGS="-O2 -I$(TOOLS_DIR)/include" \
-	LDFLAGS="-L$(TOOLS_DIR)/lib -Wl,-rpath,$(TOOLS_DIR)/lib" \
-	CONFIG_SITE=/dev/null \
-	./configure \
-	--prefix=$(TOOLS_DIR) \
-	--sysconfdir=$(TOOLS_DIR)/etc \
-	--localstatedir=$(TOOLS_DIR)/var \
-	--enable-shared \
-	--disable-static )
-	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/xkbcomp-1.4.0
-	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/xkbcomp-1.4.0
-	@rm -rf $(BUILD_DIR)/xkbcomp-1.4.0
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -40,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "xkbcomp 1.4.0"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/xkbcomp-1.4.0 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -71,3 +49,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/xkbcomp-1.4.0
 	@rm -rf $(BUILD_DIR)/xkbcomp-1.4.0
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))

@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := pango
+TARGET_DEPENDENCIES := glib cairo harfbuzz fontconfig freetype
 SOURCE := $(SOURCES_DIR)/pango-1.40.5.tar.xz
 SOURCE_URL := https://ftp.gnome.org/pub/gnome/sources/pango/1.40/pango-1.40.5.tar.xz
 MD5 := 11fb1e94c486507a94c4a905d86e70ce
@@ -40,6 +42,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "pango 1.40.5"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@sed -i "/seems to be moved/s/^/#/" $(BUILD_DIR)/pango-1.40.5/ltmain.sh
 	@( cd $(BUILD_DIR)/pango-1.40.5 && \
@@ -73,3 +76,4 @@ system:
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/pango-1.40.5
 	@sed -i "s@\.latomic@\-latomic@g" $(ROOTFS_DIR)/usr/lib/libpangocairo-1.0.la
 	@rm -rf $(BUILD_DIR)/pango-1.40.5
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := font-util
+HOST_DEPENDENCIES := pkgconf
 SOURCE := $(SOURCES_DIR)/font-util-1.3.1.tar.bz2
 SOURCE_URL := https://www.x.org/archive/individual/font/font-util-1.3.1.tar.bz2
 MD5 := 23756dab809f9ec5011bb27fb2c3c7d6
@@ -7,6 +9,7 @@ MD5 := 23756dab809f9ec5011bb27fb2c3c7d6
 toolchain:
 	@$(STEP) "font-util 1.3.1"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/font-util-1.3.1 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -28,6 +31,7 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/font-util-1.3.1
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/font-util-1.3.1
 	@rm -rf $(BUILD_DIR)/font-util-1.3.1
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -40,6 +44,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "font-util 1.3.1"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/font-util-1.3.1 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -70,3 +75,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/font-util-1.3.1
 	@rm -rf $(BUILD_DIR)/font-util-1.3.1
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

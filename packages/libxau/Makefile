@@ -1,5 +1,8 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := libxau
+HOST_DEPENDENCIES := xproto
+TARGET_DEPENDENCIES := xproto
 SOURCE := $(SOURCES_DIR)/libXau-1.0.8.tar.bz2
 SOURCE_URL := https://www.x.org/archive/individual/lib/libXau-1.0.8.tar.bz2
 MD5 := 685f8abbffa6d145c0f930f00703b21b
@@ -7,6 +10,7 @@ MD5 := 685f8abbffa6d145c0f930f00703b21b
 toolchain:
 	@$(STEP) "libXau 1.0.8"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/libXau-1.0.8 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -28,6 +32,7 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/libXau-1.0.8
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/libXau-1.0.8
 	@rm -rf $(BUILD_DIR)/libXau-1.0.8
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -40,6 +45,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "libXau 1.0.8"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/libXau-1.0.8 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -70,3 +76,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/libXau-1.0.8
 	@rm -rf $(BUILD_DIR)/libXau-1.0.8
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

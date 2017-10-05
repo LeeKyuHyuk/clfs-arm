@@ -1,5 +1,6 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := libpthread-stubs
 SOURCE := $(SOURCES_DIR)/libpthread-stubs-0.4.tar.bz2
 SOURCE_URL := https://xcb.freedesktop.org/dist/libpthread-stubs-0.4.tar.bz2
 MD5 := 48c1544854a94db0e51499cc3afd797f
@@ -7,6 +8,7 @@ MD5 := 48c1544854a94db0e51499cc3afd797f
 toolchain:
 	@$(STEP) "libpthread-stubs 0.4"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/libpthread-stubs-0.4 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -28,6 +30,7 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/libpthread-stubs-0.4
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/libpthread-stubs-0.4
 	@rm -rf $(BUILD_DIR)/libpthread-stubs-0.4
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -40,6 +43,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "libpthread-stubs 0.4"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/libpthread-stubs-0.4 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -70,3 +74,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/libpthread-stubs-0.4
 	@rm -rf $(BUILD_DIR)/libpthread-stubs-0.4
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

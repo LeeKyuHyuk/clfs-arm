@@ -1,5 +1,6 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := xcb-proto
 SOURCE := $(SOURCES_DIR)/xcb-proto-1.12.tar.bz2
 SOURCE_URL := https://xcb.freedesktop.org/dist/xcb-proto-1.12.tar.bz2
 MD5 := 14e60919f859560f28426a685a555962
@@ -7,6 +8,7 @@ MD5 := 14e60919f859560f28426a685a555962
 toolchain:
 	@$(STEP) "xcb-proto 1.12"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@patch -Np1 -i $(PACKAGES_DIR)/xcb-proto/xcb-proto-1.12-schema-1.patch -d $(BUILD_DIR)/xcb-proto-1.12
 	@( cd $(BUILD_DIR)/xcb-proto-1.12 && \
@@ -29,6 +31,7 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/xcb-proto-1.12
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/xcb-proto-1.12
 	@rm -rf $(BUILD_DIR)/xcb-proto-1.12
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -41,6 +44,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "xcb-proto 1.12"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@patch -Np1 -i $(PACKAGES_DIR)/xcb-proto/xcb-proto-1.12-schema-1.patch -d $(BUILD_DIR)/xcb-proto-1.12
 	@( cd $(BUILD_DIR)/xcb-proto-1.12 && \
@@ -72,3 +76,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/xcb-proto-1.12
 	@rm -rf $(BUILD_DIR)/xcb-proto-1.12
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

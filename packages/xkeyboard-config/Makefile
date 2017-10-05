@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := xkeyboard-config
+TARGET_DEPENDENCIES := xlib
 SOURCE := $(SOURCES_DIR)/xkeyboard-config-2.21.tar.bz2
 SOURCE_URL := https://www.x.org/archive/individual/data/xkeyboard-config/xkeyboard-config-2.21.tar.bz2
 MD5 := af9498e8954907d0a47f0f7b3d21e1ef
@@ -15,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "xkeyboard-config 2.21"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/xkeyboard-config-2.21 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -47,3 +50,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/xkeyboard-config-2.21
 	@rm -rf $(BUILD_DIR)/xkeyboard-config-2.21
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

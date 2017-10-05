@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := freetype
+TARGET_DEPENDENCIES := zlib bzip2 libpng
 SOURCE := $(SOURCES_DIR)/freetype-2.8.tar.bz2
 SOURCE_URL := http://downloads.sourceforge.net/freetype/freetype-2.8.tar.bz2
 MD5 := 2413ac3eaf508ada019c63959ea81a92
@@ -7,6 +9,7 @@ MD5 := 2413ac3eaf508ada019c63959ea81a92
 toolchain:
 	@$(STEP) "freetype 2.8"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/freetype-2.8 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -31,6 +34,7 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/freetype-2.8
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/freetype-2.8
 	@rm -rf $(BUILD_DIR)/freetype-2.8
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -43,6 +47,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "freetype 2.8"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/freetype-2.8 && ./autogen.sh )
 	@( cd $(BUILD_DIR)/freetype-2.8 && \
@@ -69,8 +74,8 @@ system:
 	--program-prefix="" \
 	--disable-static \
 	--enable-shared \
-	--without-zlib \
-	--without-bzip2 \
+	--with-zlib \
+	--with-bzip2 \
 	LIBPNG_CFLAGS="`$(SYSROOT_DIR)/usr/bin/libpng-config --cflags`" \
 	LIBPNG_LDFLAGS="`$(SYSROOT_DIR)/usr/bin/libpng-config --ldflags`" )
 	@make -j$(CONFIG_PARALLEL_JOBS) CCexe="gcc" -C $(BUILD_DIR)/freetype-2.8
@@ -78,3 +83,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/freetype-2.8
 	@rm -rf $(BUILD_DIR)/freetype-2.8
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

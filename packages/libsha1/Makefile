@@ -1,5 +1,6 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := libsha1
 SOURCE := $(PACKAGES_DIR)/libsha1/libsha1-0.3.tar.gz
 SOURCE_URL := https://github.com/dottedmag/libsha1/archive/0.3.tar.gz
 MD5 := 23dff1d87335ce6966c10806cb2f7553
@@ -15,6 +16,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "libsha1 0.3"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/libsha1-0.3 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -45,3 +47,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/libsha1-0.3
 	@rm -rf $(BUILD_DIR)/libsha1-0.3
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

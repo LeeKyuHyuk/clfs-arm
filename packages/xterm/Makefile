@@ -1,5 +1,6 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := xterm
 SOURCE := $(SOURCES_DIR)/xterm-330.tgz
 SOURCE_URL := ftp://ftp.invisible-island.net/xterm/xterm-330.tgz
 MD5 := 9a6db7974aa4ccbb50eabebf72618467
@@ -15,6 +16,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "xterm 330"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/xterm-330 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -46,3 +48,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install install-ti -C $(BUILD_DIR)/xterm-330
 	@rm -rf $(BUILD_DIR)/xterm-330
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

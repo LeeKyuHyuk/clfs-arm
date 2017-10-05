@@ -1,4 +1,11 @@
+include $(SUPPORT_DIR)/functions.mk
+
+NAME := xlib
+HOST_DEPENDENCIES := fontconfig libxcb
+TARGET_DEPENDENCIES := fontconfig libxcb
+
 toolchain:
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@make toolchain -C $(PACKAGES_DIR)/xorg/lib/xtrans
 	@make toolchain -C $(PACKAGES_DIR)/xorg/lib/libX11
 	@make toolchain -C $(PACKAGES_DIR)/xorg/lib/libXext
@@ -31,8 +38,10 @@ toolchain:
 	@make toolchain -C $(PACKAGES_DIR)/xorg/lib/libpciaccess
 	@make toolchain -C $(PACKAGES_DIR)/xorg/lib/libxkbfile
 	@make toolchain -C $(PACKAGES_DIR)/xorg/lib/libxshmfence
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@make system -C $(PACKAGES_DIR)/xorg/lib/xtrans
 	@make system -C $(PACKAGES_DIR)/xorg/lib/libX11
 	@make system -C $(PACKAGES_DIR)/xorg/lib/libXext
@@ -65,3 +74,4 @@ system:
 	@make system -C $(PACKAGES_DIR)/xorg/lib/libpciaccess
 	@make system -C $(PACKAGES_DIR)/xorg/lib/libxkbfile
 	@make system -C $(PACKAGES_DIR)/xorg/lib/libxshmfence
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

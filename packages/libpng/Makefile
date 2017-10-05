@@ -1,5 +1,8 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := libpng
+HOST_DEPENDENCIES := zlib
+TARGET_DEPENDENCIES := zlib
 SOURCE := $(SOURCES_DIR)/libpng-1.6.31.tar.xz
 SOURCE_URL := http://downloads.sourceforge.net/libpng/libpng-1.6.31.tar.xz
 MD5 := 1b34eab440263e32cfa39d19413fad54
@@ -7,6 +10,7 @@ MD5 := 1b34eab440263e32cfa39d19413fad54
 toolchain:
 	@$(STEP) "libpng 1.6.31"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@patch -Np1 -i $(PACKAGES_DIR)/libpng/Disable-pngfix-and-png-fix-itxt.patch -d $(BUILD_DIR)/libpng-1.6.31
 	@patch -Np1 -i $(PACKAGES_DIR)/libpng/Don-t-append-prefix-to-symbol-names-in-version-script.patch -d $(BUILD_DIR)/libpng-1.6.31
@@ -30,6 +34,7 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/libpng-1.6.31
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/libpng-1.6.31
 	@rm -rf $(BUILD_DIR)/libpng-1.6.31
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -42,6 +47,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "libpng 1.6.31"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@patch -Np1 -i $(PACKAGES_DIR)/libpng/Disable-pngfix-and-png-fix-itxt.patch -d $(BUILD_DIR)/libpng-1.6.31
 	@patch -Np1 -i $(PACKAGES_DIR)/libpng/Don-t-append-prefix-to-symbol-names-in-version-script.patch -d $(BUILD_DIR)/libpng-1.6.31
@@ -77,3 +83,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/libpng-1.6.31
 	@rm -rf $(BUILD_DIR)/libpng-1.6.31
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

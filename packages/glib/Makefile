@@ -2,6 +2,7 @@ include $(SUPPORT_DIR)/functions.mk
 
 NAME := glib
 HOST_DEPENDENCIES := gettext libffi pcre pkgconf util-linux zlib
+TARGET_DEPENDENCIES := libffi pcre util-linux zlib
 SOURCE := $(SOURCES_DIR)/glib-2.52.0.tar.xz
 SOURCE_URL := ftp://ftp.gnome.org/pub/gnome/sources/glib/2.52/glib-2.52.0.tar.xz
 MD5 := 64283e546091dcf3c9837d5430dda022
@@ -53,6 +54,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "glib 2.52.0"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/glib-2.52.0 && \
 	ac_cv_func_posix_getpwuid_r=yes \
@@ -136,3 +138,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/glib-2.52.0
 	@rm -rf $(BUILD_DIR)/glib-2.52.0
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

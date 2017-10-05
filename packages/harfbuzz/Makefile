@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := harfbuzz
+TARGET_DEPENDENCIES := freetype glib icu
 SOURCE := $(SOURCES_DIR)/harfbuzz-1.4.6.tar.bz2
 SOURCE_URL := https://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.4.6.tar.bz2
 MD5 := e246c08a3bac98e31e731b2a1bf97edf
@@ -7,6 +9,7 @@ MD5 := e246c08a3bac98e31e731b2a1bf97edf
 toolchain:
 	@$(STEP) "harfbuzz 1.4.6"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/harfbuzz-1.4.6 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -28,6 +31,7 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/harfbuzz-1.4.6
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/harfbuzz-1.4.6
 	@rm -rf $(BUILD_DIR)/harfbuzz-1.4.6
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -40,6 +44,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "harfbuzz 1.4.6"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/harfbuzz-1.4.6 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -76,3 +81,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/harfbuzz-1.4.6
 	@rm -rf $(BUILD_DIR)/harfbuzz-1.4.6
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

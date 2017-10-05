@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := xinit
+TARGET_DEPENDENCIES := xlib twm xclock xterm
 SOURCE := $(SOURCES_DIR)/xinit-1.3.4.tar.bz2
 SOURCE_URL := ftp://ftp.x.org/pub/individual/app/xinit-1.3.4.tar.bz2
 MD5 := 4e928452dfaf73851413a2d8b8c76388
@@ -15,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "xinit 1.3.4"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/xinit-1.3.4 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -47,3 +50,4 @@ system:
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/xinit-1.3.4
 	@sed -i 's/\(mcookie=\)\(.*\)/\1`\/usr\/bin\/mcookie`/' $(ROOTFS_DIR)/usr/bin/startx
 	@rm -rf $(BUILD_DIR)/xinit-1.3.4
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

@@ -1,5 +1,6 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := bzip2
 SOURCE := $(SOURCES_DIR)/bzip2-1.0.6.tar.gz
 SOURCE_URL := http://www.bzip.org/1.0.6/bzip2-1.0.6.tar.gz
 MD5 := 00b516f4704d4a7cb50a1d97e6e8e15b
@@ -7,6 +8,7 @@ MD5 := 00b516f4704d4a7cb50a1d97e6e8e15b
 toolchain:
 	@$(STEP) "bzip2 1.0.6"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@patch -Np1 -i $(PACKAGES_DIR)/bzip2/bzip2-1.0.6-install_docs-1.patch -d $(BUILD_DIR)/bzip2-1.0.6
 	@sed -i 's#\(ln -s -f \)$(PREFIX)/bin/#\1#' $(BUILD_DIR)/bzip2-1.0.6/Makefile
@@ -17,6 +19,7 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/bzip2-1.0.6
 	@make -j$(CONFIG_PARALLEL_JOBS) PREFIX=$(TOOLS_DIR) install -C $(BUILD_DIR)/bzip2-1.0.6
 	@rm -rf $(BUILD_DIR)/bzip2-1.0.6
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -29,6 +32,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "bzip2 1.0.6"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@patch -Np1 -i $(PACKAGES_DIR)/bzip2/bzip2-1.0.6-install_docs-1.patch -d $(BUILD_DIR)/bzip2-1.0.6
 	@sed -i 's#\(ln -s -f \)$(PREFIX)/bin/#\1#' $(BUILD_DIR)/bzip2-1.0.6/Makefile
@@ -49,3 +53,4 @@ system:
 	@ln -sfv bzip2 $(ROOTFS_DIR)/bin/bunzip2
 	@ln -sfv bzip2 $(ROOTFS_DIR)/bin/bzcat
 	@rm -rf $(BUILD_DIR)/bzip2-1.0.6
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

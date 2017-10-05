@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := twm
+TARGET_DEPENDENCIES := xserver
 SOURCE := $(SOURCES_DIR)/twm-1.0.9.tar.bz2
 SOURCE_URL := ftp://ftp.x.org/pub/individual/app/twm-1.0.9.tar.bz2
 MD5 := 59a6f076cdacb5f6945dac809bcf4906
@@ -15,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "twm 1.0.9"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/twm-1.0.9 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -45,3 +48,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/twm-1.0.9
 	@rm -rf $(BUILD_DIR)/twm-1.0.9
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

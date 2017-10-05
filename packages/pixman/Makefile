@@ -1,6 +1,6 @@
 include $(SUPPORT_DIR)/functions.mk
 
-NANE := pixman
+NAME := pixman
 HOST_DEPENDENCIES := pkgconf
 SOURCE := $(SOURCES_DIR)/pixman-0.34.0.tar.gz
 SOURCE_URL := http://cairographics.org/releases/pixman-0.34.0.tar.gz
@@ -44,6 +44,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "pixman 0.34.0"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/pixman-0.34.0 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -77,4 +78,4 @@ system:
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/pixman-0.34.0
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/pixman-0.34.0
-	@rm -rf $(BUILD_DIR)/pixman-0.34.0
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

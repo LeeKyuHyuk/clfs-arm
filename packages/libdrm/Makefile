@@ -1,32 +1,10 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := libdrm
+TARGET_DEPENDENCIES := libpthread-stubs
 SOURCE := $(SOURCES_DIR)/libdrm-2.4.82.tar.bz2
 SOURCE_URL := http://dri.freedesktop.org/libdrm/libdrm-2.4.82.tar.bz2
 MD5 := 29867814123c3d23056b1d05aada1b9d
-
-toolchain:
-	@$(STEP) "libdrm 2.4.82"
-	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
-	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
-	@( cd $(BUILD_DIR)/libdrm-2.4.82 && \
-	CFLAGS="-O2 -I$(TOOLS_DIR)/include" \
-	CPPFLAGS="-I$(TOOLS_DIR)/include" \
-	CXXFLAGS="-O2 -I$(TOOLS_DIR)/include" \
-	LDFLAGS="-L$(TOOLS_DIR)/lib -L$(TOOLS_DIR)/lib -Wl,-rpath,$(TOOLS_DIR)/lib" \
-	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
-	PKG_CONFIG_LIBDIR="$(TOOLS_DIR)/lib/pkgconfig:$(TOOLS_DIR)/share/pkgconfig" \
-	PKG_CONFIG_SYSROOT_DIR="/" \
-	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
-	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
-	./configure \
-	--prefix=$(TOOLS_DIR) \
-	--sysconfdir=$(TOOLS_DIR)/etc \
-	--localstatedir=$(TOOLS_DIR)/var \
-	--disable-static \
-	--enable-udev )
-	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/libdrm-2.4.82
-	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/libdrm-2.4.82
-	@rm -rf $(BUILD_DIR)/libdrm-2.4.82
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -39,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "libdrm 2.4.82"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@patch -Np1 -i $(PACKAGES_DIR)/libdrm/Add-ARM-support-into-xf86drm.h.patch -d $(BUILD_DIR)/libdrm-2.4.82
 	@patch -Np1 -i $(PACKAGES_DIR)/libdrm/xf86atomic-require-CAS-support-in-libatomic_ops.patch -d $(BUILD_DIR)/libdrm-2.4.82
@@ -87,3 +66,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/libdrm-2.4.82
 	@rm -rf $(BUILD_DIR)/libdrm-2.4.82
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

@@ -1,5 +1,6 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := util-macros
 SOURCE := $(SOURCES_DIR)/util-macros-1.19.1.tar.bz2
 SOURCE_URL := https://www.x.org/archive/individual/util/util-macros-1.19.1.tar.bz2
 MD5 := 6e76e546a4e580f15cebaf8019ef1625
@@ -7,6 +8,7 @@ MD5 := 6e76e546a4e580f15cebaf8019ef1625
 toolchain:
 	@$(STEP) "util-macros 1.19.1"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/util-macros-1.19.1 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -28,6 +30,7 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/util-macros-1.19.1
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/util-macros-1.19.1
 	@rm -rf $(BUILD_DIR)/util-macros-1.19.1
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -40,6 +43,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "util-macros 1.19.1"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/util-macros-1.19.1 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -70,3 +74,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/util-macros-1.19.1
 	@rm -rf $(BUILD_DIR)/util-macros-1.19.1
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

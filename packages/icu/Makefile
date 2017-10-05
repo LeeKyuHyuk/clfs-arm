@@ -1,5 +1,6 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := icu
 SOURCE := $(SOURCES_DIR)/icu4c-59_1-src.tgz
 SOURCE_URL := http://download.icu-project.org/files/icu4c/59.1/icu4c-59_1-src.tgz
 MD5 := 54923fa9fab5b2b83f235fb72523de37
@@ -15,6 +16,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "icu 59.1"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@patch -Np1 -i $(PACKAGES_DIR)/icu/dont-build-static-dynamic-twice.patch -d $(BUILD_DIR)/icu
 	@patch -Np1 -i $(PACKAGES_DIR)/icu/workaround-toolchain-bugs.patch -d $(BUILD_DIR)/icu
@@ -55,3 +57,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/icu/source
 	@rm -rf $(BUILD_DIR)/icu
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

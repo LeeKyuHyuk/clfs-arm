@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := cairo
+TARGET_DEPENDENCIES := fontconfig pixman mesa glib
 SOURCE := $(SOURCES_DIR)/cairo-1.14.10.tar.xz
 SOURCE_URL := http://cairographics.org/releases/cairo-1.14.10.tar.xz
 MD5 := 146f5f4d0b4439fc3792fd3452b7b12a
@@ -8,6 +10,7 @@ toolchain:
 	@$(STEP) "cairo 1.14.10"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
+	@$(call system_dependencies, $(HOST_DEPENDENCIES))
 	@( cd $(BUILD_DIR)/cairo-1.14.10 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
 	PKG_CONFIG_SYSROOT_DIR="/" \
@@ -29,6 +32,7 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/cairo-1.14.10
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/cairo-1.14.10
 	@rm -rf $(BUILD_DIR)/cairo-1.14.10
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -41,6 +45,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "cairo 1.14.10"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/cairo-1.14.10 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -93,3 +98,4 @@ system:
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/cairo-1.14.10
 	@sed -i "s@\.latomic@\-latomic@g" $(ROOTFS_DIR)/usr/lib/libcairo-gobject.la $(ROOTFS_DIR)/usr/lib/libcairo.la
 	@rm -rf $(BUILD_DIR)/cairo-1.14.10
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

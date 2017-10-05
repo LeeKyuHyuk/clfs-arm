@@ -1,55 +1,10 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := mesa
+TARGET_DEPENDENCIES := expat zlib libdrm
 SOURCE := $(SOURCES_DIR)/mesa-17.1.5.tar.xz
 SOURCE_URL := https://mesa.freedesktop.org/archive/mesa-17.1.5.tar.xz
 MD5 := 6cf936fbcaadd98924298a7009e8265d
-
-toolchain:
-	@$(STEP) "mesa 17.1.5"
-	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
-	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
-	@( cd $(BUILD_DIR)/mesa-17.1.5 && \
-	CFLAGS="-O2 -I$(TOOLS_DIR)/include" \
-	CPPFLAGS="-I$(TOOLS_DIR)/include" \
-	CXXFLAGS="-O2 -I$(TOOLS_DIR)/include" \
-	LDFLAGS="-L$(TOOLS_DIR)/lib -L$(TOOLS_DIR)/lib -Wl,-rpath,$(TOOLS_DIR)/lib" \
-	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
-	PKG_CONFIG_LIBDIR="$(TOOLS_DIR)/lib/pkgconfig:$(TOOLS_DIR)/share/pkgconfig" \
-	PKG_CONFIG_SYSROOT_DIR="/" \
-	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
-	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
-	./configure \
-	--prefix=$(TOOLS_DIR) \
-	--sysconfdir=$(TOOLS_DIR)/etc \
-	--localstatedir=$(TOOLS_DIR)/var \
-	--enable-shared \
-	--disable-static \
-	--disable-asm \
-	--enable-glx \
-	--disable-mangling \
-	--enable-xa \
-	--enable-shared-glapi \
-	--enable-gallium-extra-hud \
-	--without-dri-drivers \
-	--disable-dri3 \
-	--disable-osmesa \
-	--enable-opengl \
-	--enable-dri \
-	--disable-va \
-	--with-platforms=drm,x11 \
-	--enable-gbm \
-	--enable-egl \
-	--enable-gles1 \
-	--enable-gles2 \
-	--disable-texture-float \
-	--disable-xvmc \
-	--disable-libunwind \
-	--disable-vdpau \
-	--disable-lmsensors \
-	--with-gallium-drivers=svga )
-	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/mesa-17.1.5
-	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/mesa-17.1.5
-	@rm -rf $(BUILD_DIR)/mesa-17.1.5
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -62,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "mesa 17.1.5"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@patch -Np1 -i $(PACKAGES_DIR)/mesa/configure.ac-invert-order-for-wayland-scanner-check.patch -d $(BUILD_DIR)/mesa-17.1.5
 	@( cd $(BUILD_DIR)/mesa-17.1.5 && autoconf )
@@ -119,3 +75,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/mesa-17.1.5
 	@rm -rf $(BUILD_DIR)/mesa-17.1.5
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

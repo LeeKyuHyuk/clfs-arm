@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := libxkbcommon
+TARGET_DEPENDENCIES := xkeyboard-config
 SOURCE := $(SOURCES_DIR)/libxkbcommon-0.7.1.tar.xz
 SOURCE_URL := https://xkbcommon.org/download/libxkbcommon-0.7.1.tar.xz
 MD5 := 947ba609cb0239b9462127d5cf8908ee
@@ -15,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "libxkbcommon 0.7.1"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/libxkbcommon-0.7.1 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -48,3 +51,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/libxkbcommon-0.7.1
 	@rm -rf $(BUILD_DIR)/libxkbcommon-0.7.1
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

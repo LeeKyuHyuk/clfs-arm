@@ -1,4 +1,11 @@
+include $(SUPPORT_DIR)/functions.mk
+
+NAME := xproto
+HOST_DEPENDENCIES := util-macros
+TARGET_DEPENDENCIES := util-macros
+
 toolchain:
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@make toolchain -C $(PACKAGES_DIR)/xorg/proto/bigreqsproto
 	@make toolchain -C $(PACKAGES_DIR)/xorg/proto/compositeproto
 	@make toolchain -C $(PACKAGES_DIR)/xorg/proto/damageproto
@@ -25,8 +32,10 @@ toolchain:
 	@make toolchain -C $(PACKAGES_DIR)/xorg/proto/xf86vidmodeproto
 	@make toolchain -C $(PACKAGES_DIR)/xorg/proto/xineramaproto
 	@make toolchain -C $(PACKAGES_DIR)/xorg/proto/xproto
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@make system -C $(PACKAGES_DIR)/xorg/proto/bigreqsproto
 	@make system -C $(PACKAGES_DIR)/xorg/proto/compositeproto
 	@make system -C $(PACKAGES_DIR)/xorg/proto/damageproto
@@ -53,3 +62,4 @@ system:
 	@make system -C $(PACKAGES_DIR)/xorg/proto/xf86vidmodeproto
 	@make system -C $(PACKAGES_DIR)/xorg/proto/xineramaproto
 	@make system -C $(PACKAGES_DIR)/xorg/proto/xproto
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

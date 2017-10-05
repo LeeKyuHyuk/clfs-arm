@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := xclock
+TARGET_DEPENDENCIES := xlib
 SOURCE := $(SOURCES_DIR)/xclock-1.0.7.tar.bz2
 SOURCE_URL := ftp://ftp.x.org/pub/individual/app/xclock-1.0.7.tar.bz2
 MD5 := 6f150d063b20d08030b98c45b9bee7af
@@ -15,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "xclock 1.0.7"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/xclock-1.0.7 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -45,3 +48,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/xclock-1.0.7
 	@rm -rf $(BUILD_DIR)/xclock-1.0.7
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

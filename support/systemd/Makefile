@@ -34,14 +34,12 @@ toolchain:
 	@make toolchain -C $(PACKAGES_DIR)/util-linux
 	@make toolchain -C $(PACKAGES_DIR)/e2fsprogs
 	@make toolchain -C $(PACKAGES_DIR)/zlib
+	@make toolchain -C $(PACKAGES_DIR)/bzip2
 	@make toolchain -C $(PACKAGES_DIR)/python2
 	@make toolchain -C $(PACKAGES_DIR)/glib
 	@make toolchain -C $(PACKAGES_DIR)/pixman
 	@make toolchain -C $(PACKAGES_DIR)/kmod
 	@make toolchain -C $(PACKAGES_DIR)/openssl
-	@make toolchain -C $(PACKAGES_DIR)/vde2
-	@make toolchain -C $(PACKAGES_DIR)/sdl2
-	@make toolchain -C $(PACKAGES_DIR)/qemu
 	@make toolchain -C $(PACKAGES_DIR)/fakeroot
 	@make toolchain -C $(PACKAGES_DIR)/makedevs
 	@make toolchain -C $(PACKAGES_DIR)/mkpasswd
@@ -62,6 +60,7 @@ system:
 	@make system -C $(PACKAGES_DIR)/bash
 	@make system -C $(PACKAGES_DIR)/expat
 	@make system -C $(PACKAGES_DIR)/zlib
+	@make system -C $(PACKAGES_DIR)/bzip2
 	@make system -C $(PACKAGES_DIR)/xz
 	@make system -C $(PACKAGES_DIR)/kmod
 	@make system -C $(PACKAGES_DIR)/libcap

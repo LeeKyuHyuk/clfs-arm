@@ -66,11 +66,59 @@ toolchain:
 		exit 1 ; \
 	fi;
 	@make toolchain -C $(SUPPORT_DIR)/systemd # Essential Toolchain Package
+	@make toolchain -C $(PACKAGES_DIR)/util-macros
+	@make toolchain -C $(PACKAGES_DIR)/font-util
 	$(PRINT_BUILD_TIME)
 
 system:
 	@make check
 	@make system -C $(SUPPORT_DIR)/systemd # Essential System Package
+	@make system -C $(PACKAGES_DIR)/libxml2
+	@make system -C $(PACKAGES_DIR)/libpng
+	@make system -C $(PACKAGES_DIR)/libpthread-stubs
+	@make system -C $(PACKAGES_DIR)/freetype
+	@make system -C $(PACKAGES_DIR)/fontconfig
+	@make system -C $(PACKAGES_DIR)/util-macros
+	@make system -C $(PACKAGES_DIR)/xorg/proto
+	@make system -C $(PACKAGES_DIR)/xcb-proto
+	@make system -C $(PACKAGES_DIR)/libxau
+	@make system -C $(PACKAGES_DIR)/libxdmcp
+	@make system -C $(PACKAGES_DIR)/libxcb
+	@make system -C $(PACKAGES_DIR)/xcb-util
+	@make system -C $(PACKAGES_DIR)/xorg/lib
+	@make system -C $(PACKAGES_DIR)/libffi
+	@make system -C $(PACKAGES_DIR)/pcre
+	@make system -C $(PACKAGES_DIR)/glib
+	@make system -C $(PACKAGES_DIR)/pixman
+	@make system -C $(PACKAGES_DIR)/libdrm
+	@make system -C $(PACKAGES_DIR)/mesa
+	@make system -C $(PACKAGES_DIR)/libepoxy
+	@make system -C $(PACKAGES_DIR)/cairo
+	@make system -C $(PACKAGES_DIR)/icu
+	@make system -C $(PACKAGES_DIR)/harfbuzz
+	@make system -C $(PACKAGES_DIR)/pango
+	@make system -C $(PACKAGES_DIR)/xkeyboard-config
+	@make system -C $(PACKAGES_DIR)/libxkbcommon
+	@make system -C $(PACKAGES_DIR)/xkbcomp
+	@make system -C $(PACKAGES_DIR)/libevdev
+	@make system -C $(PACKAGES_DIR)/mtdev
+	@make system -C $(PACKAGES_DIR)/libinput
+	@make system -C $(PACKAGES_DIR)/libsha1
+	@make system -C $(PACKAGES_DIR)/xorg/mcookie
+	@make system -C $(PACKAGES_DIR)/xorg/server
+	@make system -C $(PACKAGES_DIR)/xorg/driver/xf86-input-evdev
+	@make system -C $(PACKAGES_DIR)/xorg/driver/xf86-input-libinput
+	@make system -C $(PACKAGES_DIR)/xorg/driver/xf86-input-keyboard
+	@make system -C $(PACKAGES_DIR)/xorg/driver/xf86-input-mouse
+	@make system -C $(PACKAGES_DIR)/xorg/driver/xf86-video-fbdev
+	@make system -C $(PACKAGES_DIR)/xorg/app/twm
+	@make system -C $(PACKAGES_DIR)/xorg/app/xclock
+	@make system -C $(PACKAGES_DIR)/xterm
+	@make system -C $(PACKAGES_DIR)/xorg/app/xinit
+	@make system -C $(PACKAGES_DIR)/xorg/app/xhost
+	@make system -C $(PACKAGES_DIR)/xorg/app/xauth
+	@make system -C $(PACKAGES_DIR)/nanumfont
+	@make system -C $(PACKAGES_DIR)/openbox
 	@make system -C $(PACKAGES_DIR)/glibc
 	$(PRINT_BUILD_TIME)
 
@@ -96,7 +144,7 @@ run:
 		$(ERROR) "QEMU Emulate only supports 'qemu_vexpress'." ; \
 		exit 1 ; \
 	fi;
-	@$(TOOLS_DIR)/bin/qemu-system-arm -M vexpress-a9 -smp 4 -m 1G -kernel $(KERNEL_DIR)/zImage -dtb $(KERNEL_DIR)/vexpress-v2p-ca9.dtb -drive file=$(IMAGES_DIR)/rootfs.ext2,if=sd,format=raw -append "console=ttyAMA0,115200 root=/dev/mmcblk0" -serial stdio -netdev user,id=eth0 -device virtio-net-device,netdev=eth0 -show-cursor -display none
+	@qemu-system-arm -M vexpress-a9 -smp 4 -m 1G -kernel $(KERNEL_DIR)/zImage -dtb $(KERNEL_DIR)/vexpress-v2p-ca9.dtb -drive file=$(IMAGES_DIR)/rootfs.ext2,if=sd,format=raw -append "console=ttyAMA0,115200 root=/dev/mmcblk0" -serial stdio -netdev user,id=eth0 -device virtio-net-device,netdev=eth0 -show-cursor
 
 flash:
 	@chmod 755 $(DEVICE_DIR)/raspberrypi/image-usb-stick

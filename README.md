@@ -13,13 +13,13 @@ Fedora 26 or Ubuntu 16.04 is recommended.
 #### **Fedora 26**
 
 ``` bash
-$ sudo dnf -y install gcc-c++ perl-Thread-Queue
+$ sudo dnf -y install gcc-c++ perl-Thread-Queue qemu-system-arm
 ```
 
 #### **Ubuntu 16.04**
 
 ```bash
-$ sudo apt install gcc g++ wget git
+$ sudo apt install gcc g++ wget git qemu-system
 ```
 
 ### Get CLFS-ARM Source code

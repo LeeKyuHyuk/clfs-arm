@@ -48,6 +48,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "pcre 8.40"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/pcre-8.40 && \
 	ac_cv_lbl_unaligned_fail=yes \
@@ -82,3 +83,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/pcre-8.40
 	@rm -rf $(BUILD_DIR)/pcre-8.40
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

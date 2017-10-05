@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := openbox
+TARGET_DEPENDENCIES := xlib libxml2 glib pango xinit
 SOURCE := $(SOURCES_DIR)/openbox-3.6.1.tar.gz
 SOURCE_URL := http://openbox.org/dist/openbox/openbox-3.6.1.tar.gz
 MD5 := b72794996c6a3ad94634727b95f9d204
@@ -15,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "openbox 3.6.1"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/openbox-3.6.1 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -52,3 +55,4 @@ system:
 	@echo 'exec /usr/bin/startx /usr/bin/openbox-session -- vt1 &> /dev/null' >> $(ROOTFS_DIR)/etc/profile
 	@echo 'fi' >> $(ROOTFS_DIR)/etc/profile
 	@rm -rf $(BUILD_DIR)/openbox-3.6.1
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

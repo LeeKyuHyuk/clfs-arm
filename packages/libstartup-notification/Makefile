@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := libstartup-notification
+TARGET_DEPENDENCIES := xlib xcb-util
 SOURCE := $(SOURCES_DIR)/startup-notification-0.12.tar.gz
 SOURCE_URL := https://www.freedesktop.org/software/startup-notification/releases/startup-notification-0.12.tar.gz
 MD5 := 2cd77326d4dcaed9a5a23a1232fb38e9
@@ -15,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "startup-notification 0.12"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@patch -Np0 -i $(PACKAGES_DIR)/libstartup-notification/libstartup-notification-build-system-fixes-for-cross-compilation.patch -d $(BUILD_DIR)/startup-notification-0.12
 	@( cd $(BUILD_DIR)/startup-notification-0.12 && \
@@ -46,3 +49,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/startup-notification-0.12
 	@rm -rf $(BUILD_DIR)/startup-notification-0.12
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

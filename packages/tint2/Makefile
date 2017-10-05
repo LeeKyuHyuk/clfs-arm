@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := tint2
+TARGET_DEPENDENCIES := openbox libgtk2 imlib2 libstartup-notification librsvg hicolor-icon-theme adwaita-icon-theme
 SOURCE := $(PACKAGES_DIR)/tint2/tint2-15.1-63c3690fa8efb1cd2dd23969f219f9b7a37a65b6.tar.bz2
 SOURCE_URL := https://gitlab.com/o9000/tint2/repository/15.1/archive.tar.bz2
 MD5 := 8a01e325fbe68bd23dd2f8d7514cbca5
@@ -15,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "tint2 15.1"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@mkdir -p $(BUILD_DIR)/tint2-15.1-63c3690fa8efb1cd2dd23969f219f9b7a37a65b6/build
 	@( cd $(BUILD_DIR)/tint2-15.1-63c3690fa8efb1cd2dd23969f219f9b7a37a65b6/build && \
@@ -36,3 +39,4 @@ system:
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/tint2-15.1-63c3690fa8efb1cd2dd23969f219f9b7a37a65b6/build
 	@echo "XDG_CONFIG_HOME=/etc/xdg/ tint2 &" > $(ROOTFS_DIR)/etc/xdg/openbox/autostart
 	@rm -rf $(BUILD_DIR)/tint2-15.1-63c3690fa8efb1cd2dd23969f219f9b7a37a65b6
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

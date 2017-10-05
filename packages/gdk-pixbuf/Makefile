@@ -1,5 +1,8 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := gdk-pixbuf
+HOST_DEPENDENCIES := glib libpng pkgconf
+TARGET_DEPENDENCIES := glib libpng libjpeg-turbo xlib
 SOURCE := $(SOURCES_DIR)/gdk-pixbuf-2.36.6.tar.xz
 SOURCE_URL := ftp://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.36/gdk-pixbuf-2.36.6.tar.xz
 MD5 := 5dd53760750670d27c194ff6ace7eb51
@@ -7,6 +10,7 @@ MD5 := 5dd53760750670d27c194ff6ace7eb51
 toolchain:
 	@$(STEP) "gdk-pixbuf 2.36.6"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/gdk-pixbuf-2.36.6 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -30,6 +34,7 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/gdk-pixbuf-2.36.6
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/gdk-pixbuf-2.36.6
 	@rm -rf $(BUILD_DIR)/gdk-pixbuf-2.36.6
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -42,6 +47,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "gdk-pixbuf 2.36.6"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@cp -f $(TOOLS_DIR)/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache $(BUILD_DIR)/gdk-pixbuf-2.36.6/gdk-pixbuf
 	@sed -i -e 's/ tests//' $(BUILD_DIR)/gdk-pixbuf-2.36.6/Makefile.in
@@ -80,3 +86,4 @@ system:
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/gdk-pixbuf-2.36.6
 	@cp -v $(TOOLS_DIR)/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache $(ROOTFS_DIR)/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
 	@rm -rf $(BUILD_DIR)/gdk-pixbuf-2.36.6
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

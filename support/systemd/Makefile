@@ -35,6 +35,7 @@ toolchain:
 	@make toolchain -C $(PACKAGES_DIR)/e2fsprogs
 	@make toolchain -C $(PACKAGES_DIR)/zlib
 	@make toolchain -C $(PACKAGES_DIR)/bzip2
+	@make toolchain -C $(PACKAGES_DIR)/libarchive
 	@make toolchain -C $(PACKAGES_DIR)/python2
 	@make toolchain -C $(PACKAGES_DIR)/glib
 	@make toolchain -C $(PACKAGES_DIR)/pixman

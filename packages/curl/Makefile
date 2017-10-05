@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := curl
+HOST_DEPENDENCIES := pkgconf openssl
 SOURCE := $(SOURCES_DIR)/curl-7.54.1.tar.bz2
 SOURCE_URL := https://curl.haxx.se/download/curl-7.54.1.tar.bz2
 MD5 := 6b6eb722f512e7a24855ff084f54fe55
@@ -7,6 +9,7 @@ MD5 := 6b6eb722f512e7a24855ff084f54fe55
 toolchain:
 	@$(STEP) "curl 7.54.1"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/curl-7.54.1 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -29,3 +32,4 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/curl-7.54.1
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/curl-7.54.1
 	@rm -rf $(BUILD_DIR)/curl-7.54.1
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)

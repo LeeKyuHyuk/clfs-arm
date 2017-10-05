@@ -68,6 +68,11 @@ toolchain:
 	@make toolchain -C $(SUPPORT_DIR)/systemd # Essential Toolchain Package
 	@make toolchain -C $(PACKAGES_DIR)/util-macros
 	@make toolchain -C $(PACKAGES_DIR)/font-util
+	@make toolchain -C $(PACKAGES_DIR)/libpng
+	@make toolchain -C $(PACKAGES_DIR)/gdk-pixbuf
+	@make toolchain -C $(PACKAGES_DIR)/libgtk2
+	@make toolchain -C $(PACKAGES_DIR)/curl
+	@make toolchain -C $(PACKAGES_DIR)/cmake
 	$(PRINT_BUILD_TIME)
 
 system:
@@ -119,6 +124,17 @@ system:
 	@make system -C $(PACKAGES_DIR)/xorg/app/xauth
 	@make system -C $(PACKAGES_DIR)/nanumfont
 	@make system -C $(PACKAGES_DIR)/openbox
+	@make system -C $(PACKAGES_DIR)/libjpeg-turbo
+	@make system -C $(PACKAGES_DIR)/gdk-pixbuf
+	@make system -C $(PACKAGES_DIR)/atk
+	@make system -C $(PACKAGES_DIR)/libgtk2
+	@make system -C $(PACKAGES_DIR)/imlib2
+	@make system -C $(PACKAGES_DIR)/libstartup-notification
+	@make system -C $(PACKAGES_DIR)/libcroco
+	@make system -C $(PACKAGES_DIR)/librsvg
+	@make system -C $(PACKAGES_DIR)/hicolor-icon-theme
+	@make system -C $(PACKAGES_DIR)/adwaita-icon-theme
+	@make system -C $(PACKAGES_DIR)/tint2
 	@make system -C $(PACKAGES_DIR)/glibc
 	$(PRINT_BUILD_TIME)
 

@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := hicolor-icon-theme
+TARGET_DEPENDENCIES := libgtk2
 SOURCE := $(SOURCES_DIR)/hicolor-icon-theme-0.15.tar.xz
 SOURCE_URL := http://icon-theme.freedesktop.org/releases/hicolor-icon-theme-0.15.tar.xz
 MD5 := 6aa2b3993a883d85017c7cc0cfc0fb73
@@ -15,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "hicolor-icon-theme 0.15"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/hicolor-icon-theme-0.15 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -45,3 +48,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/hicolor-icon-theme-0.15
 	@rm -rf $(BUILD_DIR)/hicolor-icon-theme-0.15
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

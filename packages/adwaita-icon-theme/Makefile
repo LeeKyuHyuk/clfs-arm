@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := adwaita-icon-theme
+TARGET_DEPENDENCIES := libgtk2 librsvg
 SOURCE := $(SOURCES_DIR)/adwaita-icon-theme-3.24.0.tar.xz
 SOURCE_URL := ftp://ftp.gnome.org/pub/gnome/sources/adwaita-icon-theme/3.24/adwaita-icon-theme-3.24.0.tar.xz
 MD5 := 3ccac0d600ffc936d2adfb80e9245bc5
@@ -15,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "adwaita-icon-theme 3.24.0"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/adwaita-icon-theme-3.24.0 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -45,3 +48,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/adwaita-icon-theme-3.24.0
 	@rm -rf $(BUILD_DIR)/adwaita-icon-theme-3.24.0
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

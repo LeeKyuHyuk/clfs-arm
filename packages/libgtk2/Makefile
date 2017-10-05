@@ -1,5 +1,8 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := libgtk2
+HOST_DEPENDENCIES := glib libpng gdk-pixbuf
+TARGET_DEPENDENCIES := glib cairo pango atk gdk-pixbuf xlib libpng libjpeg-turbo
 SOURCE := $(SOURCES_DIR)/gtk+-2.24.30.tar.xz
 SOURCE_URL := ftp://ftp.gnome.org/pub/gnome/sources/gtk+/2.24/gtk+-2.24.30.tar.xz
 MD5 := 04568ba5c58b75e3c7543e45628ad789
@@ -7,6 +10,7 @@ MD5 := 04568ba5c58b75e3c7543e45628ad789
 toolchain:
 	@$(STEP) "gtk+ 2.24.30"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@patch -Np1 -i $(PACKAGES_DIR)/libgtk2/libgtk2-reduce-dependencies.patch -d $(BUILD_DIR)/gtk+-2.24.30
 	@( cd $(BUILD_DIR)/gtk+-2.24.30 && aclocal )
@@ -39,6 +43,7 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) gtk-update-icon-cache -C $(BUILD_DIR)/gtk+-2.24.30/gtk
 	@cp -v $(BUILD_DIR)/gtk+-2.24.30/gtk/gtk-update-icon-cache $(TOOLS_DIR)/bin
 	@rm -rf $(BUILD_DIR)/gtk+-2.24.30
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -51,6 +56,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "gtk+ 2.24.30"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@patch -Np1 -i $(PACKAGES_DIR)/libgtk2/libgtk2-reduce-dependencies.patch -d $(BUILD_DIR)/gtk+-2.24.30
 	@( cd $(BUILD_DIR)/gtk+-2.24.30 && aclocal )
@@ -96,3 +102,4 @@ system:
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/gtk+-2.24.30
 	@cp -v $(PACKAGES_DIR)/libgtk2/gtkrc $(ROOTFS_DIR)/etc/gtk-2.0/gtkrc
 	@rm -rf $(BUILD_DIR)/gtk+-2.24.30
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

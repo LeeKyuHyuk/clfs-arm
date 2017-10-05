@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := imlib2
+TARGET_DEPENDENCIES := xlib libpng libjpeg-turbo
 SOURCE := $(PACKAGES_DIR)/imlib2/imlib2-1.4.10.tar.bz2
 SOURCE_URL := https://ftp.osuosl.org/pub/blfs/conglomeration/imlib2/imlib2-1.4.10.tar.bz2
 MD5 := a0de8524592bbd9f24fcc6cb8352137c
@@ -15,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "imlib2 1.4.10"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/imlib2-1.4.10 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -45,3 +48,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/imlib2-1.4.10
 	@rm -rf $(BUILD_DIR)/imlib2-1.4.10
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

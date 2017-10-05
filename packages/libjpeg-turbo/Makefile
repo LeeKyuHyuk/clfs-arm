@@ -1,5 +1,6 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := libjpeg-turbo
 SOURCE := $(SOURCES_DIR)/libjpeg-turbo-1.5.2.tar.gz
 SOURCE_URL := https://downloads.sourceforge.net/project/libjpeg-turbo/1.5.2/libjpeg-turbo-1.5.2.tar.gz
 MD5 := 6b4923e297a7eaa255f08511017a8818
@@ -15,6 +16,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "libjpeg-turbo 1.5.2"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/libjpeg-turbo-1.5.2 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -47,3 +49,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/libjpeg-turbo-1.5.2
 	@rm -rf $(BUILD_DIR)/libjpeg-turbo-1.5.2
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

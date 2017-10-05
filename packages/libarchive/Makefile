@@ -1,5 +1,6 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := libarchive
 SOURCE := $(SOURCES_DIR)/libarchive-3.3.1.tar.gz
 SOURCE_URL := http://www.libarchive.org/downloads/libarchive-3.3.1.tar.gz
 MD5 := d2af45480aa5b0db5b5f3919cd0ea65e
@@ -7,6 +8,7 @@ MD5 := d2af45480aa5b0db5b5f3919cd0ea65e
 toolchain:
 	@$(STEP) "libarchive 3.3.1"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/libarchive-3.3.1 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -28,3 +30,4 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/libarchive-3.3.1
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/libarchive-3.3.1
 	@rm -rf $(BUILD_DIR)/libarchive-3.3.1
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)

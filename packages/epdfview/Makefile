@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := epdfview
+TARGET_DEPENDENCIES := poppler hicolor-icon-theme
 SOURCE := $(PACKAGES_DIR)/epdfview/epdfview-0.1.8.tar.bz2
 SOURCE_URL := http://anduin.linuxfromscratch.org/BLFS/epdfview/epdfview-0.1.8.tar.bz2
 MD5 := e50285b01612169b2594fea375f53ae4
@@ -15,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "epdfview 0.1.8"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@patch -Np1 -i $(PACKAGES_DIR)/epdfview/epdfview-0.1.8-fixes-2.patch -d $(BUILD_DIR)/epdfview-0.1.8
 	@( cd $(BUILD_DIR)/epdfview-0.1.8 && \
@@ -49,3 +52,4 @@ system:
   	ln -svf ../../../../epdfview/pixmaps/icon_epdfview-$${size}.png $(ROOTFS_DIR)/usr/share/icons/hicolor/$${size}x$${size}/apps ; \
 	done ;
 	@rm -rf $(BUILD_DIR)/epdfview-0.1.8
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

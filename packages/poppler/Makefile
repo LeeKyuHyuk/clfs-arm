@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := poppler
+TARGET_DEPENDENCIES := fontconfig cairo libjpeg-turbo libpng openjpeg
 SOURCE := $(SOURCES_DIR)/poppler-0.59.0.tar.xz
 SOURCE_URL := https://poppler.freedesktop.org/poppler-0.59.0.tar.xz
 MD5 := 6e44408a3b4f4a738f8a6770d0aea8a5
@@ -15,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "poppler 0.59.0"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/poppler-0.59.0 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -49,3 +52,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/poppler-0.59.0
 	@rm -rf $(BUILD_DIR)/poppler-0.59.0
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

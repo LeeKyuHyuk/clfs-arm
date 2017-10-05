@@ -135,6 +135,9 @@ system:
 	@make system -C $(PACKAGES_DIR)/hicolor-icon-theme
 	@make system -C $(PACKAGES_DIR)/adwaita-icon-theme
 	@make system -C $(PACKAGES_DIR)/tint2
+	@make system -C $(PACKAGES_DIR)/openjpeg
+	@make system -C $(PACKAGES_DIR)/poppler
+	@make system -C $(PACKAGES_DIR)/epdfview
 	@make system -C $(PACKAGES_DIR)/glibc
 	$(PRINT_BUILD_TIME)
 

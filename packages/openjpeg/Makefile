@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := openjpeg
+TARGET_DEPENDENCIES := libpng
 SOURCE := $(SOURCES_DIR)/openjpeg-1.5.2.tar.gz
 SOURCE_URL := https://downloads.sourceforge.net/openjpeg.mirror/openjpeg-1.5.2.tar.gz
 MD5 := c41772c30fb1c272358b3707233134a1
@@ -15,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "openjpeg 1.5.2"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/openjpeg-1.5.2 && autoreconf -f -i )
 	@( cd $(BUILD_DIR)/openjpeg-1.5.2 && \
@@ -46,3 +49,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/openjpeg-1.5.2
 	@rm -rf $(BUILD_DIR)/openjpeg-1.5.2
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

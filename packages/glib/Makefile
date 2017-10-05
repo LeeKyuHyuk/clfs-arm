@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := glib
+HOST_DEPENDENCIES := gettext libffi pcre pkgconf util-linux zlib
 SOURCE := $(SOURCES_DIR)/glib-2.52.0.tar.xz
 SOURCE_URL := ftp://ftp.gnome.org/pub/gnome/sources/glib/2.52/glib-2.52.0.tar.xz
 MD5 := 64283e546091dcf3c9837d5430dda022
@@ -7,10 +9,8 @@ MD5 := 64283e546091dcf3c9837d5430dda022
 toolchain:
 	@$(STEP) "glib 2.52.0"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
-	@sed -i -e "s# tests##" $(BUILD_DIR)/glib-2.52.0/Makefile.am
-	@sed -i -e "s# tests##" $(BUILD_DIR)/glib-2.52.0/gio/Makefile.am
-	@sed -i -e "s# tests##" $(BUILD_DIR)/glib-2.52.0/glib/Makefile.am
 	@patch -Np0 -i $(PACKAGES_DIR)/glib/glib-2.52.0-as_fn_error.patch -d $(BUILD_DIR)/glib-2.52.0
 	@( cd $(BUILD_DIR)/glib-2.52.0 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -23,7 +23,6 @@ toolchain:
 	CXXFLAGS="-O2 -I$(TOOLS_DIR)/include" \
 	LDFLAGS="-L$(TOOLS_DIR)/lib -Wl,-rpath,$(TOOLS_DIR)/lib" \
 	CONFIG_SITE=/dev/null \
-	LIBS="-lpcre -lffi" \
 	./configure \
 	--prefix=$(TOOLS_DIR) \
 	--sysconfdir=$(TOOLS_DIR)/etc \
@@ -41,6 +40,7 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/glib-2.52.0
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/glib-2.52.0
 	@rm -rf $(BUILD_DIR)/glib-2.52.0
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -54,10 +54,6 @@ system:
 	@$(STEP) "glib 2.52.0"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
-	@sed -i -e "s# tests##" $(BUILD_DIR)/glib-2.52.0/Makefile.am
-	@sed -i -e "s# tests##" $(BUILD_DIR)/glib-2.52.0/gio/Makefile.am
-	@sed -i -e "s# tests##" $(BUILD_DIR)/glib-2.52.0/glib/Makefile.am
-	@patch -Np0 -i $(PACKAGES_DIR)/glib/glib-2.52.0-as_fn_error.patch -d $(BUILD_DIR)/glib-2.52.0
 	@( cd $(BUILD_DIR)/glib-2.52.0 && \
 	ac_cv_func_posix_getpwuid_r=yes \
 	glib_cv_stack_grows=no \

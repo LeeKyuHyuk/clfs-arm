@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := autoconf
+HOST_DEPENDENCIES := m4 libtool
 SOURCE := $(SOURCES_DIR)/autoconf-2.69.tar.xz
 SOURCE_URL := http://ftpmirror.gnu.org/gnu/autoconf/autoconf-2.69.tar.xz
 MD5 := 50f97f4159805e374639a73e2636f22e
@@ -7,6 +9,7 @@ MD5 := 50f97f4159805e374639a73e2636f22e
 toolchain:
 	@$(STEP) "autoconf 2.69"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/autoconf-2.69 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -31,6 +34,7 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/autoconf-2.69
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/autoconf-2.69
 	@rm -rf $(BUILD_DIR)/autoconf-2.69
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc

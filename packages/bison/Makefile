@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := bison
+HOST_DEPENDENCIES := m4
 SOURCE := $(SOURCES_DIR)/bison-3.0.4.tar.xz
 SOURCE_URL := http://ftpmirror.gnu.org/gnu/bison/bison-3.0.4.tar.xz
 MD5 := c342201de104cc9ce0a21e0ad10d4021
@@ -7,6 +9,7 @@ MD5 := c342201de104cc9ce0a21e0ad10d4021
 toolchain:
 	@$(STEP) "bison 3.0.4"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/bison-3.0.4 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -28,6 +31,7 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/bison-3.0.4
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/bison-3.0.4
 	@rm -rf $(BUILD_DIR)/bison-3.0.4
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc

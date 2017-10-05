@@ -1,18 +1,29 @@
 include $(SUPPORT_DIR)/functions.mk
 
-SOURCE := $(SOURCES_DIR)/binutils-2.28.tar.bz2
-SOURCE_URL := http://ftpmirror.gnu.org/gnu/binutils/binutils-2.28.tar.bz2
-MD5 := 9e8340c96626b469a603c15c9d843727
+NAME := binutils
+SOURCE := $(SOURCES_DIR)/binutils-2.29.tar.bz2
+SOURCE_URL := http://ftpmirror.gnu.org/gnu/binutils/binutils-2.29.tar.bz2
+MD5 := 23733a26c8276edbb1168c9bee60e40e
 
 toolchain:
-	@$(STEP) "binutils 2.28"
+	@$(STEP) "binutils 2.29"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
-	@mkdir -pv $(BUILD_DIR)/binutils-2.28/binutils-build
-	@( cd $(BUILD_DIR)/binutils-2.28/binutils-build && \
+	@patch -Np1 -i $(PACKAGES_DIR)/binutils/sh-conf.patch -d $(BUILD_DIR)/binutils-2.29
+	@patch -Np1 -i $(PACKAGES_DIR)/binutils/ld-makefile.patch -d $(BUILD_DIR)/binutils-2.29
+	@patch -Np1 -i $(PACKAGES_DIR)/binutils/check-ldrunpath-length.patch -d $(BUILD_DIR)/binutils-2.29
+	@patch -Np1 -i $(PACKAGES_DIR)/binutils/add-sysroot-fix-from-bug-3049.patch -d $(BUILD_DIR)/binutils-2.29
+	@patch -Np1 -i $(PACKAGES_DIR)/binutils/poison-system-directories.patch -d $(BUILD_DIR)/binutils-2.29
+	@patch -Np1 -i $(PACKAGES_DIR)/binutils/Fixes-LINKER-BUG-.rofixup-section-size-mismatch.patch -d $(BUILD_DIR)/binutils-2.29
+	@patch -Np1 -i $(PACKAGES_DIR)/binutils/xtensa-ld-restore-old-section-sorting-behavior.patch -d $(BUILD_DIR)/binutils-2.29
+	@patch -Np1 -i $(PACKAGES_DIR)/binutils/xtensa-fix-memory-corruption-by-broken-sysregs.patch -d $(BUILD_DIR)/binutils-2.29
+	@mkdir -pv $(BUILD_DIR)/binutils-2.29/binutils-build
+	@( cd $(BUILD_DIR)/binutils-2.29/binutils-build && \
 	AR="ar" \
 	AS="as" \
-	$(BUILD_DIR)/binutils-2.28/configure \
+	MAKEINFO=true \
+	$(BUILD_DIR)/binutils-2.29/configure \
 	--prefix=$(TOOLS_DIR) \
 	--sysconfdir=$(TOOLS_DIR)/etc \
 	--localstatedir=$(TOOLS_DIR)/var \
@@ -27,9 +38,10 @@ toolchain:
 	--enable-poison-system-directories \
 	--disable-sim \
 	--disable-gdb )
-	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/binutils-2.28/binutils-build
-	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/binutils-2.28/binutils-build
-	@rm -rf $(BUILD_DIR)/binutils-2.28
+	@make -j$(CONFIG_PARALLEL_JOBS) MAKEINFO=true -C $(BUILD_DIR)/binutils-2.29/binutils-build
+	@make -j$(CONFIG_PARALLEL_JOBS) MAKEINFO=true install -C $(BUILD_DIR)/binutils-2.29/binutils-build
+	@rm -rf $(BUILD_DIR)/binutils-2.29
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -40,11 +52,11 @@ system:
 	@export RANLIB=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-ranlib
 	@export READELF=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-readelf
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
-	@$(STEP) "binutils 2.28"
+	@$(STEP) "binutils 2.29"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
-	@mkdir -pv $(BUILD_DIR)/binutils-2.28/binutils-build
-	@( cd $(BUILD_DIR)/binutils-2.28/binutils-build && \
+	@mkdir -pv $(BUILD_DIR)/binutils-2.29/binutils-build
+	@( cd $(BUILD_DIR)/binutils-2.29/binutils-build && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
 	ac_cv_lbl_unaligned_fail=yes \
 	ac_cv_func_mmap_fixed_mapped=yes \
@@ -57,7 +69,7 @@ system:
 	lt_cv_sys_lib_search_path_spec="" \
 	ac_cv_c_bigendian=no \
 	CONFIG_SITE=/dev/null \
-	$(BUILD_DIR)/binutils-2.28/configure \
+	$(BUILD_DIR)/binutils-2.29/configure \
 	--target=$(CONFIG_TARGET) \
 	--host=$(CONFIG_TARGET) \
 	--build=$(CONFIG_HOST) \
@@ -69,8 +81,8 @@ system:
 	--enable-plugins \
 	--disable-werror \
 	--with-system-zlib )
-	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/binutils-2.28/binutils-build
-	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/binutils-2.28/binutils-build
+	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/binutils-2.29/binutils-build
+	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/binutils-2.29/binutils-build
 	@$(call dependency_libs_patch)
-	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/binutils-2.28/binutils-build
-	@rm -rf $(BUILD_DIR)/binutils-2.28
+	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/binutils-2.29/binutils-build
+	@rm -rf $(BUILD_DIR)/binutils-2.29

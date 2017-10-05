@@ -1,3 +1,5 @@
+NAME := skeleton
+
 staging:
 	@$(STEP) "Create the sysroot directory"
 	@mkdir -pv $(SYSROOT_DIR)/dev

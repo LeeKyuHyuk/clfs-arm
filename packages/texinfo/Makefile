@@ -1,5 +1,6 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := texinfo
 SOURCE := $(SOURCES_DIR)/texinfo-6.3.tar.xz
 SOURCE_URL := http://ftpmirror.gnu.org/gnu/texinfo/texinfo-6.3.tar.xz
 MD5 := 32baefe5c7080dfb512a4eac5ce67b2a
@@ -7,6 +8,7 @@ MD5 := 32baefe5c7080dfb512a4eac5ce67b2a
 toolchain:
 	@$(STEP) "texinfo 6.3"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/texinfo-6.3 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -28,6 +30,7 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/texinfo-6.3
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/texinfo-6.3
 	@rm -rf $(BUILD_DIR)/texinfo-6.3
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc

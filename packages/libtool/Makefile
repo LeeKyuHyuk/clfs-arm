@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := libtool
+HOST_DEPENDENCIES := m4
 SOURCE := $(SOURCES_DIR)/libtool-2.4.6.tar.xz
 SOURCE_URL := http://ftpmirror.gnu.org/gnu/libtool/libtool-2.4.6.tar.xz
 MD5 := 1bfb9b923f2c1339b4d2ce1807064aa5
@@ -7,6 +9,7 @@ MD5 := 1bfb9b923f2c1339b4d2ce1807064aa5
 toolchain:
 	@$(STEP) "libtool 2.4.6"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@find $(BUILD_DIR)/libtool-2.4.6 -name aclocal.m4 -exec touch '{}' \;
 	@find $(BUILD_DIR)/libtool-2.4.6 -name config-h.in -exec touch '{}' \;
@@ -33,6 +36,7 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/libtool-2.4.6
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/libtool-2.4.6
 	@rm -rf $(BUILD_DIR)/libtool-2.4.6
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc

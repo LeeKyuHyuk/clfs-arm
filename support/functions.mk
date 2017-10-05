@@ -18,3 +18,21 @@ define dependency_libs_patch
 		done ; \
 	done; 2>&1 >/dev/null
 endef
+
+define toolchain_dependencies
+	@for dependencie in $(1) ; do \
+		if ! grep -q $${dependencie} $(TOOLCHAIN_DEPENDENCIES) ; then \
+			$(ERROR) "[!! ERROR !!] Dependency package '$${dependencie}' is not in step 'toolchain'." ; \
+			exit 1 ; \
+		fi ; \
+	done
+endef
+
+define system_dependencies
+	@for dependencie in $(1) ; do \
+		if ! grep -q $${dependencie} $(SYSTEM_DEPENDENCIES) ; then \
+			$(ERROR) "[!! ERROR !!] Dependency package '$${dependencie}' is not in step 'system'." ; \
+			exit 1 ; \
+		fi ; \
+	done
+endef

@@ -1,5 +1,8 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := util-linux
+HOST_DEPENDENCIES := pkgconf
+TARGET_DEPENDENCIES := ncurses
 SOURCE := $(SOURCES_DIR)/util-linux-2.30.1.tar.xz
 SOURCE_URL := https://www.kernel.org/pub/linux/utils/util-linux/v2.30/util-linux-2.30.1.tar.xz
 MD5 := 5e5ec141e775efe36f640e62f3f8cd0d
@@ -7,6 +10,7 @@ MD5 := 5e5ec141e775efe36f640e62f3f8cd0d
 toolchain:
 	@$(STEP) "util-linux 2.30.1"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/util-linux-2.30.1 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -37,6 +41,7 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/util-linux-2.30.1
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/util-linux-2.30.1
 	@rm -rf $(BUILD_DIR)/util-linux-2.30.1
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -49,6 +54,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "util-linux 2.29.2"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@mkdir -pv $(ROOTFS_DIR)/var/lib/hwclock
 	@( cd $(BUILD_DIR)/util-linux-2.30.1 && \
@@ -94,3 +100,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/util-linux-2.30.1
 	@rm -rf $(BUILD_DIR)/util-linux-2.30.1
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

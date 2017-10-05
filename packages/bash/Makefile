@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := bash
+TARGET_DEPENDENCIES := readline coreutils
 SOURCE := $(SOURCES_DIR)/bash-4.4.tar.gz
 SOURCE_URL := http://ftpmirror.gnu.org/gnu/bash/bash-4.4.tar.gz
 MD5 := 148888a7c95ac23705559b6f477dfe25
@@ -15,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "bash 4.4"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@patch -Np1 -i $(PACKAGES_DIR)/bash/bash-4.4-upstream_fixes-1.patch -d $(BUILD_DIR)/bash-4.4
 	@( cd $(BUILD_DIR)/bash-4.4 && \
@@ -46,3 +49,4 @@ system:
 	@mv -vf $(ROOTFS_DIR)/usr/bin/bash $(ROOTFS_DIR)/bin
 	@ln -svf bash $(ROOTFS_DIR)/bin/sh
 	@rm -rf $(BUILD_DIR)/bash-4.4
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

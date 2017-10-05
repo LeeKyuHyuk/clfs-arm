@@ -1,5 +1,6 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := pkgconf
 SOURCE := $(SOURCES_DIR)/pkgconf-0.9.12.tar.bz2
 SOURCE_URL := https://github.com/pkgconf/pkgconf/releases/download/pkgconf-0.9.12/pkgconf-0.9.12.tar.bz2
 MD5 := a7b523fc9af9357d7199560d2a49ddbf
@@ -7,6 +8,7 @@ MD5 := a7b523fc9af9357d7199560d2a49ddbf
 toolchain:
 	@$(STEP) "pkgconf 0.9.12"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@patch -Np1 -i $(PACKAGES_DIR)/pkgconf/Fix-all-variables-sysroot-prefix-problem.patch -d $(BUILD_DIR)/pkgconf-0.9.12
 	@( cd $(BUILD_DIR)/pkgconf-0.9.12 && \
@@ -32,3 +34,4 @@ toolchain:
 	@sed -i -e "s,@PKG_CONFIG_LIBDIR@,$(SYSROOT_DIR)/usr/lib/pkgconfig:$(SYSROOT_DIR)/usr/share/pkgconfig," -e "s,@STAGING_DIR@,$(SYSROOT_DIR)," $(TOOLS_DIR)/bin/pkg-config
 	@sed -i -e "s,@STATIC@,," $(TOOLS_DIR)/bin/pkg-config
 	@rm -rf $(BUILD_DIR)/pkgconf-0.9.12
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)

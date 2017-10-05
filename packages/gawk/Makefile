@@ -1,5 +1,6 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := gawk
 SOURCE := $(SOURCES_DIR)/gawk-4.1.4.tar.xz
 SOURCE_URL := http://ftpmirror.gnu.org/gnu/gawk/gawk-4.1.4.tar.xz
 MD5 := 4e7dbc81163e60fd4f0b52496e7542c9
@@ -7,6 +8,7 @@ MD5 := 4e7dbc81163e60fd4f0b52496e7542c9
 toolchain:
 	@$(STEP) "gawk 4.1.4"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/gawk-4.1.4 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -30,6 +32,7 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/gawk-4.1.4
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/gawk-4.1.4
 	@rm -rf $(BUILD_DIR)/gawk-4.1.4
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc

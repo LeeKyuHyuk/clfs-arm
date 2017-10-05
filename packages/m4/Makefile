@@ -1,5 +1,6 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := m4
 SOURCE := $(SOURCES_DIR)/m4-1.4.18.tar.xz
 SOURCE_URL := http://ftpmirror.gnu.org/gnu/m4/m4-1.4.18.tar.xz
 MD5 := 730bb15d96fffe47e148d1e09235af82
@@ -7,6 +8,7 @@ MD5 := 730bb15d96fffe47e148d1e09235af82
 toolchain:
 	@$(STEP) "m4 1.4.18"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/m4-1.4.18 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -28,6 +30,7 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/m4-1.4.18
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/m4-1.4.18
 	@rm -rf $(BUILD_DIR)/m4-1.4.18
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc

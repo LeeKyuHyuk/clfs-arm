@@ -1,5 +1,6 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := libxml2
 SOURCE := $(SOURCES_DIR)/libxml2-2.9.4.tar.gz
 SOURCE_URL := ftp://xmlsoft.org/libxml2/libxml2-2.9.4.tar.gz
 MD5 := ae249165c173b1ff386ee8ad676815f5
@@ -7,6 +8,7 @@ MD5 := ae249165c173b1ff386ee8ad676815f5
 toolchain:
 	@$(STEP) "libxml2 2.9.4"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/libxml2-2.9.4 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -25,11 +27,13 @@ toolchain:
 	--localstatedir=$(TOOLS_DIR)/var \
 	--enable-shared \
 	--disable-static \
+	--without-python \
 	--without-zlib \
 	--without-lzma )
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/libxml2-2.9.4
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/libxml2-2.9.4
 	@rm -rf $(BUILD_DIR)/libxml2-2.9.4
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc

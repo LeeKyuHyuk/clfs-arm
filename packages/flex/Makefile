@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := flex
+HOST_DEPENDENCIES := m4
 SOURCE := $(SOURCES_DIR)/flex-2.6.4.tar.gz
 SOURCE_URL := https://github.com/westes/flex/releases/download/v2.6.4/flex-2.6.4.tar.gz
 MD5 := 2882e3179748cc9f9c23ec593d6adc8d
@@ -7,6 +9,7 @@ MD5 := 2882e3179748cc9f9c23ec593d6adc8d
 toolchain:
 	@$(STEP) "flex 2.6.4"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@patch -Np1 -i $(PACKAGES_DIR)/flex/flex-disable-documentation.patch -d $(BUILD_DIR)/flex-2.6.4
 	@( cd $(BUILD_DIR)/flex-2.6.4 && \
@@ -29,6 +32,7 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/flex-2.6.4
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/flex-2.6.4
 	@rm -rf $(BUILD_DIR)/flex-2.6.4
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -41,6 +45,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "flex 2.6.4"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@sed -i "/math.h/a #include <malloc.h>" $(BUILD_DIR)/flex-2.6.4/src/flexdef.h # Fix a problem introduced with glibc 2.26
 	@( cd $(BUILD_DIR)/flex-2.6.4 && \
@@ -71,3 +76,4 @@ system:
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/flex-2.6.4
 	@ln -sv flex $(ROOTFS_DIR)/usr/bin/lex
 	@rm -rf $(BUILD_DIR)/flex-2.6.4
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

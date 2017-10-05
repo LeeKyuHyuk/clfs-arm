@@ -1,5 +1,6 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := mtools
 SOURCE := $(SOURCES_DIR)/mtools-4.0.18.tar.bz2
 SOURCE_URL := http://ftpmirror.gnu.org/gnu/mtools/mtools-4.0.18.tar.bz2
 MD5 := a23646617546bf6ad56f061d8b283c85
@@ -7,6 +8,7 @@ MD5 := a23646617546bf6ad56f061d8b283c85
 toolchain:
 	@$(STEP) "mtools 4.0.18"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/mtools-4.0.18 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -28,3 +30,4 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/mtools-4.0.18
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/mtools-4.0.18
 	@rm -rf $(BUILD_DIR)/mtools-4.0.18
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)

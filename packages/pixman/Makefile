@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NANE := pixman
+HOST_DEPENDENCIES := pkgconf
 SOURCE := $(SOURCES_DIR)/pixman-0.34.0.tar.gz
 SOURCE_URL := http://cairographics.org/releases/pixman-0.34.0.tar.gz
 MD5 := e80ebae4da01e77f68744319f01d52a3
@@ -7,6 +9,7 @@ MD5 := e80ebae4da01e77f68744319f01d52a3
 toolchain:
 	@$(STEP) "pixman 0.34.0"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/pixman-0.34.0 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -28,6 +31,7 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/pixman-0.34.0
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/pixman-0.34.0
 	@rm -rf $(BUILD_DIR)/pixman-0.34.0
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc

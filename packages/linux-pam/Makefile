@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := linux-pam
+TARGET_DEPENDENCIES := flex
 SOURCE := $(SOURCES_DIR)/Linux-PAM-1.3.0.tar.bz2
 SOURCE_URL := http://linux-pam.org/library/Linux-PAM-1.3.0.tar.bz2
 MD5 := da4b2289b7cfb19583d54e9eaaef1c3a
@@ -15,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "Linux-PAM 1.3.0"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/Linux-PAM-1.3.0 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -51,3 +54,4 @@ system:
 	@cp -v $(PACKAGES_DIR)/linux-pam/other $(ROOTFS_DIR)/etc/pam.d/
 	@cp -v $(PACKAGES_DIR)/linux-pam/systemd-user $(ROOTFS_DIR)/etc/pam.d/
 	@rm -rf $(BUILD_DIR)/Linux-PAM-1.3.0
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

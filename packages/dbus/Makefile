@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := dbus
+TARGET_DEPENDENCIES := expat
 SOURCE := $(SOURCES_DIR)/dbus-1.10.22.tar.gz
 SOURCE_URL := https://dbus.freedesktop.org/releases/dbus/dbus-1.10.22.tar.gz
 MD5 := baaa10b7cb49086ad91179a8decfadc5
@@ -42,6 +44,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "dbus 1.10.22"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/dbus-1.10.22 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -79,3 +82,4 @@ system:
 	@ln -sfv ../../lib/`readlink $(ROOTFS_DIR)/usr/lib/libdbus-1.so` $(ROOTFS_DIR)/usr/lib/libdbus-1.so
 	@ln -sfv /etc/machine-id $(ROOTFS_DIR)/var/lib/dbus
 	@rm -rf $(BUILD_DIR)/dbus-1.10.22
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

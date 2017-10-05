@@ -288,10 +288,10 @@ if [ -f "$HOME/.dircolors" ] ; then
         eval $(dircolors -b $HOME/.dircolors)
 fi
 
-alias ls='ls --color=auto'
-alias ll='ls -l --color=auto'
-alias la='ls -la --color=auto'
-alias grep='grep --color=auto'
+alias ls='ls --color=always'
+alias ll='ls -l --color=always'
+alias la='ls -la --color=always'
+alias grep='grep --color=always'
 EOF
 
 cat > $ROOTFS_DIR/etc/profile.d/extrapaths.sh << "EOF"
@@ -348,10 +348,10 @@ cat > $ROOTFS_DIR/etc/bashrc << "EOF"
 # Provides colored /bin/ls and /bin/grep commands.  Used in conjunction
 # with code in /etc/profile.
 
-alias ls='ls --color=auto'
-alias ll='ls -l --color=auto'
-alias la='ls -la --color=auto'
-alias grep='grep --color=auto'
+alias ls='ls --color=always'
+alias ll='ls -l --color=always'
+alias la='ls -la --color=always'
+alias grep='grep --color=always'
 
 # Provides prompt for non-login shells, specifically shells started
 # in the X environment. [Review the LFS archive thread titled

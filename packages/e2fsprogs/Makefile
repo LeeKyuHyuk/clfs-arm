@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := e2fsprogs
+HOST_DEPENDENCIES := pkgconf util-linux
 SOURCE := $(SOURCES_DIR)/e2fsprogs-1.43.4.tar.gz
 SOURCE_URL := http://downloads.sourceforge.net/project/e2fsprogs/e2fsprogs/v1.43.4/e2fsprogs-1.43.4.tar.gz
 MD5 := 0bd1c74f357f6e9ae2ab6fa6229b9aea
@@ -7,6 +9,7 @@ MD5 := 0bd1c74f357f6e9ae2ab6fa6229b9aea
 toolchain:
 	@$(STEP) "e2fsprogs 1.43.4"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/e2fsprogs-1.43.4 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -35,6 +38,7 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/e2fsprogs-1.43.4
 	@make -j$(CONFIG_PARALLEL_JOBS) install install-libs -C $(BUILD_DIR)/e2fsprogs-1.43.4
 	@rm -rf $(BUILD_DIR)/e2fsprogs-1.43.4
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc

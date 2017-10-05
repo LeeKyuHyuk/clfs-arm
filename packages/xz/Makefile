@@ -1,5 +1,6 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := xz
 SOURCE := $(SOURCES_DIR)/xz-5.2.3.tar.xz
 SOURCE_URL := http://tukaani.org/xz/xz-5.2.3.tar.xz
 MD5 := 60fb79cab777e3f71ca43d298adacbd5
@@ -15,6 +16,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "xz 5.2.3"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/xz-5.2.3 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -49,3 +51,4 @@ system:
 	@mv -v $(ROOTFS_DIR)/usr/lib/liblzma.so.* $(ROOTFS_DIR)/lib
 	@ln -svf ../../lib/`readlink $(ROOTFS_DIR)/usr/lib/liblzma.so` $(ROOTFS_DIR)/usr/lib/liblzma.so
 	@rm -rf $(BUILD_DIR)/xz-5.2.3
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

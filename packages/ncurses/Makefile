@@ -1,5 +1,6 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := ncurses
 SOURCE := $(SOURCES_DIR)/ncurses-6.0.tar.gz
 SOURCE_URL := http://ftpmirror.gnu.org/gnu/ncurses/ncurses-6.0.tar.gz
 MD5 := ee13d052e1ead260d7c28071f46eefb1
@@ -7,6 +8,7 @@ MD5 := ee13d052e1ead260d7c28071f46eefb1
 toolchain:
 	@$(STEP) "ncurses 6.0"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@sed -i s/mawk// $(BUILD_DIR)/ncurses-6.0/configure
 	@( cd $(BUILD_DIR)/ncurses-6.0 && \
@@ -30,6 +32,7 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) tic -C $(BUILD_DIR)/ncurses-6.0/progs
 	@install -v -m755 $(BUILD_DIR)/ncurses-6.0/progs/tic $(TOOLS_DIR)/bin
 	@rm -rf $(BUILD_DIR)/ncurses-6.0
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -42,6 +45,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "ncurses 6.0"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/ncurses-6.0 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -89,3 +93,4 @@ system:
 	@echo "INPUT(-lncursesw)" > $(ROOTFS_DIR)/usr/lib/libcursesw.so
 	@ln -sfv libncurses.so      $(ROOTFS_DIR)/usr/lib/libcurses.so
 	@rm -rf $(BUILD_DIR)/ncurses-6.0
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

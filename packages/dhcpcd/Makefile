@@ -1,5 +1,6 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := dhcpcd
 SOURCE := $(PACKAGES_DIR)/dhcpcd/dhcpcd-6.11.5.tar.xz
 SOURCE_URL := http://roy.marples.name/downloads/dhcpcd/dhcpcd-6.11.5.tar.xz
 MD5 := 2465624b62c1154f0e89dc69c42c849b
@@ -15,6 +16,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "dhcpcd 6.11.5"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/dhcpcd-6.11.5 && \
 	CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc \
@@ -32,3 +34,4 @@ system:
 	@make -j$(CONFIG_PARALLEL_JOBS) all -C $(BUILD_DIR)/dhcpcd-6.11.5
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/dhcpcd-6.11.5
 	@rm -rf $(BUILD_DIR)/dhcpcd-6.11.5
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

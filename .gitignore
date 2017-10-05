@@ -1,3 +1,5 @@
 .config.mk
+.system.packages
+.toolchain.packages
 sources
 out

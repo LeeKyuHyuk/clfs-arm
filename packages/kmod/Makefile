@@ -1,5 +1,8 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := kmod
+HOST_DEPENDENCIES := pkgconf
+TARGET_DEPENDENCIES := zlib xz
 SOURCE := $(SOURCES_DIR)/kmod-24.tar.xz
 SOURCE_URL := https://www.kernel.org/pub/linux/utils/kernel/kmod/kmod-24.tar.xz
 MD5 := 08297dfb6f2b3f625f928ca3278528af
@@ -7,6 +10,7 @@ MD5 := 08297dfb6f2b3f625f928ca3278528af
 toolchain:
 	@$(STEP) "kmod 24"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/kmod-24 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -31,6 +35,7 @@ toolchain:
 	@mkdir -p $(TOOLS_DIR)/sbin/
 	@ln -svf ../usr/bin/kmod $(TOOLS_DIR)/sbin/depmod
 	@rm -rf $(BUILD_DIR)/kmod-24
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -43,6 +48,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "kmod 24"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@patch -Np1 -i $(PACKAGES_DIR)/kmod/fix-O_CLOEXEC.patch -d $(BUILD_DIR)/kmod-24
 	@patch -Np1 -i $(PACKAGES_DIR)/kmod/shared-util.c-assert_cc-can-only-be-used-inside-func.patch -d $(BUILD_DIR)/kmod-24
@@ -80,3 +86,4 @@ system:
 	done
 	@ln -sfv kmod $(ROOTFS_DIR)/bin/lsmod
 	@rm -rf $(BUILD_DIR)/kmod-24
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

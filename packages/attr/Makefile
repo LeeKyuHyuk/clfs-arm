@@ -1,8 +1,40 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := attr
 SOURCE := $(SOURCES_DIR)/attr-2.4.47.src.tar.gz
 SOURCE_URL := http://download.savannah.gnu.org/releases/attr/attr-2.4.47.src.tar.gz
 MD5 := 84f58dec00b60f2dc8fd1c9709291cc7
+
+toolchain:
+	@$(STEP) "attr 2.4.47"
+	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
+	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
+	@patch -Np1 -i $(PACKAGES_DIR)/attr/support-static-installation.patch -d $(BUILD_DIR)/attr-2.4.47
+	@patch -Np1 -i $(PACKAGES_DIR)/attr/avoid-glibc-specific-decls-defines.patch -d $(BUILD_DIR)/attr-2.4.47
+	@patch -Np1 -i $(PACKAGES_DIR)/attr/portability-fixes.patch -d $(BUILD_DIR)/attr-2.4.47
+	@( cd $(BUILD_DIR)/attr-2.4.47 && \
+	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
+	PKG_CONFIG_SYSROOT_DIR="/" \
+	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
+	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
+	PKG_CONFIG_LIBDIR="$(TOOLS_DIR)/lib/pkgconfig:$(TOOLS_DIR)/share/pkgconfig" \
+	CPPFLAGS="-I$(TOOLS_DIR)/include" \
+	CFLAGS="-O2 -I$(TOOLS_DIR)/include" \
+	CXXFLAGS="-O2 -I$(TOOLS_DIR)/include" \
+	LDFLAGS="-L$(TOOLS_DIR)/lib -Wl,-rpath,$(TOOLS_DIR)/lib" \
+	CONFIG_SITE=/dev/null \
+	./configure \
+	--prefix=$(TOOLS_DIR) \
+	--sysconfdir=$(TOOLS_DIR)/etc \
+	--localstatedir=$(TOOLS_DIR)/var \
+	--enable-shared \
+	--disable-static \
+	--enable-gettext=no )
+	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/attr-2.4.47
+	@make -j$(CONFIG_PARALLEL_JOBS) prefix=$(TOOLS_DIR) exec_prefix=$(TOOLS_DIR) install-dev install-lib -C $(BUILD_DIR)/attr-2.4.47
+	@rm -rf $(BUILD_DIR)/attr-2.4.47
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc

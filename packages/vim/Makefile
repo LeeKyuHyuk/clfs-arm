@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := vim
+TARGET_DEPENDENCIES := ncurses
 SOURCE := $(SOURCES_DIR)/vim-8.0.069.tar.bz2
 SOURCE_URL := ftp://ftp.vim.org/pub/vim/unix/vim-8.0.069.tar.bz2
 MD5 := 457543a7754b0d3c1c0aa4d4c3bb4070
@@ -15,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "Vim 8.0.069"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> $(BUILD_DIR)/vim80/src/feature.h
 	@( cd $(BUILD_DIR)/vim80 && \
@@ -67,3 +70,4 @@ system:
 	@ln -svf ../vim/vim80/doc $(ROOTFS_DIR)/usr/share/doc/vim-8.0.069
 	@cp -v $(PACKAGES_DIR)/vim/vimrc $(ROOTFS_DIR)/etc/vimrc
 	@rm -rf $(BUILD_DIR)/vim80
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

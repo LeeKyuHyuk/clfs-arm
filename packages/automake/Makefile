@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := automake
+HOST_DEPENDENCIES := autoconf
 SOURCE := $(SOURCES_DIR)/automake-1.15.tar.xz
 SOURCE_URL := http://ftpmirror.gnu.org/gnu/automake/automake-1.15.tar.xz
 MD5 := 9a1ddb0e053474d9d1105cfe39b0c48d
@@ -7,7 +9,9 @@ MD5 := 9a1ddb0e053474d9d1105cfe39b0c48d
 toolchain:
 	@$(STEP) "automake 1.15"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
+	@patch -Np0 -i $(PACKAGES_DIR)/automake/automake-fix-help2man.patch -d $(BUILD_DIR)/automake-1.15
 	@( cd $(BUILD_DIR)/automake-1.15 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
 	PKG_CONFIG_SYSROOT_DIR="/" \
@@ -29,6 +33,7 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/automake-1.15
 	@install -Dv -m 0644 $(PACKAGES_DIR)/automake/gtk-doc.m4 $(TOOLS_DIR)/share/aclocal/gtk-doc.m4
 	@rm -rf $(BUILD_DIR)/automake-1.15
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc

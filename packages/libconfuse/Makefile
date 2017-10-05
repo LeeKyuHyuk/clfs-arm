@@ -1,5 +1,6 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := libconfuse
 SOURCE := $(SOURCES_DIR)/confuse-3.0.tar.xz
 SOURCE_URL := https://github.com/martinh/libconfuse/releases/download/v3.0/confuse-3.0.tar.xz
 MD5 := c534b51a2118ed57031dc548032304a3
@@ -7,6 +8,7 @@ MD5 := c534b51a2118ed57031dc548032304a3
 toolchain:
 	@$(STEP) "libconfuse 3.0"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/confuse-3.0 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -28,3 +30,4 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/confuse-3.0
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/confuse-3.0
 	@rm -rf $(BUILD_DIR)/confuse-3.0
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)

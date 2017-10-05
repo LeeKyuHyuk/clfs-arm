@@ -8,11 +8,18 @@ Cross Linux From Scratch (CLFS) is a project that provides you with step-by-step
 
 ### Preparing Build Environment
 
-Debian 9 or Ubuntu 16.04 is recommended.
+Fedora 26 or Ubuntu 16.04 is recommended.
+
+#### **Fedora 26**
 
 ``` bash
-sudo apt update
-sudo apt install gcc g++ wget git qemu-system exo-utils
+$ sudo dnf -y install gcc-c++ perl-Thread-Queue
+```
+
+#### **Ubuntu 16.04**
+
+```bash
+$ sudo apt install gcc g++ wget git
 ```
 
 ### Get CLFS-ARM Source code
@@ -44,7 +51,7 @@ make toolchain
 
 ```
 $ arm-linux-gnueabihf-gcc --version
-arm-linux-gnueabihf-gcc (CLFS ARM 2017.07) 6.3.0
+arm-linux-gnueabihf-gcc (CLFS ARM 2017.10) 7.2.0
 Copyright (C) 2016 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
@@ -87,8 +94,8 @@ CONFIG_TARGET: arm-linux-gnueabihf
 CONFIG_HOSTNAME: clfs-arm
 CONFIG_ROOT_PASSWD: clfs
 CONFIG_LOCAL_TIMEZONE: Asia/Seoul
-CONFIG_PKG_VERSION: CLFS ARM 2017.07
-CONFIG_BUG_URL: https://github.com/LeeKyuHyuk/CLFS-ARM/issues
+CONFIG_PKG_VERSION: CLFS ARM 2017.10
+CONFIG_BUG_URL: https://github.com/LeeKyuHyuk/clfs-arm/issues
 CONFIG_PARALLEL_JOBS: 4
 WORKSPACE_DIR: /home/leekyuhyuk/clfs-arm
 CONFIG_DIR: /home/leekyuhyuk/clfs-arm/config
@@ -102,18 +109,22 @@ TOOLS_DIR: /home/leekyuhyuk/clfs-arm/out/tools
 KERNEL_DIR: /home/leekyuhyuk/clfs-arm/out/kernel
 ROOTFS_DIR: /home/leekyuhyuk/clfs-arm/out/rootfs
 IMAGES_DIR: /home/leekyuhyuk/clfs-arm/out/images
-SYSROOT_DIR: /home/leekyuhyuk/clfs-arm/out/tools/usr/arm-linux-gnueabihf/sysroot
-PATH: "/home/leekyuhyuk/clfs-arm/out/tools/bin:/home/leekyuhyuk/clfs-arm/out/tools/sbin:/home/leekyuhyuk/clfs-arm/out/tools/usr/bin:/home/leekyuhyuk/clfs-arm/out/tools/usr/sbin:/sbin:/usr/sbin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games"
+SYSROOT_DIR: /home/leekyuhyuk/clfs-arm/out/tools/arm-linux-gnueabihf/sysroot
+PATH: "/home/leekyuhyuk/clfs-arm/out/tools/bin:/home/leekyuhyuk/clfs-arm/out/tools/sbin:/home/leekyuhyuk/clfs-arm/out/tools/usr/bin:/home/leekyuhyuk/clfs-arm/out/tools/usr/sbin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/home/leekyuhyuk/.local/bin:/home/leekyuhyuk/bin"
 
 >> Device Settings:
-CONFIG_NAME: raspberrypi2
+CONFIG_NAME: qemu_vexpress
 CONFIG_ABI: aapcs-linux
-CONFIG_CPU: cortex-a7
-CONFIG_FPU: neon-vfpv4
+CONFIG_CPU: cortex-a9
+CONFIG_FPU: vfpv3-d16
 CONFIG_FLOAT: hard
 CONFIG_MODE: arm
-CONFIG_LINUX_KERNEL_SOURCE: be2540e540f5442d7b372208787fb64100af0c54.tar.gz
-CONFIG_LINUX_KERNEL_SOURCE_URL: https://github.com/raspberrypi/linux/archive/be2540e540f5442d7b372208787fb64100af0c54.tar.gz
+CONFIG_LINUX_KERNEL_SOURCE: linux-4.11.7.tar.gz
+CONFIG_LINUX_KERNEL_SOURCE_URL: https://www.kernel.org/pub/linux/kernel/v4.x/linux-4.11.7.tar.gz
+CONFIG_LINUX_KERNEL_SOURCE_MD5: 9cc718062918845dcc009a276c598a6a
+CONFIG_LINUX_KERNEL_DEFCONFIG: vexpress
+CONFIG_LINUX_KERNEL_INTREE_DTS_NAME: vexpress-v2p-ca9
+CONFIG_IMAGE_SCRIPT: /home/leekyuhyuk/clfs-arm/device/qemu/vexpress/create_image.sh
 ```
 
 ### Built With

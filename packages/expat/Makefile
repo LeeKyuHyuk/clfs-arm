@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := expat
+HOST_DEPENDENCIES := pkgconf
 SOURCE := $(SOURCES_DIR)/expat-2.2.2.tar.bz2
 SOURCE_URL := https://downloads.sourceforge.net/project/expat/expat/2.2.2/expat-2.2.2.tar.bz2
 MD5 := 1ede9a41223c78528b8c5d23e69a2667
@@ -7,6 +9,7 @@ MD5 := 1ede9a41223c78528b8c5d23e69a2667
 toolchain:
 	@$(STEP) "expat 2.2.2"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/expat-2.2.2 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -28,6 +31,7 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/expat-2.2.2
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/expat-2.2.2
 	@rm -rf $(BUILD_DIR)/expat-2.2.2
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -40,6 +44,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "expat 2.2.2"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/expat-2.2.2 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -66,3 +71,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) installlib -C $(BUILD_DIR)/expat-2.2.2
 	@rm -rf $(BUILD_DIR)/expat-2.2.2
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

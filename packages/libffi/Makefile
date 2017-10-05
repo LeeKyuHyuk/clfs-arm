@@ -1,5 +1,6 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := libffi
 SOURCE := $(SOURCES_DIR)/libffi-3.2.1.tar.gz
 SOURCE_URL := ftp://sourceware.org/pub/libffi/libffi-3.2.1.tar.gz
 MD5 := 83b89587607e3eb65c70d361f13bab43
@@ -7,6 +8,7 @@ MD5 := 83b89587607e3eb65c70d361f13bab43
 toolchain:
 	@$(STEP) "libffi 3.2.1"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@sed -i -e 's/toolexeclib_LTLIBRARIES = libffi.la/lib_LTLIBRARIES = libffi.la/g' $(BUILD_DIR)/libffi-3.2.1/Makefile.am
 	@( cd $(BUILD_DIR)/libffi-3.2.1 && autoconf )
@@ -33,6 +35,7 @@ toolchain:
 	@sed -i -e '/^includedir.*/d' -e '/^Cflags:.*/d' $(TOOLS_DIR)/lib/pkgconfig/libffi.pc
 	@rm -rf $(TOOLS_DIR)/lib/libffi-*
 	@rm -rf $(BUILD_DIR)/libffi-3.2.1
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc

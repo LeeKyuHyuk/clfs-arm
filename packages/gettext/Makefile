@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := gettext
+HOST_DEPENDENCIES := libxml2
 SOURCE := $(SOURCES_DIR)/gettext-0.19.8.1.tar.xz
 SOURCE_URL := http://ftpmirror.gnu.org/gnu/gettext/gettext-0.19.8.1.tar.xz
 MD5 := df3f5690eaa30fd228537b00cb7b7590
@@ -7,6 +9,7 @@ MD5 := df3f5690eaa30fd228537b00cb7b7590
 toolchain:
 	@$(STEP) "gettext 0.19.8.1"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@sed -i -e '/^SUBDIRS/s/ doc //;/^SUBDIRS/s/examples$$//' $(BUILD_DIR)/gettext-0.19.8.1/gettext-tools/Makefile.in
 	@sed -i -e '/^SUBDIRS/s/ doc //;/^SUBDIRS/s/tests$$//' $(BUILD_DIR)/gettext-0.19.8.1/gettext-tools/Makefile.in
@@ -41,6 +44,7 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/gettext-0.19.8.1/gettext-tools
 	@sed -i -e '/read dummy/d' $(TOOLS_DIR)/bin/gettextize
 	@rm -rf $(BUILD_DIR)/gettext-0.19.8.1
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc

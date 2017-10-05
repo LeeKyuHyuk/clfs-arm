@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := qemu
+HOST_DEPENDENCIES := vde2 sdl2
 SOURCE := $(SOURCES_DIR)/qemu-2.10.0.tar.xz
 SOURCE_URL := https://download.qemu.org/qemu-2.10.0.tar.xz
 MD5 := a89e3293cf69c32cf4be4188dfa25544
@@ -7,6 +9,7 @@ MD5 := a89e3293cf69c32cf4be4188dfa25544
 toolchain:
 	@$(STEP) "qemu 2.10.0"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/qemu-2.10.0 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -21,10 +24,19 @@ toolchain:
 	CONFIG_SITE=/dev/null \
 	./configure \
 	--prefix=$(TOOLS_DIR) \
-	--sysconfdir=$(TOOLS_DIR)/etc \
-	--localstatedir=$(TOOLS_DIR)/var \
+	--interp-prefix=$(SYSROOT_DIR) \
 	--target-list="aarch64-softmmu,arm-softmmu,aarch64-linux-user,arm-linux-user,armeb-linux-user" \
-	--enable-gtk )
+	--cc="gcc" \
+	--host-cc="gcc" \
+	--python=$(TOOLS_DIR)/bin/python2 \
+	--extra-cflags="-O2 -I$(TOOLS_DIR)/include" \
+	--extra-ldflags="-L$(TOOLS_DIR)/lib -Wl,-rpath,$(TOOLS_DIR)/lib" \
+	--enable-system \
+	--enable-fdt \
+	--enable-linux-user \
+	--enable-vde \
+	--enable-sdl )
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/qemu-2.10.0
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/qemu-2.10.0
 	@rm -rf $(BUILD_DIR)/qemu-2.10.0
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)

@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := linux-headers
+
 staging:
 	@$(STEP) "Linux API Headers"
 	@$(call check_source, $(SOURCES_DIR)/$(CONFIG_LINUX_KERNEL_SOURCE), $(CONFIG_LINUX_KERNEL_SOURCE_MD5), $(CONFIG_LINUX_KERNEL_SOURCE_URL))

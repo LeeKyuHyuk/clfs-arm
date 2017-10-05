@@ -1,5 +1,6 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := tzdata
 SOURCE := $(SOURCES_DIR)/tzdata2017b.tar.gz
 SOURCE_URL := http://www.iana.org/time-zones/repository/releases/tzdata2017b.tar.gz
 MD5 := 50dc0dc50c68644c1f70804f2e7a1625
@@ -17,6 +18,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "tzdata2017b"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@mkdir -p $(BUILD_DIR)/tzdata2017b
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)/tzdata2017b
 	@mkdir -pv $(ZONEINFO)/posix
@@ -37,3 +39,4 @@ system:
 	    cp -v $(ROOTFS_DIR)/usr/share/zoneinfo/$(CONFIG_LOCAL_TIMEZONE) $(ROOTFS_DIR)/etc/localtime ; \
 	fi;
 	@rm -rf $(BUILD_DIR)/tzdata2017b
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

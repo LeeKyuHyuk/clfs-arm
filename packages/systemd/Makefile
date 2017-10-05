@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := systemd
+TARGET_DEPENDENCIES := libcap util-linux kmod linux-pam
 SOURCE := $(PACKAGES_DIR)/systemd/systemd-234-lfs.tar.xz
 SOURCE_URL := http://anduin.linuxfromscratch.org/LFS/systemd-234-lfs.tar.xz
 MD5 := be1338f2775713dc33da74ac0146e37b
@@ -15,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "systemd 234"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@sed -i "s@\"Linux\"@\"CLFS-ARM\"@g" $(BUILD_DIR)/systemd-234-lfs/src/core/main.c
 	@( cd $(BUILD_DIR)/systemd-234-lfs && \
@@ -85,3 +88,4 @@ system:
 	@cp -v $(PACKAGES_DIR)/systemd/adjtime $(ROOTFS_DIR)/etc/adjtime
 	@cp -v $(PACKAGES_DIR)/linux-pam/systemd-user $(ROOTFS_DIR)/etc/pam.d/
 	@rm -rf $(BUILD_DIR)/systemd-234-lfs
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

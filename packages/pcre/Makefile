@@ -1,5 +1,6 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := pcre
 SOURCE := $(SOURCES_DIR)/pcre-8.40.tar.bz2
 SOURCE_URL := ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.40.tar.bz2
 MD5 := 41a842bf7dcecd6634219336e2167d1d
@@ -7,6 +8,7 @@ MD5 := 41a842bf7dcecd6634219336e2167d1d
 toolchain:
 	@$(STEP) "pcre 8.40"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/pcre-8.40 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -33,6 +35,7 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/pcre-8.40
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/pcre-8.40
 	@rm -rf $(BUILD_DIR)/pcre-8.40
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc

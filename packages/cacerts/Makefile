@@ -1,5 +1,6 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := cacerts
 SOURCE := $(PACKAGES_DIR)/cacerts/ca-certificates_20161130.tar.xz
 SOURCE_URL := http://snapshot.debian.org/archive/debian/20161205T153846Z/pool/main/c/ca-certificates/ca-certificates_20161130.tar.xz
 MD5 := 1a0a3a1b3390dc83affed4b0c2ae1c05
@@ -15,6 +16,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "Certificate Authority Certificates"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/ca-certificates all
 	@install -dv -m 0755 $(ROOTFS_DIR)/usr/share/ca-certificates
@@ -29,3 +31,4 @@ system:
 	done )
 	@$(TOOLS_DIR)/bin/c_rehash $(ROOTFS_DIR)/etc/ssl/certs
 	@rm -rf $(BUILD_DIR)/ca-certificates
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

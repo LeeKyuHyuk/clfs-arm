@@ -1,0 +1,13 @@
+Signed-off-by: KyuHyuk Lee <lee@kyuhyuk.kr>
+
+--- Makefile.in.orig	2017-06-19 02:35:04.000000000 +0900
++++ Makefile.in	2017-10-03 15:23:04.603772413 +0900
+@@ -710,7 +710,7 @@
+   $(AM_V_GEN): \
+     && $(MKDIR_P) doc \
+     && $(extend_PATH) \
+-    && $(PERL) $(srcdir)/doc/help2man --output=$@
++    && $(PERL) $(srcdir)/doc/help2man --output=$@ --no-discard-stderr
+ 
+ amhello_sources = \
+   doc/amhello/configure.ac \

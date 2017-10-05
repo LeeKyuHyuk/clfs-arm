@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := python2
+HOST_DEPENDENCIES := libffi
 SOURCE := $(SOURCES_DIR)/Python-2.7.13.tar.xz
 SOURCE_URL := https://www.python.org/ftp/python/2.7.13/Python-2.7.13.tar.xz
 MD5 := 53b43534153bb2a0363f08bae8b9d990
@@ -7,6 +9,7 @@ MD5 := 53b43534153bb2a0363f08bae8b9d990
 toolchain:
 	@$(STEP) "Python 2.7.13"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/Python-2.7.13 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -37,3 +40,4 @@ toolchain:
 	@ln -svf python2-config $(TOOLS_DIR)/bin/python-config
 	@chmod -v 755 $(TOOLS_DIR)/lib/libpython2.7.so.1.0
 	@rm -rf $(BUILD_DIR)/Python-2.7.13
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)

@@ -1,8 +1,40 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := acl
+HOST_DEPENDENCIES := attr
 SOURCE := $(SOURCES_DIR)/acl-2.2.52.src.tar.gz
 SOURCE_URL := http://download.savannah.gnu.org/releases/acl/acl-2.2.52.src.tar.gz
 MD5 := a61415312426e9c2212bd7dc7929abda
+
+toolchain:
+	@$(STEP) "acl 2.2.52"
+	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
+	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
+	@patch -Np1 -i $(PACKAGES_DIR)/acl/support-static-installation.patch -d $(BUILD_DIR)/acl-2.2.52
+	@patch -Np1 -i $(PACKAGES_DIR)/acl/add-__acl_-prefixes-to-internal-symbols.patch -d $(BUILD_DIR)/acl-2.2.52
+	@( cd $(BUILD_DIR)/acl-2.2.52 && \
+	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
+	PKG_CONFIG_SYSROOT_DIR="/" \
+	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
+	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
+	PKG_CONFIG_LIBDIR="$(TOOLS_DIR)/lib/pkgconfig:$(TOOLS_DIR)/share/pkgconfig" \
+	CPPFLAGS="-I$(TOOLS_DIR)/include" \
+	CFLAGS="-O2 -I$(TOOLS_DIR)/include" \
+	CXXFLAGS="-O2 -I$(TOOLS_DIR)/include" \
+	LDFLAGS="-L$(TOOLS_DIR)/lib -Wl,-rpath,$(TOOLS_DIR)/lib" \
+	CONFIG_SITE=/dev/null \
+	./configure \
+	--prefix=$(TOOLS_DIR) \
+	--sysconfdir=$(TOOLS_DIR)/etc \
+	--localstatedir=$(TOOLS_DIR)/var \
+	--enable-shared \
+	--disable-static \
+	--enable-gettext=no )
+	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/acl-2.2.52
+	@make -j$(CONFIG_PARALLEL_JOBS) prefix=$(TOOLS_DIR) exec_prefix=$(TOOLS_DIR) PKG_DEVLIB_DIR=$(TOOLS_DIR)/lib install-dev install-lib -C $(BUILD_DIR)/acl-2.2.52
+	@rm -rf $(BUILD_DIR)/acl-2.2.52
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc

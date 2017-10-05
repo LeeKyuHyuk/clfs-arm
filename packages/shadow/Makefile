@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := shadow-pam
+TARGET_DEPENDENCIES := linux-pam
 SOURCE := $(PACKAGES_DIR)/shadow/shadow-4.5.tar.xz
 SOURCE_URL := https://github.com/shadow-maint/shadow/releases/download/4.5/shadow-4.5.tar.xz
 MD5 := c350da50c2120de6bb29177699d89fe3
@@ -15,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "shadow 4.5"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@sed -i 's/groups$(EXEEXT) //' $(BUILD_DIR)/shadow-4.5/src/Makefile.in
 	@find $(BUILD_DIR)/shadow-4.5/man -name Makefile.in -exec sed -i 's/groups\.1 / /'   {} \;
@@ -62,3 +65,4 @@ system:
 		sed -i "s/chage/$${PROGRAM}/" $(ROOTFS_DIR)/etc/pam.d/$${PROGRAM} ; \
 	done
 	@rm -rf $(BUILD_DIR)/shadow-4.5
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

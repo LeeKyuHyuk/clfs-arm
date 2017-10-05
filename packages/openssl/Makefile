@@ -1,5 +1,6 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := openssl
 SOURCE := $(SOURCES_DIR)/openssl-1.0.2k.tar.gz
 SOURCE_URL := https://www.openssl.org/source/openssl-1.0.2k.tar.gz
 MD5 := f965fc0bf01bf882b31314b61391ae65
@@ -7,6 +8,7 @@ MD5 := f965fc0bf01bf882b31314b61391ae65
 toolchain:
 	@$(STEP) "openssl 1.0.2k"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/openssl-1.0.2k && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -27,6 +29,7 @@ toolchain:
 	@make -j1 -C $(BUILD_DIR)/openssl-1.0.2k
 	@make -j1 install -C $(BUILD_DIR)/openssl-1.0.2k
 	@rm -rf $(BUILD_DIR)/openssl-1.0.2k
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -39,6 +42,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "openssl 1.0.2k"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/openssl-1.0.2k && \
 	CROSS_COMPILE=$(CONFIG_TARGET)- \
@@ -68,3 +72,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j1 INSTALL_PREFIX=$(ROOTFS_DIR) install -C $(BUILD_DIR)/openssl-1.0.2k
 	@rm -rf $(BUILD_DIR)/openssl-1.0.2k
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

@@ -9,6 +9,10 @@ staging:
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@patch -Np1 -i $(PACKAGES_DIR)/glibc/CVE-2017-1000366-Ignore-LD_LIBRARY_PATH-for-AT_SECUR.patch -d $(BUILD_DIR)/glibc-2.25
+	@patch -Np1 -i $(PACKAGES_DIR)/glibc/ld.so-Reject-overly-long-LD_PRELOAD-path-elements.patch -d $(BUILD_DIR)/glibc-2.25
+	@patch -Np1 -i $(PACKAGES_DIR)/glibc/ld.so-Reject-overly-long-LD_AUDIT-path-elements.patch -d $(BUILD_DIR)/glibc-2.25
+	@patch -Np1 -i $(PACKAGES_DIR)/glibc/fix-binutils-2-29-build.patch -d $(BUILD_DIR)/glibc-2.25
+	@patch -Np1 -i $(PACKAGES_DIR)/glibc/sh4-trap.patch -d $(BUILD_DIR)/glibc-2.25
 	@mkdir -p $(BUILD_DIR)/glibc-2.25/glibc-build
 	@( cd $(BUILD_DIR)/glibc-2.25/glibc-build && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -49,6 +53,10 @@ system:
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@patch -Np1 -i $(PACKAGES_DIR)/glibc/CVE-2017-1000366-Ignore-LD_LIBRARY_PATH-for-AT_SECUR.patch -d $(BUILD_DIR)/glibc-2.25
+	@patch -Np1 -i $(PACKAGES_DIR)/glibc/ld.so-Reject-overly-long-LD_PRELOAD-path-elements.patch -d $(BUILD_DIR)/glibc-2.25
+	@patch -Np1 -i $(PACKAGES_DIR)/glibc/ld.so-Reject-overly-long-LD_AUDIT-path-elements.patch -d $(BUILD_DIR)/glibc-2.25
+	@patch -Np1 -i $(PACKAGES_DIR)/glibc/fix-binutils-2-29-build.patch -d $(BUILD_DIR)/glibc-2.25
+	@patch -Np1 -i $(PACKAGES_DIR)/glibc/sh4-trap.patch -d $(BUILD_DIR)/glibc-2.25
 	@patch -Np1 -i $(PACKAGES_DIR)/glibc/glibc-2.25-fhs-1.patch -d $(BUILD_DIR)/glibc-2.25
 	@mkdir -p $(BUILD_DIR)/glibc-2.25/glibc-build
 	@( cd $(BUILD_DIR)/glibc-2.25/glibc-build && \

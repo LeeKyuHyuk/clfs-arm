@@ -1,11 +1,13 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := fakeroot
 SOURCE := $(PACKAGES_DIR)/fakeroot/fakeroot_1.20.2.orig.tar.bz2
 SOURCE_URL := http://ftp.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.20.2.orig.tar.bz2
 MD5 := a4b4564a75024aa96c86e4d1017ac786
 
 toolchain:
 	@$(STEP) "fakeroot 1.20.2"
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/fakeroot-1.20.2 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -27,3 +29,4 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/fakeroot-1.20.2
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/fakeroot-1.20.2
 	@rm -rf $(BUILD_DIR)/fakeroot-1.20.2
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)

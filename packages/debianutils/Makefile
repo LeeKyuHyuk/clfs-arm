@@ -1,5 +1,6 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := debianutils
 SOURCE := $(PACKAGES_DIR)/debianutils/debianutils_4.8.1.tar.xz
 SOURCE_URL := http://snapshot.debian.org/archive/debian/20161118T033019Z/pool/main/d/debianutils/debianutils_4.8.1.tar.xz
 MD5 := 44083fc66164746880dffd30d62d054b
@@ -15,6 +16,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "debianutils 4.8.1"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/debianutils-4.8.1 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -43,3 +45,4 @@ system:
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/debianutils-4.8.1
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/debianutils-4.8.1
 	@rm -rf $(BUILD_DIR)/debianutils-4.8.1
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

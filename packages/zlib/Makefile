@@ -1,5 +1,6 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := zlib
 SOURCE := $(SOURCES_DIR)/zlib-1.2.11.tar.xz
 SOURCE_URL := http://zlib.net/zlib-1.2.11.tar.xz
 MD5 := 85adef240c5f370b308da8c938951a68
@@ -7,6 +8,7 @@ MD5 := 85adef240c5f370b308da8c938951a68
 toolchain:
 	@$(STEP) "zlib 1.2.11"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/zlib-1.2.11 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -25,6 +27,7 @@ toolchain:
 	@make -j1 -C $(BUILD_DIR)/zlib-1.2.11
 	@make -j1 LDCONFIG=true install -C $(BUILD_DIR)/zlib-1.2.11
 	@rm -rf $(BUILD_DIR)/zlib-1.2.11
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -37,6 +40,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "zlib 1.2.11"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/zlib-1.2.11 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -61,3 +65,4 @@ system:
 	@mv -v $(ROOTFS_DIR)/usr/lib/libz.so.* $(ROOTFS_DIR)/lib
 	@ln -sfv ../../lib/`readlink $(ROOTFS_DIR)/usr/lib/libz.so` $(ROOTFS_DIR)/usr/lib/libz.so
 	@rm -rf $(BUILD_DIR)/zlib-1.2.11
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

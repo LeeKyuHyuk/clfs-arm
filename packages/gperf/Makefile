@@ -1,5 +1,6 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := gperf
 SOURCE := $(SOURCES_DIR)/gperf-3.0.4.tar.gz
 SOURCE_URL := http://ftpmirror.gnu.org/gnu/gperf/gperf-3.0.4.tar.gz
 MD5 := c1f1db32fb6598d6a93e6e88796a8632
@@ -7,6 +8,7 @@ MD5 := c1f1db32fb6598d6a93e6e88796a8632
 toolchain:
 	@$(STEP) "gperf 3.0.4"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/gperf-3.0.4 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -28,6 +30,7 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/gperf-3.0.4
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/gperf-3.0.4
 	@rm -rf $(BUILD_DIR)/gperf-3.0.4
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc

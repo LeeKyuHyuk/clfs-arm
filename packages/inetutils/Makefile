@@ -1,5 +1,6 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := inetutils
 SOURCE := $(SOURCES_DIR)/inetutils-1.9.4.tar.xz
 SOURCE_URL := http://ftp.gnu.org/gnu/inetutils/inetutils-1.9.4.tar.xz
 MD5 := 87fef1fa3f603aef11c41dcc097af75e
@@ -15,6 +16,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "inetutils 1.9.4"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@patch -Np1 -i $(PACKAGES_DIR)/inetutils/inetutils-1.9-PATH_PROCNET_DEV.patch -d $(BUILD_DIR)/inetutils-1.9.4
 	@( cd $(BUILD_DIR)/inetutils-1.9.4 && \
@@ -42,3 +44,4 @@ system:
 	@chmod -v 755 $(ROOTFS_DIR)/bin/traceroute
 	@mv -v $(ROOTFS_DIR)/usr/bin/ifconfig $(ROOTFS_DIR)/sbin
 	@rm -rf $(BUILD_DIR)/inetutils-1.9.4
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

@@ -41,6 +41,7 @@ system:
 	@$(STEP) "dmxproto 2.3.1"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
+	@patch -Np0 -i $(PACKAGES_DIR)/xorg/xorg-proto-lib-aarch64-system-support.patch -d $(BUILD_DIR)/dmxproto-2.3.1
 	@( cd $(BUILD_DIR)/dmxproto-2.3.1 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
 	ac_cv_lbl_unaligned_fail=yes \

@@ -41,6 +41,7 @@ system:
 	@$(STEP) "compositeproto 0.4.2"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
+	@patch -Np0 -i $(PACKAGES_DIR)/xorg/xorg-proto-lib-aarch64-system-support.patch -d $(BUILD_DIR)/compositeproto-0.4.2
 	@( cd $(BUILD_DIR)/compositeproto-0.4.2 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
 	ac_cv_lbl_unaligned_fail=yes \

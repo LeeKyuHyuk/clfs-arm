@@ -20,6 +20,7 @@ system:
 	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@patch -Np1 -i $(PACKAGES_DIR)/epdfview/epdfview-0.1.8-fixes-2.patch -d $(BUILD_DIR)/epdfview-0.1.8
+	@patch -Np0 -i $(PACKAGES_DIR)/epdfview/epdfview-aarch64-system-support.patch -d $(BUILD_DIR)/epdfview-0.1.8
 	@( cd $(BUILD_DIR)/epdfview-0.1.8 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
 	ac_cv_lbl_unaligned_fail=yes \

@@ -73,6 +73,15 @@ toolchain:
 	@make toolchain -C $(PACKAGES_DIR)/libpng
 	@make toolchain -C $(PACKAGES_DIR)/gdk-pixbuf
 	@make toolchain -C $(PACKAGES_DIR)/libgtk2
+	@make toolchain -C $(PACKAGES_DIR)/freetype
+	@make toolchain -C $(PACKAGES_DIR)/fontconfig
+	@make toolchain -C $(PACKAGES_DIR)/xorg/proto
+	@make toolchain -C $(PACKAGES_DIR)/libxau
+	@make toolchain -C $(PACKAGES_DIR)/libxdmcp
+	@make toolchain -C $(PACKAGES_DIR)/xcb-proto
+	@make toolchain -C $(PACKAGES_DIR)/libpthread-stubs
+	@make toolchain -C $(PACKAGES_DIR)/libxcb
+	@make toolchain -C $(PACKAGES_DIR)/xorg/lib
 	@make toolchain -C $(PACKAGES_DIR)/curl
 	@make toolchain -C $(PACKAGES_DIR)/cmake
 	$(PRINT_BUILD_TIME)

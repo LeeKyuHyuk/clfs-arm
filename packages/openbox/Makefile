@@ -19,6 +19,7 @@ system:
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
+	@patch -Np0 -i $(PACKAGES_DIR)/openbox/openbox-aarch64-system-support.patch -d $(BUILD_DIR)/openbox-3.6.1
 	@( cd $(BUILD_DIR)/openbox-3.6.1 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
 	ac_cv_lbl_unaligned_fail=yes \

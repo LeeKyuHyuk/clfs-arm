@@ -33,5 +33,6 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/cmake-3.9.1
 	@mkdir -pv $(TOOLS_DIR)/share/clfs-arm
 	@cp -Rv $(SUPPORT_DIR)/cmake/* $(TOOLS_DIR)/share/clfs-arm/
+	@sed -i "s@(CONFIG_TARGET)@$(CONFIG_TARGET)@g" $(TOOLS_DIR)/share/clfs-arm/toolchainfile.cmake
 	@rm -rf $(BUILD_DIR)/cmake-3.9.1
 	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)

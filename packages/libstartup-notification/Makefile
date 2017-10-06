@@ -20,6 +20,7 @@ system:
 	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@patch -Np0 -i $(PACKAGES_DIR)/libstartup-notification/libstartup-notification-build-system-fixes-for-cross-compilation.patch -d $(BUILD_DIR)/startup-notification-0.12
+	@patch -Np0 -i $(PACKAGES_DIR)/libstartup-notification/libstartup-notification-aarch64-system-support.patch -d $(BUILD_DIR)/startup-notification-0.12
 	@( cd $(BUILD_DIR)/startup-notification-0.12 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
 	ac_cv_lbl_unaligned_fail=yes \

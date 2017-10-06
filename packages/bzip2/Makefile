@@ -14,10 +14,10 @@ toolchain:
 	@sed -i 's#\(ln -s -f \)$(PREFIX)/bin/#\1#' $(BUILD_DIR)/bzip2-1.0.6/Makefile
 	@sed -i "s#(PREFIX)/share/man#(PREFIX)/share/man#g" $(BUILD_DIR)/bzip2-1.0.6/Makefile
 	@sed -i "s#bzip2recover test#bzip2recover#g" $(BUILD_DIR)/bzip2-1.0.6/Makefile
-	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/bzip2-1.0.6 -f Makefile-libbz2_so
+	@make -j$(CONFIG_PARALLEL_JOBS) CFLAGS="-fPIC" CXXFLAGS="-fPIC" -C $(BUILD_DIR)/bzip2-1.0.6 -f Makefile-libbz2_so
 	@make clean -C $(BUILD_DIR)/bzip2-1.0.6
-	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/bzip2-1.0.6
-	@make -j$(CONFIG_PARALLEL_JOBS) PREFIX=$(TOOLS_DIR) install -C $(BUILD_DIR)/bzip2-1.0.6
+	@make -j$(CONFIG_PARALLEL_JOBS) CFLAGS="-fPIC" CXXFLAGS="-fPIC" -C $(BUILD_DIR)/bzip2-1.0.6
+	@make -j$(CONFIG_PARALLEL_JOBS) CFLAGS="-fPIC" CXXFLAGS="-fPIC" PREFIX=$(TOOLS_DIR) install -C $(BUILD_DIR)/bzip2-1.0.6
 	@rm -rf $(BUILD_DIR)/bzip2-1.0.6
 	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 

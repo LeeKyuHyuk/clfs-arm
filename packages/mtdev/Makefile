@@ -1,7 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
 NAME := mtdev
-SOURCE := $(SOURCES_DIR)/mtdev-1.1.5.tar.bz2
+SOURCE := $(PACKAGES_DIR)/mtdev/mtdev-1.1.5.tar.bz2
 SOURCE_URL := http://bitmath.org/code/mtdev/mtdev-1.1.5.tar.bz2
 MD5 := 52c9610b6002f71d1642dc1a1cca5ec1
 
@@ -18,6 +18,7 @@ system:
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
+	@patch -Np0 -i $(PACKAGES_DIR)/mtdev/mtdev-aarch64-system-support.patch -d $(BUILD_DIR)/mtdev-1.1.5	
 	@( cd $(BUILD_DIR)/mtdev-1.1.5 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
 	ac_cv_lbl_unaligned_fail=yes \

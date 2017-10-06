@@ -1,0 +1,37 @@
+Signed-off-by: KyuHyuk Lee <lee@kyuhyuk.kr>
+
+--- config-aux/config.sub.orig	2012-02-21 00:04:39.000000000 +0900
++++ config-aux/config.sub	2017-10-06 21:38:53.840895386 +0900
+@@ -247,6 +247,7 @@
+ 	# Some are omitted here because they have special meanings below.
+ 	1750a | 580 \
+ 	| a29k \
++	| aarch64 | aarch64_be \
+ 	| alpha | alphaev[4-8] | alphaev56 | alphaev6[78] | alphapca5[67] \
+ 	| alpha64 | alpha64ev[4-8] | alpha64ev56 | alpha64ev6[78] | alpha64pca5[67] \
+ 	| am33_2.0 \
+@@ -355,6 +356,7 @@
+ 	# Recognize the basic CPU types with company name.
+ 	580-* \
+ 	| a29k-* \
++	| aarch64-* | aarch64_be-* \
+ 	| alpha-* | alphaev[4-8]-* | alphaev56-* | alphaev6[78]-* \
+ 	| alpha64-* | alpha64ev[4-8]-* | alpha64ev56-* | alpha64ev6[78]-* \
+ 	| alphapca5[67]-* | alpha64pca5[67]-* | arc-* \
+
+--- config-aux/config.guess.orig	2012-02-21 00:04:39.000000000 +0900
++++ config-aux/config.guess	2017-10-06 21:38:24.583133581 +0900
+@@ -863,6 +863,13 @@
+     i*86:Minix:*:*)
+ 	echo ${UNAME_MACHINE}-pc-minix
+ 	exit ;;
++    aarch64:Linux:*:*)
++	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
++	exit ;;
++    aarch64_be:Linux:*:*)
++	UNAME_MACHINE=aarch64_be
++	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
++	exit ;;
+     alpha:Linux:*:*)
+ 	case `sed -n '/^cpu model/s/^.*: \(.*\)/\1/p' < /proc/cpuinfo` in
+ 	  EV5)   UNAME_MACHINE=alphaev5 ;;

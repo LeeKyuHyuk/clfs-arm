@@ -89,6 +89,10 @@ if [ "$CONFIG_NAME" = "raspberrypi3" ] ; then \
 		echo "# fixes rpi3 ttyAMA0 serial console" >> $IMAGES_DIR/rpi-firmware/config.txt ; \
 		echo "dtoverlay=pi3-miniuart-bt" >> $IMAGES_DIR/rpi-firmware/config.txt ; \
 	fi ; \
+	if ! grep -qE '^arm_control=0x200' "$IMAGES_DIR/rpi-firmware/config.txt" ; then \
+		$STEP "Adding 'arm_control=0x200' to config.txt (Enable 64bits support)." ; \
+		echo "arm_control=0x200" >> $IMAGES_DIR/rpi-firmware/config.txt ; \
+	fi ; \
 fi;
 echo "dwc_otg.lpm_enable=0 console=ttyAMA0,115200 root=/dev/mmcblk0p2 rootfstype=ext4 elevator=deadline fsck.repair=yes rootwait ip=dhcp rootdelay=5" > $IMAGES_DIR/rpi-firmware/cmdline.txt
 $TOOLS_DIR/usr/bin/genimage \

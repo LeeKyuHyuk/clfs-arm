@@ -38,7 +38,6 @@ staging:
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/glibc-2.25/glibc-build
 	@sed '/test-installation/s@$(PERL)@echo not running@' -i $(BUILD_DIR)/glibc-2.25/Makefile
 	@make -j$(CONFIG_PARALLEL_JOBS) install_root=$(SYSROOT_DIR) install -C $(BUILD_DIR)/glibc-2.25/glibc-build
-	@echo "#include <gnu/stubs-hard.h>" > $(SYSROOT_DIR)/usr/include/gnu/stubs.h
 	@cp -v $(BUILD_DIR)/glibc-2.25/nscd/nscd.conf $(SYSROOT_DIR)/etc/nscd.conf
 	@mkdir -pv $(SYSROOT_DIR)/usr/lib/tmpfiles.d $(SYSROOT_DIR)/lib/systemd/system
 	@install -v -Dm644 $(BUILD_DIR)/glibc-2.25/nscd/nscd.tmpfiles $(SYSROOT_DIR)/usr/lib/tmpfiles.d/nscd.conf

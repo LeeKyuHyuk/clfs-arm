@@ -1,6 +1,4 @@
 export SHELL = bash
-export CONFIG_MODE := arm
-export CONFIG_TARGET := arm-linux-gnueabihf
 export CONFIG_HOSTNAME := clfs-arm
 export CONFIG_ROOT_PASSWD := clfs
 export CONFIG_LOCAL_TIMEZONE := Asia/Seoul
@@ -19,7 +17,6 @@ export TOOLCHAIN_DEPENDENCIES := $(WORKSPACE_DIR)/.toolchain.packages
 export SYSTEM_DEPENDENCIES := $(WORKSPACE_DIR)/.system.packages
 export BUILD_DIR := $(OUTPUT_DIR)/build
 export TOOLS_DIR := $(OUTPUT_DIR)/tools
-export SYSROOT_DIR := $(TOOLS_DIR)/$(CONFIG_TARGET)/sysroot
 export ROOTFS_DIR := $(OUTPUT_DIR)/rootfs
 export IMAGES_DIR := $(OUTPUT_DIR)/images
 export KERNEL_DIR := $(OUTPUT_DIR)/kernel

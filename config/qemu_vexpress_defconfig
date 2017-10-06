@@ -5,6 +5,7 @@ export CONFIG_ABI := aapcs-linux
 export CONFIG_CPU := cortex-a9
 export CONFIG_FPU := vfpv3-d16
 export CONFIG_FLOAT := hard
+export CONFIG_LINUX_ARCH := arm
 export CONFIG_LINUX_KERNEL_SOURCE := linux-4.11.7.tar.gz
 export CONFIG_LINUX_KERNEL_SOURCE_URL := https://www.kernel.org/pub/linux/kernel/v4.x/linux-4.11.7.tar.gz
 export CONFIG_LINUX_KERNEL_SOURCE_MD5 := 9cc718062918845dcc009a276c598a6a

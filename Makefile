@@ -1,6 +1,8 @@
 include settings.mk
 -include .config.mk
 
+export SYSROOT_DIR := $(TOOLS_DIR)/$(CONFIG_TARGET)/sysroot
+
 START_BUILD_TIME := $(shell date +%s)
 define PRINT_BUILD_TIME
 @time_end=`date +%s` ; time_exec=`awk -v "TS=${START_BUILD_TIME}" -v "TE=$$time_end" 'BEGIN{TD=TE-TS;printf "%02dh:%02dm:%02ds\n",TD/(60*60)%24,TD/(60)%60,TD%60}'` ; $(STEP) "'$@' Build Time: $${time_exec}"

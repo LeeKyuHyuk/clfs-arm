@@ -5,6 +5,7 @@ export CONFIG_ABI := aapcs-linux
 export CONFIG_CPU := cortex-a7
 export CONFIG_FPU := neon-vfpv4
 export CONFIG_FLOAT := hard
+export CONFIG_LINUX_ARCH := arm
 export CONFIG_LINUX_KERNEL_SOURCE := raspberrypi-kernel_1.20170811-1.tar.gz
 export CONFIG_LINUX_KERNEL_SOURCE_URL := https://github.com/raspberrypi/linux/archive/raspberrypi-kernel_1.20170811-1.tar.gz
 export CONFIG_LINUX_KERNEL_SOURCE_MD5 := cc82ef0ca86c90a8ec59251fd2a47b6c

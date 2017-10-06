@@ -6,6 +6,18 @@ SOURCE := $(SOURCES_DIR)/gcc-7.2.0.tar.xz
 SOURCE_URL := http://ftpmirror.gnu.org/gnu/gcc/gcc-7.2.0/gcc-7.2.0.tar.xz
 MD5 := ff370482573133a7fcdd96cd2f552292
 
+ifneq ($(CONFIG_FPU),)
+TARGET_GCC_CONFIG += --with-fpu=$(CONFIG_FPU)
+endif
+
+ifneq ($(CONFIG_FLOAT),)
+TARGET_GCC_CONFIG += --with-float=$(CONFIG_FLOAT)
+endif
+
+ifneq ($(CONFIG_MODE),)
+TARGET_GCC_CONFIG += --with-mode=$(CONFIG_MODE)
+endif
+
 toolchain:
 	@$(STEP) "gcc 7.2.0 - initial"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
@@ -60,9 +72,7 @@ toolchain:
 	--disable-decimal-float \
 	--with-abi="$(CONFIG_ABI)" \
 	--with-cpu=$(CONFIG_CPU) \
-	--with-fpu=$(CONFIG_FPU) \
-	--with-float=$(CONFIG_FLOAT) \
-	--with-mode=$(CONFIG_MODE) \
+	$(TARGET_GCC_CONFIG) \
 	--enable-languages=c \
 	--disable-shared \
 	--without-headers \

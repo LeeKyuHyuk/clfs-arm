@@ -21,8 +21,14 @@ staging:
 	@install -dv -m 0755 $(SYSROOT_DIR)/bin
 	@install -dv -m 0755 $(SYSROOT_DIR)/sbin
 	@install -dv -m 0755 $(SYSROOT_DIR)/lib
-	@ln -snvf lib $(SYSROOT_DIR)/lib32
-	@ln -snvf lib $(SYSROOT_DIR)/usr/lib32
+	@if [[ "$(CONFIG_LINUX_ARCH)" = "arm" ]] ; then \
+		ln -snvf lib $(SYSROOT_DIR)/lib32 ; \
+		ln -snvf lib $(SYSROOT_DIR)/usr/lib32 ; \
+	fi;
+	@if [[ "$(CONFIG_LINUX_ARCH)" = "arm64" ]] ; then \
+		ln -snvf lib $(SYSROOT_DIR)/lib64 ; \
+		ln -snvf lib $(SYSROOT_DIR)/usr/lib64 ; \
+	fi;
 	@install -dv -m 0755 $(SYSROOT_DIR)/usr/include
 
 system:

@@ -14,6 +14,10 @@ mkdir -v $ROOTFS_DIR/var/{log,mail,spool}
 ln -svf ../run $ROOTFS_DIR/var/run
 ln -svf ../run/lock $ROOTFS_DIR/var/lock
 mkdir -pv $ROOTFS_DIR/var/{opt,cache,lib/{color,misc,locate},local}
+if [ "$CONFIG_LINUX_ARCH" = "arm64" ] ; then \
+  ln -snvf lib $ROOTFS_DIR/lib64 ; \
+  ln -snvf lib $ROOTFS_DIR/usr/lib64 ; \
+fi;
 
 $STEP "Creating Essential Files and Symlinks"
 ln -sv /proc/self/mounts $ROOTFS_DIR/etc/mtab

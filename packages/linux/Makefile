@@ -8,8 +8,8 @@ staging:
 	@mkdir -p $(BUILD_DIR)/linux-header
 	@tar -xzf $(SOURCES_DIR)/$(CONFIG_LINUX_KERNEL_SOURCE) --strip-components=1 -C $(BUILD_DIR)/linux-header
 	@make mrproper -C $(BUILD_DIR)/linux-header
-	@make -j$(CONFIG_PARALLEL_JOBS) ARCH=$(CONFIG_MODE) headers_check -C $(BUILD_DIR)/linux-header
-	@make -j$(CONFIG_PARALLEL_JOBS) ARCH=$(CONFIG_MODE) INSTALL_HDR_PATH=$(SYSROOT_DIR)/usr headers_install -C $(BUILD_DIR)/linux-header
+	@make -j$(CONFIG_PARALLEL_JOBS) ARCH=$(CONFIG_LINUX_ARCH) headers_check -C $(BUILD_DIR)/linux-header
+	@make -j$(CONFIG_PARALLEL_JOBS) ARCH=$(CONFIG_LINUX_ARCH) INSTALL_HDR_PATH=$(SYSROOT_DIR)/usr headers_install -C $(BUILD_DIR)/linux-header
 	@rm -rf $(BUILD_DIR)/linux-header
 
 system:
@@ -18,8 +18,8 @@ system:
 	@mkdir -p $(BUILD_DIR)/linux-header/dest
 	@tar -xzf $(SOURCES_DIR)/$(CONFIG_LINUX_KERNEL_SOURCE) --strip-components=1 -C $(BUILD_DIR)/linux-header
 	@make mrproper -C $(BUILD_DIR)/linux-header
-	@make -j$(CONFIG_PARALLEL_JOBS) ARCH=$(CONFIG_MODE) headers_check -C $(BUILD_DIR)/linux-header
-	@make -j$(CONFIG_PARALLEL_JOBS) ARCH=$(CONFIG_MODE) INSTALL_HDR_PATH=$(BUILD_DIR)/linux-header/dest headers_install -C $(BUILD_DIR)/linux-header
+	@make -j$(CONFIG_PARALLEL_JOBS) ARCH=$(CONFIG_LINUX_ARCH) headers_check -C $(BUILD_DIR)/linux-header
+	@make -j$(CONFIG_PARALLEL_JOBS) ARCH=$(CONFIG_LINUX_ARCH) INSTALL_HDR_PATH=$(BUILD_DIR)/linux-header/dest headers_install -C $(BUILD_DIR)/linux-header
 	@find $(BUILD_DIR)/linux-header/dest/include \( -name .install -o -name ..install.cmd \) -delete
 	@mkdir -pv $(ROOTFS_DIR)/usr/include
 	@cp -rv $(BUILD_DIR)/linux-header/dest/include/* $(ROOTFS_DIR)/usr/include
@@ -31,8 +31,8 @@ kernel:
 	@mkdir -p $(BUILD_DIR)/linux-kernel
 	@tar -xzf $(SOURCES_DIR)/$(CONFIG_LINUX_KERNEL_SOURCE) --strip-components=1 -C $(BUILD_DIR)/linux-kernel
 	@make mrproper -C $(BUILD_DIR)/linux-kernel
-	@make -j$(CONFIG_PARALLEL_JOBS) ARCH=$(CONFIG_MODE) headers_check -C $(BUILD_DIR)/linux-kernel
-	@make -j$(CONFIG_PARALLEL_JOBS) ARCH=$(CONFIG_MODE) CROSS_COMPILE="$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-" $(CONFIG_LINUX_KERNEL_DEFCONFIG)_defconfig -C $(BUILD_DIR)/linux-kernel
+	@make -j$(CONFIG_PARALLEL_JOBS) ARCH=$(CONFIG_LINUX_ARCH) headers_check -C $(BUILD_DIR)/linux-kernel
+	@make -j$(CONFIG_PARALLEL_JOBS) ARCH=$(CONFIG_LINUX_ARCH) CROSS_COMPILE="$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-" $(CONFIG_LINUX_KERNEL_DEFCONFIG)_defconfig -C $(BUILD_DIR)/linux-kernel
 	@sed -i -e "/\\<CONFIG_KERNEL_GZIP\\>/d" $(BUILD_DIR)/linux-kernel/.config
 	@echo 'CONFIG_KERNEL_GZIP=y' >> $(BUILD_DIR)/linux-kernel/.config
 	@sed -i -e "/\\<CONFIG_KERNEL_XZ\\>/d" $(BUILD_DIR)/linux-kernel/.config
@@ -47,14 +47,14 @@ kernel:
 	@echo 'CONFIG_DEVTMPFS_MOUNT=y' >> $(BUILD_DIR)/linux-kernel/.config
 	@sed -i -e "/\\<CONFIG_INOTIFY_USER\\>/d" $(BUILD_DIR)/linux-kernel/.config
 	@echo 'CONFIG_INOTIFY_USER=y' >> $(BUILD_DIR)/linux-kernel/.config
-	@make -j$(CONFIG_PARALLEL_JOBS) ARCH=$(CONFIG_MODE) CROSS_COMPILE="$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-" zImage modules -C $(BUILD_DIR)/linux-kernel
+	@make -j$(CONFIG_PARALLEL_JOBS) ARCH=$(CONFIG_LINUX_ARCH) CROSS_COMPILE="$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-" zImage modules -C $(BUILD_DIR)/linux-kernel
 	@for dtb in $(CONFIG_LINUX_KERNEL_INTREE_DTS_NAME) ; do \
-		make -j$(CONFIG_PARALLEL_JOBS) ARCH=$(CONFIG_MODE) CROSS_COMPILE="$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-" $${dtb}.dtb -C $(BUILD_DIR)/linux-kernel ; \
+		make -j$(CONFIG_PARALLEL_JOBS) ARCH=$(CONFIG_LINUX_ARCH) CROSS_COMPILE="$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-" $${dtb}.dtb -C $(BUILD_DIR)/linux-kernel ; \
 	done
 	@if grep -q "CONFIG_MODULES=y" $(BUILD_DIR)/linux-kernel/.config; then \
-		make -j1 ARCH=$(CONFIG_MODE) CROSS_COMPILE="$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-" INSTALL_MOD_PATH=$(ROOTFS_DIR) INSTALL_MOD_STRIP=1 -C $(BUILD_DIR)/linux-kernel modules_install ; \
-		rm -f $(ROOTFS_DIR)/lib/modules/`make -j$(CONFIG_PARALLEL_JOBS) ARCH=$(CONFIG_MODE) CROSS_COMPILE="$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-" INSTALL_MOD_PATH=$(ROOTFS_DIR) INSTALL_MOD_STRIP=1 -C $(BUILD_DIR)/linux-kernel --no-print-directory -s kernelrelease 2>/dev/null`/build ; \
-		rm -f $(ROOTFS_DIR)/lib/modules/`make -j$(CONFIG_PARALLEL_JOBS) ARCH=$(CONFIG_MODE) CROSS_COMPILE="$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-" INSTALL_MOD_PATH=$(ROOTFS_DIR) INSTALL_MOD_STRIP=1 -C $(BUILD_DIR)/linux-kernel --no-print-directory -s kernelrelease 2>/dev/null`/source ; \
+		make -j1 ARCH=$(CONFIG_LINUX_ARCH) CROSS_COMPILE="$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-" INSTALL_MOD_PATH=$(ROOTFS_DIR) INSTALL_MOD_STRIP=1 -C $(BUILD_DIR)/linux-kernel modules_install ; \
+		rm -f $(ROOTFS_DIR)/lib/modules/`make -j$(CONFIG_PARALLEL_JOBS) ARCH=$(CONFIG_LINUX_ARCH) CROSS_COMPILE="$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-" INSTALL_MOD_PATH=$(ROOTFS_DIR) INSTALL_MOD_STRIP=1 -C $(BUILD_DIR)/linux-kernel --no-print-directory -s kernelrelease 2>/dev/null`/build ; \
+		rm -f $(ROOTFS_DIR)/lib/modules/`make -j$(CONFIG_PARALLEL_JOBS) ARCH=$(CONFIG_LINUX_ARCH) CROSS_COMPILE="$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-" INSTALL_MOD_PATH=$(ROOTFS_DIR) INSTALL_MOD_STRIP=1 -C $(BUILD_DIR)/linux-kernel --no-print-directory -s kernelrelease 2>/dev/null`/source ; \
 	fi
 	@if grep -q "CONFIG_DTC=y" $(BUILD_DIR)/linux-kernel/.config; then 	\
 		install -Dv -m 0755 $(BUILD_DIR)/linux-kernel/scripts/dtc/dtc $(TOOLS_DIR)/bin/linux-dtc ;	\

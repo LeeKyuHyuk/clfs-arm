@@ -1,9 +1,18 @@
 include $(SUPPORT_DIR)/functions.mk
 
 NAME := openssl
+TARGET_DEPENDENCIES := zlib
 SOURCE := $(SOURCES_DIR)/openssl-1.0.2k.tar.gz
 SOURCE_URL := https://www.openssl.org/source/openssl-1.0.2k.tar.gz
 MD5 := f965fc0bf01bf882b31314b61391ae65
+
+ifeq ($(CONFIG_LINUX_ARCH),arm)
+LINUX_ARCH = "linux-armv4"
+endif
+
+ifeq ($(CONFIG_LINUX_ARCH),arm64)
+LINUX_ARCH = linux-aarch64
+endif
 
 toolchain:
 	@$(STEP) "openssl 1.0.2k"
@@ -59,12 +68,13 @@ system:
 	ac_cv_c_bigendian=no \
 	CONFIG_SITE=/dev/null \
 	./Configure \
-	linux-armv4 \
+	$(LINUX_ARCH) \
 	--prefix=/usr \
 	--openssldir=/etc/ssl \
 	--libdir=/lib \
 	shared \
 	zlib-dynamic )
+
 	@sed -i -e "s#-march=[-a-z0-9] ##" -e "s#-mcpu=[-a-z0-9] ##g" $(BUILD_DIR)/openssl-1.0.2k/Makefile
 	@sed -i -e "s# build_tests##" $(BUILD_DIR)/openssl-1.0.2k/Makefile
 	@make -j1 -C $(BUILD_DIR)/openssl-1.0.2k

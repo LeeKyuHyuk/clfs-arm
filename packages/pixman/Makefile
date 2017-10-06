@@ -6,6 +6,14 @@ SOURCE := $(SOURCES_DIR)/pixman-0.34.0.tar.gz
 SOURCE_URL := http://cairographics.org/releases/pixman-0.34.0.tar.gz
 MD5 := e80ebae4da01e77f68744319f01d52a3
 
+ifeq ($(CONFIG_LINUX_ARCH),arm)
+TARGET_PIXMAN_CONFIG = --enable-arm-simd --enable-arm-neon
+endif
+
+ifeq ($(CONFIG_LINUX_ARCH),arm64)
+TARGET_PIXMAN_CONFIG = --disable-arm-simd --disable-arm-neon
+endif
+
 toolchain:
 	@$(STEP) "pixman 0.34.0"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
@@ -71,8 +79,7 @@ system:
 	--disable-static \
 	--enable-shared \
 	--disable-gtk \
-	--enable-arm-simd \
-	--enable-arm-neon \
+	$(TARGET_PIXMAN_CONFIG) \
 	--disable-arm-iwmmxt )
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/pixman-0.34.0
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/pixman-0.34.0

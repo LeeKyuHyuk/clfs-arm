@@ -170,11 +170,11 @@ settings:
 	@$(SCRIPTS_DIR)/settings.sh
 
 run:
-	@if ! [[ "$(CONFIG_NAME)" = "qemu_vexpress" ]] ; then \
-		$(ERROR) "QEMU Emulate only supports 'qemu_vexpress'." ; \
+	@if [[ "$(CONFIG_NAME)" = "qemu_vexpress" ]] ; then \
+		qemu-system-arm -M vexpress-a9 -smp 4 -m 1G -kernel $(KERNEL_DIR)/zImage -dtb $(KERNEL_DIR)/vexpress-v2p-ca9.dtb -drive file=$(IMAGES_DIR)/rootfs.ext2,if=sd,format=raw -append "console=ttyAMA0,115200 root=/dev/mmcblk0" -serial stdio -netdev user,id=eth0 -device virtio-net-device,netdev=eth0 -show-cursor ; \
 		exit 1 ; \
 	fi;
-	@qemu-system-arm -M vexpress-a9 -smp 4 -m 1G -kernel $(KERNEL_DIR)/zImage -dtb $(KERNEL_DIR)/vexpress-v2p-ca9.dtb -drive file=$(IMAGES_DIR)/rootfs.ext2,if=sd,format=raw -append "console=ttyAMA0,115200 root=/dev/mmcblk0" -serial stdio -netdev user,id=eth0 -device virtio-net-device,netdev=eth0 -show-cursor
+	@$(ERROR) "QEMU Emulate only supports 'qemu_vexpress'."
 
 flash:
 	@chmod 755 $(DEVICE_DIR)/raspberrypi/image-usb-stick

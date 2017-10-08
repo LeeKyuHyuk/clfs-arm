@@ -32,7 +32,12 @@ kernel:
 	@tar -xzf $(SOURCES_DIR)/$(CONFIG_LINUX_KERNEL_SOURCE) --strip-components=1 -C $(BUILD_DIR)/linux-kernel
 	@make mrproper -C $(BUILD_DIR)/linux-kernel
 	@make -j$(CONFIG_PARALLEL_JOBS) ARCH=$(CONFIG_LINUX_ARCH) headers_check -C $(BUILD_DIR)/linux-kernel
-	@make -j$(CONFIG_PARALLEL_JOBS) ARCH=$(CONFIG_LINUX_ARCH) CROSS_COMPILE="$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-" $(CONFIG_LINUX_KERNEL_DEFCONFIG)_defconfig -C $(BUILD_DIR)/linux-kernel
+	@if ! [ "$(CONFIG_LINUX_KERNEL_DEFCONFIG)" = "" ] ; then \
+		make -j$(CONFIG_PARALLEL_JOBS) ARCH=$(CONFIG_LINUX_ARCH) CROSS_COMPILE="$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-" $(CONFIG_LINUX_KERNEL_DEFCONFIG)_defconfig -C $(BUILD_DIR)/linux-kernel ; \
+	fi;
+	@if ! [ "$(CONFIG_LINUX_KERNEL_CUSTOM_DEFCONFIG)" = "" ] ; then \
+		cp -v $(CONFIG_LINUX_KERNEL_CUSTOM_DEFCONFIG) $(BUILD_DIR)/linux-kernel/.config ; \
+	fi;
 	@sed -i -e "/\\<CONFIG_KERNEL_GZIP\\>/d" $(BUILD_DIR)/linux-kernel/.config
 	@echo 'CONFIG_KERNEL_GZIP=y' >> $(BUILD_DIR)/linux-kernel/.config
 	@sed -i -e "/\\<CONFIG_KERNEL_XZ\\>/d" $(BUILD_DIR)/linux-kernel/.config

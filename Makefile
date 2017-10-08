@@ -89,6 +89,7 @@ toolchain:
 system:
 	@make check
 	@make system -C $(SUPPORT_DIR)/systemd # Essential System Package
+	@make system -C $(PACKAGES_DIR)/ntp
 	@make system -C $(PACKAGES_DIR)/libxml2
 	@make system -C $(PACKAGES_DIR)/libpng
 	@make system -C $(PACKAGES_DIR)/libpthread-stubs

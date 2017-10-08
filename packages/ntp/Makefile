@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := ntp
+TARGET_DEPENDENCIES := libcap wget openssl
 SOURCE := $(SOURCES_DIR)/ntp-4.2.8p9.tar.gz
 SOURCE_URL := https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p9.tar.gz
 MD5 := 857452b05f5f2e033786f77ade1974ed
@@ -15,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "ntp 4.2.8p9"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/ntp-4.2.8p9 && \
 	./configure \
@@ -38,3 +41,4 @@ system:
 	@mkdir -p $(ROOTFS_DIR)/etc/systemd/system/multi-user.target.wants
 	@ln -fs ../../../../usr/lib/systemd/system/ntpd.service $(ROOTFS_DIR)/etc/systemd/system/multi-user.target.wants/ntpd.service
 	@rm -rf $(BUILD_DIR)/ntp-4.2.8p9
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := p11-kit
+TARGET_DEPENDENCIES := cacerts libtasn1 libffi
 SOURCE := $(SOURCES_DIR)/p11-kit-0.23.8.tar.gz
 SOURCE_URL := https://github.com/p11-glue/p11-kit/releases/download/0.23.8/p11-kit-0.23.8.tar.gz
 MD5 := 3caf26d841df1527d52549e7adc62966
@@ -15,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "p11-kit 0.23.8"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/p11-kit-0.23.8 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -46,3 +49,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/p11-kit-0.23.8
 	@rm -rf $(BUILD_DIR)/p11-kit-0.23.8
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

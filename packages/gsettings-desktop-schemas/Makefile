@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := gsettings-desktop-schemas
+TARGET_DEPENDENCIES := glib
 SOURCE := $(SOURCES_DIR)/gsettings-desktop-schemas-3.24.0.tar.xz
 SOURCE_URL := ftp://ftp.gnome.org/pub/gnome/sources/gsettings-desktop-schemas/3.24/gsettings-desktop-schemas-3.24.0.tar.xz
 MD5 := cc3465621bea4ff6de915812fadc5a8e
@@ -15,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "gsettings-desktop-schemas 3.24.0"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@sed -i -r 's:"(/system):"/org/gnome\1:g' $(BUILD_DIR)/gsettings-desktop-schemas-3.24.0/schemas/*.in
 	@( cd $(BUILD_DIR)/gsettings-desktop-schemas-3.24.0 && \
@@ -46,3 +49,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/gsettings-desktop-schemas-3.24.0
 	@rm -rf $(BUILD_DIR)/gsettings-desktop-schemas-3.24.0
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

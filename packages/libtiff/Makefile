@@ -1,10 +1,10 @@
 include $(SUPPORT_DIR)/functions.mk
 
-NAME := libsoup
-TARGET_DEPENDENCIES := glib-networking libxml2 sqlite curl
-SOURCE := $(SOURCES_DIR)/libsoup-2.58.2.tar.xz
-SOURCE_URL := ftp://ftp.gnome.org/pub/gnome/sources/libsoup/2.58/libsoup-2.58.2.tar.xz
-MD5 := eb33adb459c2283efc5c7d09ccdbbcfc
+NAME := libtiff
+TARGET_DEPENDENCIES := libjpeg-turbo
+SOURCE := $(SOURCES_DIR)/tiff-4.0.8.tar.gz
+SOURCE_URL := http://download.osgeo.org/libtiff/tiff-4.0.8.tar.gz
+MD5 := 2a7d1c1318416ddf36d5f6fa4600069b
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -15,11 +15,11 @@ system:
 	@export RANLIB=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-ranlib
 	@export READELF=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-readelf
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
-	@$(STEP) "libsoup 2.58.2"
+	@$(STEP) "libtiff 4.0.8"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
-	@( cd $(BUILD_DIR)/libsoup-2.58.2 && \
+	@( cd $(BUILD_DIR)/tiff-4.0.8 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
 	ac_cv_lbl_unaligned_fail=yes \
 	ac_cv_func_mmap_fixed_mapped=yes \
@@ -43,9 +43,9 @@ system:
 	--program-prefix="" \
 	--disable-static \
 	--enable-shared )
-	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/libsoup-2.58.2
-	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/libsoup-2.58.2
+	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/tiff-4.0.8
+	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/tiff-4.0.8
 	@$(call dependency_libs_patch)
-	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/libsoup-2.58.2
-	@rm -rf $(BUILD_DIR)/libsoup-2.58.2
+	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/tiff-4.0.8
+	@rm -rf $(BUILD_DIR)/tiff-4.0.8
 	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

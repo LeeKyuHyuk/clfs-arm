@@ -1,12 +1,22 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := nspr
 SOURCE := $(SOURCES_DIR)/nspr-4.16.tar.gz
 SOURCE_URL := https://archive.mozilla.org/pub/nspr/releases/v4.16/src/nspr-4.16.tar.gz
 MD5 := 42fd8963a4b394f62d43ba604f03fab7
 
+ifeq ($(shell uname -m),x86_64)
+HOST_64BIT_OPTION = --enable-64bit
+endif
+
+ifeq ($(CONFIG_LINUX_ARCH),arm64)
+TARGET_64BIT_OPTION = --enable-64bit
+endif
+
 toolchain:
 	@$(STEP) "nspr 4.16"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/nspr-4.16/nspr && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -26,10 +36,12 @@ toolchain:
 	--enable-shared \
 	--disable-static \
 	--with-mozilla \
-	--with-pthreads )
+	--with-pthreads \
+	$(HOST_64BIT_OPTION) )
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/nspr-4.16/nspr
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/nspr-4.16/nspr
 	@rm -rf $(BUILD_DIR)/nspr-4.16
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -42,6 +54,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "nspr 4.16"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/nspr-4.16/nspr && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -68,9 +81,11 @@ system:
 	--disable-static \
 	--enable-shared \
 	--with-mozilla \
-	--with-pthreads )
+	--with-pthreads \
+	$(TARGET_64BIT_OPTION) )
 	@make -j$(CONFIG_PARALLEL_JOBS) LIBRARY= -C $(BUILD_DIR)/nspr-4.16/nspr
 	@make -j$(CONFIG_PARALLEL_JOBS) LIBRARY= DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/nspr-4.16/nspr
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) LIBRARY= DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/nspr-4.16/nspr
 	@rm -rf $(BUILD_DIR)/nspr-4.16
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

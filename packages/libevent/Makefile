@@ -1,10 +1,10 @@
 include $(SUPPORT_DIR)/functions.mk
 
-NAME := libsoup
-TARGET_DEPENDENCIES := glib-networking libxml2 sqlite curl
-SOURCE := $(SOURCES_DIR)/libsoup-2.58.2.tar.xz
-SOURCE_URL := ftp://ftp.gnome.org/pub/gnome/sources/libsoup/2.58/libsoup-2.58.2.tar.xz
-MD5 := eb33adb459c2283efc5c7d09ccdbbcfc
+NAME := libevent
+TARGET_DEPENDENCIES := openssl
+SOURCE := $(SOURCES_DIR)/libevent-2.1.8-stable.tar.gz
+SOURCE_URL := https://github.com/libevent/libevent/releases/download/release-2.1.8-stable/libevent-2.1.8-stable.tar.gz
+MD5 := f3eeaed018542963b7d2416ef1135ecc
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -15,11 +15,11 @@ system:
 	@export RANLIB=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-ranlib
 	@export READELF=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-readelf
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
-	@$(STEP) "libsoup 2.58.2"
+	@$(STEP) "libevent 2.1.8"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
-	@( cd $(BUILD_DIR)/libsoup-2.58.2 && \
+	@( cd $(BUILD_DIR)/libevent-2.1.8-stable && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
 	ac_cv_lbl_unaligned_fail=yes \
 	ac_cv_func_mmap_fixed_mapped=yes \
@@ -43,9 +43,9 @@ system:
 	--program-prefix="" \
 	--disable-static \
 	--enable-shared )
-	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/libsoup-2.58.2
-	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/libsoup-2.58.2
+	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/libevent-2.1.8-stable
+	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/libevent-2.1.8-stable
 	@$(call dependency_libs_patch)
-	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/libsoup-2.58.2
-	@rm -rf $(BUILD_DIR)/libsoup-2.58.2
+	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/libevent-2.1.8-stable
+	@rm -rf $(BUILD_DIR)/libevent-2.1.8-stable
 	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := gcr
+TARGET_DEPENDENCIES := glib libgcrypt libtasn1 p11-kit libgtk3 libxslt
 SOURCE := $(SOURCES_DIR)/gcr-3.20.0.tar.xz
 SOURCE_URL := ftp://ftp.gnome.org/pub/gnome/sources/gcr/3.20/gcr-3.20.0.tar.xz
 MD5 := 4314bf89eac293dd0a9d806593ff1b35
@@ -15,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "gcr 3.20.0"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@sed -i -r 's:"(/desktop):"/org/gnome\1:' $(BUILD_DIR)/gcr-3.20.0/schema/*.xml
 	@( cd $(BUILD_DIR)/gcr-3.20.0 && \
@@ -47,3 +50,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/gcr-3.20.0
 	@rm -rf $(BUILD_DIR)/gcr-3.20.0
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

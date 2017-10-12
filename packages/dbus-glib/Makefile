@@ -1,5 +1,8 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := dbus-glib
+HOST_DEPENDENCIES := dbus glib
+TARGET_DEPENDENCIES := dbus glib
 SOURCE := $(SOURCES_DIR)/dbus-glib-0.108.tar.gz
 SOURCE_URL := https://dbus.freedesktop.org/releases/dbus-glib/dbus-glib-0.108.tar.gz
 MD5 := a66a613705870752ca9786e0359aea97
@@ -7,6 +10,7 @@ MD5 := a66a613705870752ca9786e0359aea97
 toolchain:
 	@$(STEP) "dbus-glib 0.108"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/dbus-glib-0.108 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -33,6 +37,7 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/dbus-glib-0.108
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/dbus-glib-0.108
 	@rm -rf $(BUILD_DIR)/dbus-glib-0.108
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -45,6 +50,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "dbus-glib 0.108"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@$(TOOLS_DIR)/bin/dbus-daemon --introspect > $(BUILD_DIR)/dbus-glib-0.108/introspect.xml
 	@( cd $(BUILD_DIR)/dbus-glib-0.108 && \
@@ -83,3 +89,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/dbus-glib-0.108
 	@rm -rf $(BUILD_DIR)/dbus-glib-0.108
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := webkitgtk
+TARGET_DEPENDENCIES := cairo enchant gst-plugins-base libgtk2 libgtk3 icu libgudev libsecret libsoup mesa sqlite hicolor-icon-theme libnotify harfbuzz libwebp
 SOURCE := $(SOURCES_DIR)/webkitgtk-2.16.6.tar.xz
 SOURCE_URL := https://webkitgtk.org/releases/webkitgtk-2.16.6.tar.xz
 MD5 := 0e2d142a586e4ff79cf0324f4fdbf20c
@@ -15,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "webkitgtk 2.16.6"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@sed -i 's/unsigned short/char16_t/' $(BUILD_DIR)/webkitgtk-2.16.6/Source/JavaScriptCore/API/JSStringRef.h $(BUILD_DIR)/webkitgtk-2.16.6/Source/WebKit2/Shared/API/c/WKString.h
 	@sed -i '/stdbool.h/ a#include <uchar.h>' $(BUILD_DIR)/webkitgtk-2.16.6/Source/JavaScriptCore/API/JSBase.h
@@ -44,6 +47,7 @@ system:
 	-DENABLE_MINIBROWSER=ON \
 	-DENABLE_SPELLCHECK=ON \
 	-DPORT=GTK \
+	-DUSE_LIBSECRET=ON \
 	-DUSE_LIBNOTIFY=ON \
 	-DUSE_LIBHYPHEN=OFF \
 	-DCMAKE_INSTALL_PREFIX=/usr \
@@ -61,3 +65,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/webkitgtk-2.16.6/build
 	@rm -rf $(BUILD_DIR)/webkitgtk-2.16.6
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

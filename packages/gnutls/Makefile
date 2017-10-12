@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := gnutls
+TARGET_DEPENDENCIES := nettle cacerts libtasn1 p11-kit
 SOURCE := $(SOURCES_DIR)/gnutls-3.6.0.tar.xz
 SOURCE_URL := https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.0.tar.xz
 MD5 := 296f8d61333851b9326bd18484e6135e
@@ -15,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "gnutls 3.6.0"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/gnutls-3.6.0 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -47,3 +50,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/gnutls-3.6.0
 	@rm -rf $(BUILD_DIR)/gnutls-3.6.0
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

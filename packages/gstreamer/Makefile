@@ -1,33 +1,10 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := gstreamer
+TARGET_DEPENDENCIES := glib
 SOURCE := $(SOURCES_DIR)/gstreamer-1.12.2.tar.xz
 SOURCE_URL := https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.12.2.tar.xz
 MD5 := 4748860621607ffd96244fb79c86c238
-
-toolchain:
-	@$(STEP) "gstreamer 1.12.2"
-	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
-	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
-	@( cd $(BUILD_DIR)/gstreamer-1.12.2 && \
-	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
-	PKG_CONFIG_SYSROOT_DIR="/" \
-	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
-	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
-	PKG_CONFIG_LIBDIR="$(TOOLS_DIR)/lib/pkgconfig:$(TOOLS_DIR)/share/pkgconfig" \
-	CPPFLAGS="-I$(TOOLS_DIR)/include" \
-	CFLAGS="-O2 -I$(TOOLS_DIR)/include" \
-	CXXFLAGS="-O2 -I$(TOOLS_DIR)/include" \
-	LDFLAGS="-L$(TOOLS_DIR)/lib -Wl,-rpath,$(TOOLS_DIR)/lib" \
-	CONFIG_SITE=/dev/null \
-	./configure \
-	--prefix=$(TOOLS_DIR) \
-	--sysconfdir=$(TOOLS_DIR)/etc \
-	--localstatedir=$(TOOLS_DIR)/var \
-	--enable-shared \
-	--disable-static )
-	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/gstreamer-1.12.2
-	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/gstreamer-1.12.2
-	@rm -rf $(BUILD_DIR)/gstreamer-1.12.2
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -40,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "gstreamer 1.12.2"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/gstreamer-1.12.2 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -87,3 +65,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/gstreamer-1.12.2
 	@rm -rf $(BUILD_DIR)/gstreamer-1.12.2
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := enchant
+TARGET_DEPENDENCIES := glib dbus-glib
 SOURCE := $(SOURCES_DIR)/enchant-1.6.0.tar.gz
 SOURCE_URL := http://www.abisource.com/downloads/enchant/1.6.0/enchant-1.6.0.tar.gz
 MD5 := de11011aff801dc61042828041fb59c7
@@ -15,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "enchant 1.6.0"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/enchant-1.6.0 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -45,3 +48,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/enchant-1.6.0
 	@rm -rf $(BUILD_DIR)/enchant-1.6.0
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

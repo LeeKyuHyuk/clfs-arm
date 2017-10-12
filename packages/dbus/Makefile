@@ -1,6 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
 NAME := dbus
+HOST_DEPENDENCIES := expat
 TARGET_DEPENDENCIES := expat
 SOURCE := $(SOURCES_DIR)/dbus-1.10.22.tar.gz
 SOURCE_URL := https://dbus.freedesktop.org/releases/dbus/dbus-1.10.22.tar.gz
@@ -9,6 +10,7 @@ MD5 := baaa10b7cb49086ad91179a8decfadc5
 toolchain:
 	@$(STEP) "dbus 1.10.22"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/dbus-1.10.22 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -32,6 +34,7 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/dbus-1.10.22
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/dbus-1.10.22
 	@rm -rf $(BUILD_DIR)/dbus-1.10.22
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc

@@ -1,5 +1,8 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := libxslt
+HOST_DEPENDENCIES := libgcrypt libxml2
+TARGET_DEPENDENCIES := libgcrypt libxml2
 SOURCE := $(SOURCES_DIR)/libxslt-1.1.29.tar.gz
 SOURCE_URL := http://xmlsoft.org/sources/libxslt-1.1.29.tar.gz
 MD5 := a129d3c44c022de3b9dcf6d6f288d72e
@@ -7,6 +10,7 @@ MD5 := a129d3c44c022de3b9dcf6d6f288d72e
 toolchain:
 	@$(STEP) "libxslt 1.1.29"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/libxslt-1.1.29 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -31,6 +35,7 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/libxslt-1.1.29
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/libxslt-1.1.29
 	@rm -rf $(BUILD_DIR)/libxslt-1.1.29
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -43,6 +48,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "libxslt 1.1.29"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/libxslt-1.1.29 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -75,3 +81,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/libxslt-1.1.29
 	@rm -rf $(BUILD_DIR)/libxslt-1.1.29
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

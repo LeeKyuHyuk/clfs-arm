@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := libgudev
+TARGET_DEPENDENCIES := glib
 SOURCE := $(SOURCES_DIR)/libgudev-231.tar.xz
 SOURCE_URL := ftp://ftp.gnome.org/pub/gnome/sources/libgudev/231/libgudev-231.tar.xz
 MD5 := 916c10c51ec61131e244c3936bbb2e0c
@@ -15,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "libgudev 231"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/libgudev-231 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -46,3 +49,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/libgudev-231
 	@rm -rf $(BUILD_DIR)/libgudev-231
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

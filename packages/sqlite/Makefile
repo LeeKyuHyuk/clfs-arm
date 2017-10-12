@@ -1,5 +1,6 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := sqlite
 SOURCE := $(SOURCES_DIR)/sqlite-autoconf-3190300.tar.gz
 SOURCE_URL := https://sqlite.org/2017/sqlite-autoconf-3190300.tar.gz
 MD5 := c93070d5bf136ce271db23d2dfbc2435
@@ -15,6 +16,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "sqlite 3190300"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/sqlite-autoconf-3190300 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -49,3 +51,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/sqlite-autoconf-3190300
 	@rm -rf $(BUILD_DIR)/sqlite-autoconf-3190300
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

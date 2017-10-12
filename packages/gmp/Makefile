@@ -43,6 +43,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "gmp 6.1.2"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/gmp-6.1.2 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -73,3 +74,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/gmp-6.1.2
 	@rm -rf $(BUILD_DIR)/gmp-6.1.2
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := granite
+TARGET_DEPENDENCIES := glib libgtk3 gee
 SOURCE := $(SOURCES_DIR)/granite-0.4.1.tar.xz
 SOURCE_URL := https://launchpad.net/granite/0.4/0.4.1/+download/granite-0.4.1.tar.xz
 MD5 := b1002c0488bb9ade0ef89730c4f84393
@@ -15,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "granite 0.4.1"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@mkdir -p $(BUILD_DIR)/granite-0.4.1/build
 	@( cd $(BUILD_DIR)/granite-0.4.1/build && \
@@ -36,3 +39,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install/fast -C $(BUILD_DIR)/granite-0.4.1/build
 	@rm -rf $(BUILD_DIR)/granite-0.4.1
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := glib-networking
+TARGET_DEPENDENCIES := glib gnutls gsettings-desktop-schemas cacerts p11-kit
 SOURCE := $(SOURCES_DIR)/glib-networking-2.54.0.tar.xz
 SOURCE_URL := ftp://ftp.gnome.org/pub/gnome/sources/glib-networking/2.54/glib-networking-2.54.0.tar.xz
 MD5 := 45d2f8b650412c05e45b08aa78a3f735
@@ -15,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "glib-networking 2.54.0"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/glib-networking-2.54.0 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -46,3 +49,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/glib-networking-2.54.0
 	@rm -rf $(BUILD_DIR)/glib-networking-2.54.0
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

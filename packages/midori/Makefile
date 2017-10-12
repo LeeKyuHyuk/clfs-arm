@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := midori
+TARGET_DEPENDENCIES := gcr libnotify webkitgtk librsvg granite
 SOURCE := $(SOURCES_DIR)/midori_0.5.11_all_.tar.bz2
 SOURCE_URL := http://www.midori-browser.org/downloads/midori_0.5.11_all_.tar.bz2
 MD5 := fcc03ef759fce4fe9f2446d9da4a065e
@@ -15,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "Midori 0.5.11"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@patch -Np1 -i $(PACKAGES_DIR)/midori/fix-bug-1492932.patch -d $(BUILD_DIR)/midori-0.5.11
 	@patch -Np1 -i $(PACKAGES_DIR)/midori/gcr-for-x11-only.patch -d $(BUILD_DIR)/midori-0.5.11
@@ -52,3 +55,4 @@ system:
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/midori-0.5.11/build
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install/fast -C $(BUILD_DIR)/midori-0.5.11/build
 	@rm -rf $(BUILD_DIR)/midori-0.5.11
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

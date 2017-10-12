@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := json-glib
+TARGET_DEPENDENCIES := glib
 SOURCE := $(SOURCES_DIR)/json-glib-1.2.8.tar.xz
 SOURCE_URL := ftp://ftp.gnome.org/pub/gnome/sources/json-glib/1.2/json-glib-1.2.8.tar.xz
 MD5 := ff31e7d0594df44318e12facda3d086e
@@ -15,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "json-glib 1.2.8"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/json-glib-1.2.8 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -45,3 +48,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/json-glib-1.2.8
 	@rm -rf $(BUILD_DIR)/json-glib-1.2.8
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

@@ -1,7 +1,8 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := libtasn1
 SOURCE := $(SOURCES_DIR)/libtasn1-4.12.tar.gz
-SOURCE_URL := ftp://ftp.gnu.org/gnu/libtasn1/libtasn1-4.12.tar.gz
+SOURCE_URL := http://ftpmirror.gnu.org/gnu/libtasn1/libtasn1-4.12.tar.gz
 MD5 := 3747a80089dfa3c0bbcf21adfff9968b
 
 system:
@@ -15,6 +16,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "libtasn1 4.12"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/libtasn1-4.12 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -45,3 +47,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/libtasn1-4.12
 	@rm -rf $(BUILD_DIR)/libtasn1-4.12
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

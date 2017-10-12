@@ -83,6 +83,17 @@ toolchain:
 	@make toolchain -C $(PACKAGES_DIR)/libxcb
 	@make toolchain -C $(PACKAGES_DIR)/xorg/lib
 	@make toolchain -C $(PACKAGES_DIR)/curl
+	@make toolchain -C $(PACKAGES_DIR)/dbus
+	@make toolchain -C $(PACKAGES_DIR)/dbus-glib
+	@make toolchain -C $(PACKAGES_DIR)/autoconf-2.13
+	@make toolchain -C $(PACKAGES_DIR)/nspr
+	@make toolchain -C $(PACKAGES_DIR)/nss
+	@make toolchain -C $(PACKAGES_DIR)/cairo
+	@make toolchain -C $(PACKAGES_DIR)/harfbuzz
+	@make toolchain -C $(PACKAGES_DIR)/pango
+	@make toolchain -C $(PACKAGES_DIR)/libcroco
+	@make toolchain -C $(PACKAGES_DIR)/librsvg
+	@make toolchain -C $(PACKAGES_DIR)/vala
 	@make toolchain -C $(PACKAGES_DIR)/cmake
 	$(PRINT_BUILD_TIME)
 
@@ -150,6 +161,41 @@ system:
 	@make system -C $(PACKAGES_DIR)/openjpeg
 	@make system -C $(PACKAGES_DIR)/poppler
 	@make system -C $(PACKAGES_DIR)/epdfview
+	@make system -C $(PACKAGES_DIR)/alsa-lib
+	@make system -C $(PACKAGES_DIR)/json-glib
+	@make system -C $(PACKAGES_DIR)/at-spi2-core
+	@make system -C $(PACKAGES_DIR)/at-spi2-atk
+	@make system -C $(PACKAGES_DIR)/libgtk3
+	@make system -C $(PACKAGES_DIR)/libevent
+	@make system -C $(PACKAGES_DIR)/nspr
+	@make system -C $(PACKAGES_DIR)/sqlite
+	@make system -C $(PACKAGES_DIR)/libtasn1
+	@make system -C $(PACKAGES_DIR)/p11-kit
+	@make system -C $(PACKAGES_DIR)/nss
+	@make system -C $(PACKAGES_DIR)/curl
+	@make system -C $(PACKAGES_DIR)/dbus-glib
+	@make system -C $(PACKAGES_DIR)/gmp
+	@make system -C $(PACKAGES_DIR)/nettle
+	@make system -C $(PACKAGES_DIR)/gnutls
+	@make system -C $(PACKAGES_DIR)/gsettings-desktop-schemas
+	@make system -C $(PACKAGES_DIR)/glib-networking
+	@make system -C $(PACKAGES_DIR)/libsoup
+	@make system -C $(PACKAGES_DIR)/libgpg-error
+	@make system -C $(PACKAGES_DIR)/libgcrypt
+	@make system -C $(PACKAGES_DIR)/libxslt
+	@make system -C $(PACKAGES_DIR)/gcr
+	@make system -C $(PACKAGES_DIR)/enchant
+	@make system -C $(PACKAGES_DIR)/gstreamer
+	@make system -C $(PACKAGES_DIR)/gst-plugins-base
+	@make system -C $(PACKAGES_DIR)/libgudev
+	@make system -C $(PACKAGES_DIR)/libsecret
+	@make system -C $(PACKAGES_DIR)/libnotify
+	@make system -C $(PACKAGES_DIR)/libtiff
+	@make system -C $(PACKAGES_DIR)/libwebp
+	@make system -C $(PACKAGES_DIR)/gee
+	@make system -C $(PACKAGES_DIR)/granite
+	@make system -C $(PACKAGES_DIR)/webkitgtk
+	@make system -C $(PACKAGES_DIR)/midori
 	@make system -C $(PACKAGES_DIR)/glibc
 	$(PRINT_BUILD_TIME)
 

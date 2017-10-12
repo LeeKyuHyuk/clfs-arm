@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := nettle
+TARGET_DEPENDENCIES := gmp openssl
 SOURCE := $(SOURCES_DIR)/nettle-3.3.tar.gz
 SOURCE_URL := ftp://ftp.gnu.org/gnu/nettle/nettle-3.3.tar.gz
 MD5 := 10f969f78a463704ae73529978148dbe
@@ -15,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "nettle 3.3"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/nettle-3.3 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -49,3 +52,4 @@ system:
 	@chmod -v 755 $(ROOTFS_DIR)/usr/lib/libhogweed.so
 	@chmod -v 755 $(ROOTFS_DIR)/usr/lib/libnettle.so
 	@rm -rf $(BUILD_DIR)/nettle-3.3
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

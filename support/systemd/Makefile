@@ -36,11 +36,11 @@ toolchain:
 	@make toolchain -C $(PACKAGES_DIR)/zlib
 	@make toolchain -C $(PACKAGES_DIR)/bzip2
 	@make toolchain -C $(PACKAGES_DIR)/libarchive
+	@make toolchain -C $(PACKAGES_DIR)/openssl
 	@make toolchain -C $(PACKAGES_DIR)/python2
 	@make toolchain -C $(PACKAGES_DIR)/glib
 	@make toolchain -C $(PACKAGES_DIR)/pixman
 	@make toolchain -C $(PACKAGES_DIR)/kmod
-	@make toolchain -C $(PACKAGES_DIR)/openssl
 	@make toolchain -C $(PACKAGES_DIR)/fakeroot
 	@make toolchain -C $(PACKAGES_DIR)/makedevs
 	@make toolchain -C $(PACKAGES_DIR)/mkpasswd

@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := libsecret
+TARGET_DEPENDENCIES := glib libgcrypt
 SOURCE := $(SOURCES_DIR)/libsecret-0.18.5.tar.xz
 SOURCE_URL := ftp://ftp.gnome.org/pub/gnome/sources/libsecret/0.18/libsecret-0.18.5.tar.xz
 MD5 := 2d688825921313da8731313b0a7f394c
@@ -15,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "libsecret 0.18.5"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/libsecret-0.18.5 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -51,3 +54,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/libsecret-0.18.5
 	@rm -rf $(BUILD_DIR)/libsecret-0.18.5
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

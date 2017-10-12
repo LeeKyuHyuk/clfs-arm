@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := at-spi2-atk
+TARGET_DEPENDENCIES := at-spi2-core atk
 SOURCE := $(SOURCES_DIR)/at-spi2-atk-2.24.1.tar.xz
 SOURCE_URL := ftp://ftp.gnome.org/pub/gnome/sources/at-spi2-atk/2.24/at-spi2-atk-2.24.1.tar.xz
 MD5 := 79388fbc4dc7f27394556dd389aeb594
@@ -15,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "at-spi2-atk 2.24.1"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/at-spi2-atk-2.24.1 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -45,3 +48,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/at-spi2-atk-2.24.1
 	@rm -rf $(BUILD_DIR)/at-spi2-atk-2.24.1
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

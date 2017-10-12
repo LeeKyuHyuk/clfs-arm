@@ -1,6 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
 NAME := pango
+HOST_DEPENDENCIES := glib cairo harfbuzz fontconfig freetype
 TARGET_DEPENDENCIES := glib cairo harfbuzz fontconfig freetype
 SOURCE := $(SOURCES_DIR)/pango-1.40.5.tar.xz
 SOURCE_URL := https://ftp.gnome.org/pub/gnome/sources/pango/1.40/pango-1.40.5.tar.xz
@@ -9,6 +10,7 @@ MD5 := 11fb1e94c486507a94c4a905d86e70ce
 toolchain:
 	@$(STEP) "pango 1.40.5"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/pango-1.40.5 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -30,6 +32,7 @@ toolchain:
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/pango-1.40.5
 	@make -j$(CONFIG_PARALLEL_JOBS) install -C $(BUILD_DIR)/pango-1.40.5
 	@rm -rf $(BUILD_DIR)/pango-1.40.5
+	@echo $(NAME) >> $(TOOLCHAIN_DEPENDENCIES)
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc

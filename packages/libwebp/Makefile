@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := libwebp
+TARGET_DEPENDENCIES := libjpeg-turbo libpng libtiff
 SOURCE := $(SOURCES_DIR)/libwebp-0.6.0.tar.gz
 SOURCE_URL := http://downloads.webmproject.org/releases/webp/libwebp-0.6.0.tar.gz
 MD5 := 19a6e926ab1721268df03161b84bb4a0
@@ -15,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "libwebp 0.6.0"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/libwebp-0.6.0 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -50,3 +53,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/libwebp-0.6.0
 	@rm -rf $(BUILD_DIR)/libwebp-0.6.0
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

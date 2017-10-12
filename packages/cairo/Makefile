@@ -10,7 +10,7 @@ toolchain:
 	@$(STEP) "cairo 1.14.10"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
-	@$(call system_dependencies, $(HOST_DEPENDENCIES))
+	@$(call toolchain_dependencies, $(HOST_DEPENDENCIES))
 	@( cd $(BUILD_DIR)/cairo-1.14.10 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
 	PKG_CONFIG_SYSROOT_DIR="/" \

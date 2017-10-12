@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := gst-plugins-base
+TARGET_DEPENDENCIES := gstreamer alsa-lib xlib
 SOURCE := $(SOURCES_DIR)/gst-plugins-base-1.12.2.tar.xz
 SOURCE_URL := https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.12.2.tar.xz
 MD5 := 77f5379c4ca677616b415e3b3ff95578
@@ -15,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "gst-plugins-base 1.12.2"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/gst-plugins-base-1.12.2 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -47,3 +50,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/gst-plugins-base-1.12.2
 	@rm -rf $(BUILD_DIR)/gst-plugins-base-1.12.2
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

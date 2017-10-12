@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := libgcrypt
+TARGET_DEPENDENCIES := libgpg-error
 SOURCE := $(SOURCES_DIR)/libgcrypt-1.8.0.tar.bz2
 SOURCE_URL := ftp://ftp.gnupg.org/gcrypt/libgcrypt/libgcrypt-1.8.0.tar.bz2
 MD5 := 530db74602b558209f9ad7356a680971
@@ -15,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "libgcrypt 1.8.0"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/libgcrypt-1.8.0 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -47,3 +50,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/libgcrypt-1.8.0
 	@rm -rf $(BUILD_DIR)/libgcrypt-1.8.0
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

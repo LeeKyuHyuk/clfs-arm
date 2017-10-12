@@ -94,6 +94,7 @@ toolchain:
 	@make toolchain -C $(PACKAGES_DIR)/libcroco
 	@make toolchain -C $(PACKAGES_DIR)/librsvg
 	@make toolchain -C $(PACKAGES_DIR)/vala
+	@make toolchain -C $(PACKAGES_DIR)/ruby
 	@make toolchain -C $(PACKAGES_DIR)/cmake
 	$(PRINT_BUILD_TIME)
 
@@ -187,6 +188,7 @@ system:
 	@make system -C $(PACKAGES_DIR)/enchant
 	@make system -C $(PACKAGES_DIR)/gstreamer
 	@make system -C $(PACKAGES_DIR)/gst-plugins-base
+	@make system -C $(PACKAGES_DIR)/gst-plugins-bad
 	@make system -C $(PACKAGES_DIR)/libgudev
 	@make system -C $(PACKAGES_DIR)/libsecret
 	@make system -C $(PACKAGES_DIR)/libnotify

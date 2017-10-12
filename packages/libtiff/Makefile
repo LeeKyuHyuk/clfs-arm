@@ -19,6 +19,7 @@ system:
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
+	@patch -Np0 -i $(PACKAGES_DIR)/libtiff/libtiff-aarch64-system-support.patch -d $(BUILD_DIR)/tiff-4.0.8
 	@( cd $(BUILD_DIR)/tiff-4.0.8 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
 	ac_cv_lbl_unaligned_fail=yes \

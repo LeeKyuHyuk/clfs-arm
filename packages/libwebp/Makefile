@@ -43,6 +43,10 @@ system:
 	--program-prefix="" \
 	--disable-static \
 	--enable-shared \
+	--with-pnglibdir=$(SYSROOT_DIR)/usr/lib \
+	--with-jpegincludedir=$(SYSROOT_DIR)/usr/lib \
+	--with-tifflibdir=$(SYSROOT_DIR)/usr/lib \
+	--with-gllibdir=$(SYSROOT_DIR)/usr/lib \
 	--enable-libwebpmux \
 	--enable-libwebpdemux \
 	--enable-libwebpdecoder \

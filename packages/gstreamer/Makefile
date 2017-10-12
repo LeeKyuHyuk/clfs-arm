@@ -2,9 +2,9 @@ include $(SUPPORT_DIR)/functions.mk
 
 NAME := gstreamer
 TARGET_DEPENDENCIES := glib
-SOURCE := $(SOURCES_DIR)/gstreamer-1.12.2.tar.xz
-SOURCE_URL := https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.12.2.tar.xz
-MD5 := 4748860621607ffd96244fb79c86c238
+SOURCE := $(SOURCES_DIR)/gstreamer-1.12.3.tar.xz
+SOURCE_URL := https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.12.3.tar.xz
+MD5 := 33dfcb690304fccdaff178440de13334
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -15,11 +15,11 @@ system:
 	@export RANLIB=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-ranlib
 	@export READELF=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-readelf
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
-	@$(STEP) "gstreamer 1.12.2"
+	@$(STEP) "gstreamer 1.12.3"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
-	@( cd $(BUILD_DIR)/gstreamer-1.12.2 && \
+	@( cd $(BUILD_DIR)/gstreamer-1.12.3 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
 	PKG_CONFIG_LIBDIR=$(SYSROOT_DIR)/usr/lib/pkgconfig:$(SYSROOT_DIR)/usr/share/pkgconfig \
 	PKG_CONFIG_SYSROOT_DIR=$(SYSROOT_DIR) \
@@ -60,9 +60,9 @@ system:
 	--disable-gst-debug \
 	--with-package-name="$(CONFIG_PKG_VERSION)" \
 	--with-package-origin="$(CONFIG_BUG_URL)" )
-	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/gstreamer-1.12.2
-	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/gstreamer-1.12.2
+	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/gstreamer-1.12.3
+	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/gstreamer-1.12.3
 	@$(call dependency_libs_patch)
-	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/gstreamer-1.12.2
-	@rm -rf $(BUILD_DIR)/gstreamer-1.12.2
+	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/gstreamer-1.12.3
+	@rm -rf $(BUILD_DIR)/gstreamer-1.12.3
 	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

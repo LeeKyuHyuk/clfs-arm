@@ -1,10 +1,10 @@
 include $(SUPPORT_DIR)/functions.mk
 
-NAME := gst-plugins-base
-TARGET_DEPENDENCIES := gstreamer alsa-lib xlib
-SOURCE := $(SOURCES_DIR)/gst-plugins-base-1.12.3.tar.xz
-SOURCE_URL := https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.12.3.tar.xz
-MD5 := e69d41472a9b08eaf9659cde5dc0a4a4
+NAME := gst-plugins-bad
+TARGET_DEPENDENCIES := gst-plugins-base
+SOURCE := $(SOURCES_DIR)/gst-plugins-bad-1.12.3.tar.xz
+SOURCE_URL := https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-1.12.3.tar.xz
+MD5 := 594a818b13fa89960b6e7c414340db38
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -15,11 +15,11 @@ system:
 	@export RANLIB=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-ranlib
 	@export READELF=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-readelf
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
-	@$(STEP) "gst-plugins-base 1.12.3"
+	@$(STEP) "gst-plugins-bad 1.12.3"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
-	@( cd $(BUILD_DIR)/gst-plugins-base-1.12.3 && \
+	@( cd $(BUILD_DIR)/gst-plugins-bad-1.12.3 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
 	ac_cv_lbl_unaligned_fail=yes \
 	ac_cv_func_mmap_fixed_mapped=yes \
@@ -45,9 +45,9 @@ system:
 	--enable-shared \
 	--with-package-name="$(CONFIG_PKG_VERSION)" \
 	--with-package-origin="$(CONFIG_BUG_URL)" )
-	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/gst-plugins-base-1.12.3
-	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/gst-plugins-base-1.12.3
+	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/gst-plugins-bad-1.12.3
+	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/gst-plugins-bad-1.12.3
 	@$(call dependency_libs_patch)
-	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/gst-plugins-base-1.12.3
-	@rm -rf $(BUILD_DIR)/gst-plugins-base-1.12.3
+	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/gst-plugins-bad-1.12.3
+	@rm -rf $(BUILD_DIR)/gst-plugins-bad-1.12.3
 	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

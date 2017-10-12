@@ -2,9 +2,9 @@ include $(SUPPORT_DIR)/functions.mk
 
 NAME := enchant
 TARGET_DEPENDENCIES := glib dbus-glib
-SOURCE := $(SOURCES_DIR)/enchant-1.6.0.tar.gz
-SOURCE_URL := http://www.abisource.com/downloads/enchant/1.6.0/enchant-1.6.0.tar.gz
-MD5 := de11011aff801dc61042828041fb59c7
+SOURCE := $(SOURCES_DIR)/enchant-2.1.2.tar.gz
+SOURCE_URL := https://github.com/AbiWord/enchant/releases/download/v2.1.2/enchant-2.1.2.tar.gz
+MD5 := 0aa15a6330c4506bcdc9d5b51c24f2f8
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -15,11 +15,11 @@ system:
 	@export RANLIB=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-ranlib
 	@export READELF=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-readelf
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
-	@$(STEP) "enchant 1.6.0"
+	@$(STEP) "enchant 2.1.2"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
-	@( cd $(BUILD_DIR)/enchant-1.6.0 && \
+	@( cd $(BUILD_DIR)/enchant-2.1.2 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
 	ac_cv_lbl_unaligned_fail=yes \
 	ac_cv_func_mmap_fixed_mapped=yes \
@@ -43,9 +43,9 @@ system:
 	--program-prefix="" \
 	--disable-static \
 	--enable-shared )
-	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/enchant-1.6.0
-	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/enchant-1.6.0
+	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/enchant-2.1.2
+	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/enchant-2.1.2
 	@$(call dependency_libs_patch)
-	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/enchant-1.6.0
-	@rm -rf $(BUILD_DIR)/enchant-1.6.0
+	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/enchant-2.1.2
+	@rm -rf $(BUILD_DIR)/enchant-2.1.2
 	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

@@ -85,4 +85,5 @@ system:
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/pixman-0.34.0
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/pixman-0.34.0
+	@rm -rf $(BUILD_DIR)/pixman-0.34.0
 	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

@@ -2,9 +2,9 @@ include $(SUPPORT_DIR)/functions.mk
 
 NAME := mesa
 TARGET_DEPENDENCIES := expat zlib libdrm
-SOURCE := $(SOURCES_DIR)/mesa-17.1.5.tar.xz
-SOURCE_URL := https://mesa.freedesktop.org/archive/mesa-17.1.5.tar.xz
-MD5 := 6cf936fbcaadd98924298a7009e8265d
+SOURCE := $(SOURCES_DIR)/mesa-17.2.2.tar.xz
+SOURCE_URL := https://mesa.freedesktop.org/archive/mesa-17.2.2.tar.xz
+MD5 := 1a157b5baefb5adf9f4fbb8a6632d74c
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -15,13 +15,12 @@ system:
 	@export RANLIB=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-ranlib
 	@export READELF=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-readelf
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
-	@$(STEP) "mesa 17.1.5"
+	@$(STEP) "mesa 17.2.2"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
-	@patch -Np1 -i $(PACKAGES_DIR)/mesa/configure.ac-invert-order-for-wayland-scanner-check.patch -d $(BUILD_DIR)/mesa-17.1.5
-	@( cd $(BUILD_DIR)/mesa-17.1.5 && autoconf )
-	@( cd $(BUILD_DIR)/mesa-17.1.5 && \
+	@( cd $(BUILD_DIR)/mesa-17.2.2 && autoconf )
+	@( cd $(BUILD_DIR)/mesa-17.2.2 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
 	ac_cv_lbl_unaligned_fail=yes \
 	ac_cv_func_mmap_fixed_mapped=yes \
@@ -48,7 +47,10 @@ system:
 	--disable-asm \
 	--enable-glx \
 	--disable-mangling \
+	--enable-texture-float \
+	--enable-osmesa \
 	--enable-xa \
+	--enable-glx-tls \
 	--enable-shared-glapi \
 	--with-gallium-drivers=swrast,vc4 \
 	--enable-gallium-extra-hud \
@@ -70,9 +72,9 @@ system:
 	--disable-vdpau \
 	--disable-lmsensors \
 	--with-llvm-prefix=$(SYSROOT_DIR)/usr/bin )
-	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/mesa-17.1.5
-	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/mesa-17.1.5
+	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/mesa-17.2.2
+	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/mesa-17.2.2
 	@$(call dependency_libs_patch)
-	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/mesa-17.1.5
-	@rm -rf $(BUILD_DIR)/mesa-17.1.5
+	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/mesa-17.2.2
+	@rm -rf $(BUILD_DIR)/mesa-17.2.2
 	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

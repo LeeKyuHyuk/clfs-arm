@@ -8,10 +8,12 @@ MD5 := 10d86dd5a5b68875654cc38af139f382
 
 ifeq ($(CONFIG_LINUX_ARCH),arm)
  JIT_OPTION = -DENABLE_JIT=ON
+ GLES2_OPTION = -DENABLE_GLES2=OFF
 endif
 
 ifeq ($(CONFIG_LINUX_ARCH),arm64)
  JIT_OPTION = -DENABLE_JIT=OFF
+ GLES2_OPTION = -DENABLE_GLES2=ON
 endif
 
 system:
@@ -43,8 +45,8 @@ system:
 	lt_cv_sys_lib_search_path_spec="" \
 	ac_cv_c_bigendian=no \
 	CONFIG_SITE=/dev/null \
-	CFLAGS="-Wno-expansion-to-defined" \
-	CXXFLAGS="-Wno-expansion-to-defined" \
+	CFLAGS="-Wno-expansion-to-defined -fpermissive" \
+	CXXFLAGS="-Wno-expansion-to-defined -fpermissive" \
 	cmake -DCMAKE_BUILD_TYPE=Release \
 	-DCMAKE_TOOLCHAIN_FILE=$(TOOLS_DIR)/share/clfs-arm/toolchainfile.cmake \
 	$(JIT_OPTION) \
@@ -52,7 +54,7 @@ system:
 	-DENABLE_GEOLOCATION=OFF \
 	-DENABLE_GTKDOC=OFF \
 	-DENABLE_INTROSPECTION=OFF \
-	-DENABLE_MINIBROWSER=ON \
+	-DENABLE_MINIBROWSER=OFF \
 	-DENABLE_SPELLCHECK=ON \
 	-DPORT=GTK \
 	-DUSE_LIBSECRET=ON \
@@ -65,7 +67,7 @@ system:
 	-DENABLE_X11_TARGET=ON \
 	-DENABLE_VIDEO=ON \
 	-DENABLE_WEB_AUDIO=ON \
-	-DENABLE_GLES2=ON \
+	$(GLES2_OPTION) \
 	-DENABLE_OPENGL=ON \
 	-Wno-dev ..  )
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/webkitgtk-2.18.0/build

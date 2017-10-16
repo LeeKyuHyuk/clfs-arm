@@ -1,10 +1,10 @@
 include $(SUPPORT_DIR)/functions.mk
 
 NAME := libdrm
-TARGET_DEPENDENCIES := libpthread-stubs
-SOURCE := $(SOURCES_DIR)/libdrm-2.4.82.tar.bz2
-SOURCE_URL := http://dri.freedesktop.org/libdrm/libdrm-2.4.82.tar.bz2
-MD5 := 29867814123c3d23056b1d05aada1b9d
+TARGET_DEPENDENCIES := libpthread-stubs xlib
+SOURCE := $(SOURCES_DIR)/libdrm-2.4.84.tar.bz2
+SOURCE_URL := http://dri.freedesktop.org/libdrm/libdrm-2.4.84.tar.bz2
+MD5 := 35b9544bc2ad864acd1abaa1a2b99092
 
 system:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -15,13 +15,11 @@ system:
 	@export RANLIB=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-ranlib
 	@export READELF=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-readelf
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
-	@$(STEP) "libdrm 2.4.82"
+	@$(STEP) "libdrm 2.4.84"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
 	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
-	@patch -Np1 -i $(PACKAGES_DIR)/libdrm/Add-ARM-support-into-xf86drm.h.patch -d $(BUILD_DIR)/libdrm-2.4.82
-	@patch -Np1 -i $(PACKAGES_DIR)/libdrm/xf86atomic-require-CAS-support-in-libatomic_ops.patch -d $(BUILD_DIR)/libdrm-2.4.82
-	@( cd $(BUILD_DIR)/libdrm-2.4.82 && \
+	@( cd $(BUILD_DIR)/libdrm-2.4.84 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
 	ac_cv_lbl_unaligned_fail=yes \
 	ac_cv_func_mmap_fixed_mapped=yes \
@@ -61,9 +59,9 @@ system:
 	--enable-vc4 \
 	--enable-udev \
 	--disable-valgrind )
-	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/libdrm-2.4.82
-	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/libdrm-2.4.82
+	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/libdrm-2.4.84
+	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(SYSROOT_DIR) install -C $(BUILD_DIR)/libdrm-2.4.84
 	@$(call dependency_libs_patch)
-	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/libdrm-2.4.82
-	@rm -rf $(BUILD_DIR)/libdrm-2.4.82
+	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/libdrm-2.4.84
+	@rm -rf $(BUILD_DIR)/libdrm-2.4.84
 	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

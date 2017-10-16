@@ -54,5 +54,6 @@ system:
 	-Wno-dev ..  )
 	@make -j$(CONFIG_PARALLEL_JOBS) -C $(BUILD_DIR)/midori-0.5.11/build
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install/fast -C $(BUILD_DIR)/midori-0.5.11/build
+	@echo "export WEBKIT_IGNORE_SSL_ERRORS=\"1\" midori" >> $(ROOTFS_DIR)/etc/profile
 	@rm -rf $(BUILD_DIR)/midori-0.5.11
 	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

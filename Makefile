@@ -163,6 +163,12 @@ system:
 	@make system -C $(PACKAGES_DIR)/openjpeg
 	@make system -C $(PACKAGES_DIR)/poppler
 	@make system -C $(PACKAGES_DIR)/epdfview
+	@make system -C $(PACKAGES_DIR)/dbus-glib
+	@make system -C $(PACKAGES_DIR)/lxmenu-data
+	@make system-extra -C $(PACKAGES_DIR)/libfm
+	@make system -C $(PACKAGES_DIR)/menu-cache
+	@make system -C $(PACKAGES_DIR)/libfm
+	@make system -C $(PACKAGES_DIR)/pcmanfm
 	@make system -C $(PACKAGES_DIR)/alsa-lib
 	@make system -C $(PACKAGES_DIR)/json-glib
 	@make system -C $(PACKAGES_DIR)/at-spi2-core
@@ -175,7 +181,6 @@ system:
 	@make system -C $(PACKAGES_DIR)/p11-kit
 	@make system -C $(PACKAGES_DIR)/nss
 	@make system -C $(PACKAGES_DIR)/curl
-	@make system -C $(PACKAGES_DIR)/dbus-glib
 	@make system -C $(PACKAGES_DIR)/gmp
 	@make system -C $(PACKAGES_DIR)/nettle
 	@make system -C $(PACKAGES_DIR)/gnutls

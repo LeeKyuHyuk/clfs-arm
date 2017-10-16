@@ -1,5 +1,8 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := libfm
+TARGET_DEPENDENCIES := libgtk2 menu-cache lxmenu-data dbus-glib
+TARGET_EXTRA_DEPENDENCIES := glib
 SOURCE := $(SOURCES_DIR)/libfm-1.2.5.tar.xz
 SOURCE_URL := https://downloads.sourceforge.net/pcmanfm/libfm-1.2.5.tar.xz
 MD5 := a1ba9ae5e920f38b647dd511edd6c807
@@ -15,6 +18,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "libfm 1.2.5"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/libfm-1.2.5 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -45,6 +49,7 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/libfm-1.2.5
 	@rm -rf $(BUILD_DIR)/libfm-1.2.5
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)
 
 system-extra:
 	@export CC=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-gcc
@@ -57,6 +62,7 @@ system-extra:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "libfm-extra 1.2.5"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_EXTRA_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/libfm-1.2.5 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -89,3 +95,4 @@ system-extra:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/libfm-1.2.5
 	@rm -rf $(BUILD_DIR)/libfm-1.2.5
+	@echo "$(NAME)-extra" >> $(SYSTEM_DEPENDENCIES)

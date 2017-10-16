@@ -1,5 +1,7 @@
 include $(SUPPORT_DIR)/functions.mk
 
+NAME := menu-cache
+TARGET_DEPENDENCIES := libfm-extra
 SOURCE := $(SOURCES_DIR)/menu-cache-1.0.2.tar.xz
 SOURCE_URL := https://downloads.sourceforge.net/lxde/menu-cache-1.0.2.tar.xz
 MD5 := 8dde7a3f5bd9798d0129d1979a5d7640
@@ -15,6 +17,7 @@ system:
 	@export STRIP=$(TOOLS_DIR)/bin/$(CONFIG_TARGET)-strip
 	@$(STEP) "menu-cache 1.0.2"
 	@$(call check_source, $(SOURCE), $(MD5), $(SOURCE_URL))
+	@$(call system_dependencies, $(TARGET_DEPENDENCIES))
 	@$(EXTRACT) $(SOURCE) $(BUILD_DIR)
 	@( cd $(BUILD_DIR)/menu-cache-1.0.2 && \
 	PKG_CONFIG="$(TOOLS_DIR)/bin/pkg-config" \
@@ -45,3 +48,4 @@ system:
 	@$(call dependency_libs_patch)
 	@make -j$(CONFIG_PARALLEL_JOBS) DESTDIR=$(ROOTFS_DIR) install -C $(BUILD_DIR)/menu-cache-1.0.2
 	@rm -rf $(BUILD_DIR)/menu-cache-1.0.2
+	@echo $(NAME) >> $(SYSTEM_DEPENDENCIES)

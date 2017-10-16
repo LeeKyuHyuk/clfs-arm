@@ -96,6 +96,7 @@ toolchain:
 	@make toolchain -C $(PACKAGES_DIR)/vala
 	@make toolchain -C $(PACKAGES_DIR)/ruby
 	@make toolchain -C $(PACKAGES_DIR)/cmake
+	@make toolchain -C $(PACKAGES_DIR)/nodejs
 	$(PRINT_BUILD_TIME)
 
 system:
@@ -204,6 +205,8 @@ system:
 	@make system -C $(PACKAGES_DIR)/granite
 	@make system -C $(PACKAGES_DIR)/webkitgtk
 	@make system -C $(PACKAGES_DIR)/midori
+	@make system -C $(PACKAGES_DIR)/c-ares
+	@make system -C $(PACKAGES_DIR)/nodejs
 	@make system -C $(PACKAGES_DIR)/glibc
 	$(PRINT_BUILD_TIME)
 
@@ -212,6 +215,11 @@ kernel:
 	@rm -rf $(BUILD_DIR) $(KERNEL_DIR)
 	@mkdir -pv $(BUILD_DIR) $(KERNEL_DIR)
 	@make kernel -C $(PACKAGES_DIR)/linux
+	$(PRINT_BUILD_TIME)
+
+test:
+	@rm -rf $(BUILD_DIR)
+	@mkdir -pv $(BUILD_DIR)
 	$(PRINT_BUILD_TIME)
 
 image:
